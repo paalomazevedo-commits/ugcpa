@@ -23,10 +23,9 @@
   --azul-fundo:#e7eefa;      /* azul bem lavado, faixas suaves */
   --tinta:#16233b;           /* texto principal */
   --tinta-media:#465777;     /* texto de apoio */
-  --fio:rgba(31,78,156,.13); /* fio da grade do azulejo */
-  --ponto-forte:rgba(31,78,156,.62);   /* bolinha do encontro das linhas */
-  --ponto-claro:rgba(156,192,234,.85); /* bolinha do centro do quadrado */
-  --grade:84px;              /* medida do quadrado do azulejo */
+  --fio:rgba(31,78,156,.13); /* fio fino usado em divisórias */
+  --bege:#eae8e2;             /* bege quente, fundo da capa */
+  --bege-ponto:rgba(60,50,35,.09); /* textura fina de papel sobre o bege */
   --topo:76px;               /* altura do menu fixo */
   --gutter:clamp(16px,5vw,48px);
 }
@@ -42,16 +41,7 @@ body{
   color:var(--tinta);
   overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
-  /* padrão de azulejo desenhado em CSS puro:
-     bolinha cobalto no encontro das linhas, bolinha clara no centro do quadrado */
   background-color:var(--louca);
-  background-image:
-    radial-gradient(circle, var(--ponto-forte) 3.2px, transparent 3.7px),
-    radial-gradient(circle, var(--ponto-claro) 2.8px, transparent 3.3px),
-    linear-gradient(to right, var(--fio) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--fio) 1px, transparent 1px);
-  background-size:var(--grade) var(--grade);
-  background-position:calc(var(--grade)/2) calc(var(--grade)/2), 0 0, 0 0, 0 0;
 }
 img{max-width:100%;display:block;height:auto}
 ul{list-style:none;margin:0;padding:0}
@@ -100,7 +90,14 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .btn--linha:hover{background:var(--cobalto);color:#fff}
 
 /* ===== menu fixo ===== */
-.topo{position:fixed;inset:0 0 auto 0;z-index:90;background:var(--louca);border-bottom:3px solid var(--cobalto)}
+.topo{
+  position:fixed;inset:0 0 auto 0;z-index:90;border-bottom:3px solid var(--cobalto);
+  background-color:var(--louca);
+  background-image:url('padrao-cabecalho.webp');
+  background-repeat:repeat;
+  background-size:170px auto;
+  background-position:center -20px;
+}
 .barra{height:var(--topo);display:flex;align-items:center;justify-content:space-between;gap:16px}
 .marca-topo{font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:1.22rem;text-decoration:none;letter-spacing:.01em}
 .menu{display:flex;align-items:center;gap:26px}
@@ -115,11 +112,11 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 /* ===== 1. CAPA ===== */
 .capa{
   padding:clamp(40px,7vw,78px) 0 0;scroll-margin-top:var(--topo);
-  /* fundo decorativo só desta seção (o resto do site mantém a grade de bolinhas) */
-  background-color:var(--louca);
-  background-image:url('padrao-capa.webp');
-  background-repeat:repeat;
-  background-size:420px auto;
+  /* fundo bege só desta seção, com uma textura fininha de papel por cima
+     (o resto do site fica liso, na cor --louca) */
+  background-color:var(--bege);
+  background-image:radial-gradient(circle, var(--bege-ponto) .7px, transparent 1px);
+  background-size:7px 7px;
 }
 .capa-grade{display:grid;grid-template-columns:1.12fr .88fr;grid-template-areas:"texto foto" "numeros foto";gap:0 clamp(28px,5vw,64px);align-items:center;padding-bottom:clamp(48px,7vw,80px)}
 .capa-texto{grid-area:texto}
