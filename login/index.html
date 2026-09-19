@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Entrar | Paloma Ribeiro</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Playfair+Display:ital,wght@1,400;1,600&display=swap" rel="stylesheet">
+<style>
+/* mesma paleta e jeito de arredondar canto do portfólio (azulejo português) */
+:root{
+  --louca:#f7f7f2;
+  --louca-clara:#fdfdfa;
+  --cobalto:#1f4e9c;
+  --cobalto-escuro:#163a76;
+  --azul-claro:#9cc0ea;
+  --azul-fundo:#e7eefa;
+  --tinta:#16233b;
+  --tinta-media:#465777;
+  --fio:rgba(31,78,156,.13);
+  --vermelho:#b3261e;
+  --vermelho-fundo:#fbe9e7;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  padding:24px;
+  font-family:"Jost",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-weight:400;
+  color:var(--tinta);
+  background-color:var(--louca);
+  background-image:
+    radial-gradient(circle, var(--cobalto) 3.2px, transparent 3.7px),
+    radial-gradient(circle, var(--azul-claro) 2.8px, transparent 3.3px),
+    linear-gradient(to right, var(--fio) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--fio) 1px, transparent 1px);
+  background-size:84px 84px;
+  background-position:42px 42px, 0 0, 0 0, 0 0;
+}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--cobalto);outline-offset:2px}
+
+.cartao{
+  width:min(380px,100%);
+  background:var(--louca-clara);
+  border:3px solid var(--cobalto);
+  box-shadow:inset 0 0 0 5px var(--louca-clara), inset 0 0 0 6px var(--cobalto);
+  padding:36px 30px 30px;
+}
+.rotulo{
+  font-family:"Playfair Display",Georgia,serif;
+  font-style:italic;font-size:1.02rem;color:var(--cobalto);
+  display:inline-block;padding-bottom:6px;margin-bottom:6px;
+  border-bottom:1px solid var(--cobalto);
+}
+h1{
+  margin:0 0 22px;
+  font-family:"Jost",sans-serif;
+  font-weight:600;
+  font-size:1.3rem;
+  letter-spacing:-.01em;
+}
+.campo{display:block;margin-bottom:16px}
+.campo span{display:block;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--cobalto);margin-bottom:7px}
+.campo input{
+  width:100%;padding:12px 13px;border:2px solid var(--cobalto);
+  background:var(--louca-clara);border-radius:0;font:inherit;color:inherit;
+}
+.linha-senha{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.linha-senha span{margin-bottom:7px}
+.esqueci{
+  background:none;border:0;padding:0;cursor:pointer;color:var(--cobalto);
+  font:inherit;font-size:.78rem;text-decoration:underline;text-underline-offset:2px;
+}
+.entrar{
+  width:100%;margin-top:8px;padding:13px 20px;border:2px solid var(--cobalto);
+  background:var(--cobalto);color:#fff;font:inherit;font-weight:500;font-size:.92rem;
+  letter-spacing:.04em;cursor:pointer;transition:background .2s ease;
+}
+.entrar:hover:not(:disabled){background:var(--cobalto-escuro)}
+.entrar:disabled{opacity:.6;cursor:default}
+.faixa{
+  margin-top:16px;padding:13px 14px;font-size:.88rem;line-height:1.5;border:2px solid;
+}
+.faixa[hidden]{display:none}
+.faixa--erro{background:var(--vermelho-fundo);border-color:var(--vermelho);color:var(--vermelho)}
+.faixa--ok{background:var(--azul-fundo);border-color:var(--cobalto);color:var(--tinta)}
+.rodape-cartao{margin-top:22px;text-align:center;font-size:.8rem;color:var(--tinta-media)}
+</style>
+</head>
+<body>
+<main class="cartao">
+  <p class="rotulo">Painel, só pra mim</p>
+  <h1>Entrar</h1>
+
+  <form id="formLogin" novalidate>
+    <label class="campo">
+      <span>E-mail</span>
+      <input type="email" name="email" id="campoEmail" autocomplete="username" required>
+    </label>
+    <label class="campo">
+      <div class="linha-senha">
+        <span>Senha</span>
+        <button type="button" class="esqueci" id="botaoEsqueci">Esqueci minha senha</button>
+      </div>
+      <input type="password" name="senha" id="campoSenha" autocomplete="current-password" required>
+    </label>
+    <button class="entrar" type="submit" id="botaoEntrar">Entrar</button>
+  </form>
+
+  <p class="faixa faixa--erro" id="faixaErro" role="alert" hidden></p>
+  <p class="faixa faixa--ok" id="faixaOk" role="status" hidden></p>
+
+  <p class="rodape-cartao">Portfólio: <a href="../">paalomazevedo-commits.github.io/ugcpa</a></p>
+</main>
+
+<!-- biblioteca do Supabase (CDN) + a configuração do banco, nesta ordem -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/banco.js"></script>
+<script>
+(function () {
+  var $ = function (s) { return document.querySelector(s); };
+  var form = $("#formLogin");
+  var botao = $("#botaoEntrar");
+  var faixaErro = $("#faixaErro");
+  var faixaOk = $("#faixaOk");
+
+  function escondeFaixas() {
+    faixaErro.hidden = true;
+    faixaOk.hidden = true;
+  }
+  function mostraErro(msg) {
+    faixaOk.hidden = true;
+    faixaErro.hidden = false;
+    faixaErro.textContent = msg;
+  }
+  function mostraOk(msg) {
+    faixaErro.hidden = true;
+    faixaOk.hidden = false;
+    faixaOk.textContent = msg;
+  }
+
+  if (!window.banco) {
+    mostraErro("Não consegui me conectar ao banco agora. Recarregue a página e tente de novo em instantes.");
+  }
+
+  /* se já tiver sessão aberta, manda direto pro admin */
+  function conferirSessaoInicial() {
+    if (!window.banco) return;
+    window.banco.auth.getSession().then(function (resposta) {
+      if (resposta && resposta.data && resposta.data.session) {
+        window.location.replace("../admin/");
+      }
+    });
+  }
+  conferirSessaoInicial();
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    escondeFaixas();
+    if (!window.banco) {
+      mostraErro("Não consegui me conectar ao banco agora. Recarregue a página e tente de novo em instantes.");
+      return;
+    }
+    if (!form.checkValidity()) {
+      mostraErro("Preencha o e-mail e a senha.");
+      form.reportValidity();
+      return;
+    }
+    var email = $("#campoEmail").value.trim();
+    var senha = $("#campoSenha").value;
+
+    botao.disabled = true;
+    botao.textContent = "Entrando...";
+
+    window.banco.auth.signInWithPassword({ email: email, password: senha }).then(function (resposta) {
+      botao.disabled = false;
+      botao.textContent = "Entrar";
+      if (resposta.error) {
+        console.error("Erro ao entrar:", resposta.error);
+        mostraErro("E-mail ou senha incorretos.");
+        return;
+      }
+      window.location.replace("../admin/");
+    }).catch(function (erro) {
+      botao.disabled = false;
+      botao.textContent = "Entrar";
+      console.error("Erro ao entrar:", erro);
+      mostraErro("Não consegui entrar agora. Tenta de novo em instantes.");
+    });
+  });
+
+  $("#botaoEsqueci").addEventListener("click", function () {
+    escondeFaixas();
+    if (!window.banco) {
+      mostraErro("Não consegui me conectar ao banco agora. Recarregue a página e tente de novo em instantes.");
+      return;
+    }
+    var email = $("#campoEmail").value.trim();
+    if (!email) {
+      mostraErro("Escreva o seu e-mail no campo acima primeiro, depois clique em \"Esqueci minha senha\" de novo.");
+      $("#campoEmail").focus();
+      return;
+    }
+    var enderecoDeVolta = window.location.origin + window.location.pathname;
+    window.banco.auth.resetPasswordForEmail(email, { redirectTo: enderecoDeVolta }).then(function (resposta) {
+      if (resposta.error) {
+        console.error("Erro ao pedir recuperação de senha:", resposta.error);
+        mostraErro("Não consegui enviar o e-mail agora. Tenta de novo em instantes.");
+        return;
+      }
+      mostraOk("Se esse e-mail tiver uma conta, mandamos um link pra trocar a senha. Confira a caixa de entrada.");
+    }).catch(function (erro) {
+      console.error("Erro ao pedir recuperação de senha:", erro);
+      mostraErro("Não consegui enviar o e-mail agora. Tenta de novo em instantes.");
+    });
+  });
+})();
+</script>
+</body>
+</html>

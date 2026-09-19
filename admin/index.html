@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-BR" style="visibility:hidden">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel | Paloma Ribeiro</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<div id="carregandoSessao"></div>
+
+<div class="app" id="appAdmin" hidden>
+  <div class="cortina" id="cortinaLateral"></div>
+
+  <aside class="lateral">
+    <div class="lateral-topo">
+      <p class="lateral-marca">Paloma Ribeiro</p>
+      <p class="lateral-sub">Painel</p>
+    </div>
+    <nav class="lateral-nav" id="lateralNav" aria-label="Navegação do painel"></nav>
+    <div class="lateral-rodape">
+      <p class="lateral-email" id="lateralEmail"></p>
+      <button type="button" class="botao-sair" id="botaoSair"></button>
+    </div>
+  </aside>
+
+  <div style="flex:1;min-width:0;display:flex;flex-direction:column">
+    <header class="topo-mobile">
+      <button type="button" class="botao-hamb" id="botaoHamb" aria-label="Abrir o menu"></button>
+      <p class="topo-mobile-titulo" id="tituloTopoMobile"></p>
+    </header>
+    <main class="conteudo">
+      <div class="conteudo-cabecalho">
+        <h1 class="conteudo-titulo" id="conteudoTitulo"></h1>
+        <p class="conteudo-legenda" id="conteudoLegenda"></p>
+      </div>
+      <div class="avisos" id="avisosPainel"></div>
+      <div id="conteudoSecao"></div>
+    </main>
+  </div>
+</div>
+
+<div class="toast-area" id="toastArea"></div>
+
+<!-- biblioteca do Supabase (CDN) + a configuração do banco -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/banco.js"></script>
+
+<!-- armação do painel e o código de cada aba -->
+<script src="js/app.js"></script>
+<script src="js/portfolio.js"></script>
+<script src="js/marcas.js"></script>
+<script src="js/calendario.js"></script>
+<script src="js/campanhas.js"></script>
+<script src="js/checklist.js"></script>
+<script src="../js/biblioteca.js"></script>
+
+<script>
+/* ============================================================
+   TRANCA DE ENTRADA
+   Isto é o que decide se a pessoa vê o painel ou vai pro login.
+   Nada do painel é montado nem mostrado antes dessa conferência.
+   ============================================================ */
+(function () {
+  function mostraErroConexao() {
+    document.getElementById("carregandoSessao").innerHTML =
+      '<div style="min-height:100vh;display:grid;place-items:center;padding:24px;font-family:system-ui,sans-serif">' +
+      '<div style="max-width:360px;text-align:center">' +
+      '<p style="font-weight:600">Não consegui me conectar ao banco agora.</p>' +
+      '<p style="margin-top:8px;color:#5a6884;font-size:.9rem">Confira sua internet e recarregue a página. Se continuar assim, confira se o endereço do projeto e a chave em js/banco.js estão certos.</p>' +
+      "</div></div>";
+    document.documentElement.style.visibility = "";
+  }
+
+  if (!window.banco) { mostraErroConexao(); return; }
+
+  window.banco.auth.getSession().then(function (resp) {
+    var sessao = resp && resp.data && resp.data.session;
+    if (!sessao) { window.location.replace("../login/"); return; }
+    document.getElementById("carregandoSessao").hidden = true;
+    document.getElementById("appAdmin").hidden = false;
+    document.documentElement.style.visibility = "";
+    window.Admin.iniciar(sessao.user);
+  }).catch(function (erro) {
+    console.error("Erro ao conferir a sessão:", erro);
+    mostraErroConexao();
+  });
+})();
+</script>
+</body>
+</html>

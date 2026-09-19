@@ -192,6 +192,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .selo-som{margin-bottom:14px;padding:8px 13px;background:var(--louca-clara);border:2px solid var(--cobalto);color:var(--cobalto);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;transition:background .2s ease,color .2s ease}
 .video-abrir:hover .selo-som,.video-abrir:focus-visible .selo-som{background:var(--cobalto);color:#fff}
 .video-texto{padding:16px 14px 12px}
+.video-destaque{font-size:.9rem;font-weight:600;color:var(--cobalto);margin-bottom:3px}
 .video-marca{font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cobalto)}
 .video-titulo{font-size:1.05rem;margin-top:5px}
 
@@ -509,6 +510,10 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   </div>
 </div>
 
+<!-- biblioteca do Supabase (CDN) + a configuração do banco, sempre nesta ordem -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/banco.js"></script>
+
 <script>
 document.documentElement.classList.add('js');
 
@@ -567,30 +572,14 @@ const DESTAQUES = [
   }
 ];
 
-/* --- 4) CATEGORIAS DOS VÍDEOS ---
-   Só aparece o carrossel da categoria que tiver pelo menos um vídeo na lista abaixo. */
-const CATEGORIAS = [
-  { id: "beleza",   nome: "Beleza" },
-  { id: "skincare", nome: "Skincare" },
-  { id: "moda",     nome: "Moda" },
-  { id: "tech",     nome: "Tech" }
-];
+/* --- OS VÍDEOS DOS CARROSSÉIS não ficam mais numa lista aqui no código.
+   Agora eles vêm do banco de dados, editados lá no seu painel
+   (admin/index.html, aba Portfólio). Quando você adiciona, edita, apaga
+   ou reordena um vídeo no painel, ele muda aqui sozinho, sem precisar
+   publicar o site de novo. O carrossel de cada nicho só aparece se tiver
+   pelo menos um vídeo visível daquele nicho. */
 
-/* --- 5) VÍDEOS DO CARROSSEL ---
-   Cada vídeo roda sozinho e sem som dentro do card, e abre com som quando alguém clica.
-   id:        AQUI ENTRA O CÓDIGO DO VÍDEO NO YOUTUBE, que é o pedaço final do endereço.
-              Em https://youtube.com/shorts/7XeWNnD0xCE o código é 7XeWNnD0xCE
-   categoria: precisa ser um dos ids da lista CATEGORIAS acima.
-   marca:     o nome da marca do trabalho.
-   titulo:    o nome do vídeo. */
-const VIDEOS = [
-  { id: "Q1XgR8XCRDo", categoria: "beleza", marca: "Aprilskin",    titulo: "Batom" },
-  { id: "e4SqXe4NIT4", categoria: "beleza", marca: "Garnier",      titulo: "Hidratante" },
-  { id: "YfBW8uTd_FE", categoria: "beleza", marca: "Celimax",      titulo: "Máscara" },
-  { id: "7XeWNnD0xCE", categoria: "tech",   marca: "Show Imports", titulo: "Mercado" }
-];
-
-/* --- 6) SERVIÇOS --- */
+/* --- 4) SERVIÇOS --- */
 const SERVICOS = [
   { numero: "01", titulo: "Vídeo UGC",              texto: "Vídeo vertical gravado por mim, com roteiro, fala natural e o produto na rotina de verdade." },
   { numero: "02", titulo: "Corte para anúncio",     texto: "Versão curta e direta do vídeo, feita para rodar como anúncio pago sem perder o gancho." },
@@ -600,7 +589,7 @@ const SERVICOS = [
   { numero: "06", titulo: "Pacote mensal",          texto: "Um número fechado de entregas por mês, com calendário combinado e prioridade na agenda." }
 ];
 
-/* --- 7) MÉTRICAS COM CONTADOR (o número anima quando aparece na tela) --- */
+/* --- 5) MÉTRICAS COM CONTADOR (o número anima quando aparece na tela) --- */
 const METRICAS = [
   { valor: 50, prefixo: "",  sufixo: "",  rotulo: "vídeos entregues" },
   { valor: 25, prefixo: "",  sufixo: "",  rotulo: "marcas atendidas" },
@@ -608,14 +597,14 @@ const METRICAS = [
   { valor: 0,  prefixo: "+", sufixo: "M", rotulo: "views somadas" }   /* <<< TROQUE O 0 PELO NÚMERO REAL */
 ];
 
-/* --- 8) RESULTADOS DE CAMPANHA --- */
+/* --- 6) RESULTADOS DE CAMPANHA --- */
 const RESULTADOS = [
   { marca: "Campanha 01", valor: "+0,0M", rotulo: "views no reels", texto: "Escreva aqui o resultado dessa campanha em uma linha." },  /* <<< TROQUE PELOS DADOS REAIS */
   { marca: "Campanha 02", valor: "+0%",   rotulo: "de cliques",     texto: "Escreva aqui o resultado dessa campanha em uma linha." },  /* <<< TROQUE PELOS DADOS REAIS */
   { marca: "Campanha 03", valor: "+0",    rotulo: "vendas no mês",  texto: "Escreva aqui o resultado dessa campanha em uma linha." }   /* <<< TROQUE PELOS DADOS REAIS */
 ];
 
-/* --- 9) DEPOIMENTOS --- */
+/* --- 7) DEPOIMENTOS --- */
 const DEPOIMENTOS = [
   { texto: "Escreva aqui o depoimento com as palavras do cliente.", nome: "Cliente 01", empresa: "Marca 01" },
   { texto: "Escreva aqui o depoimento com as palavras do cliente.", nome: "Cliente 02", empresa: "Marca 02" },
@@ -705,10 +694,64 @@ function estaNaTela(el){
   return r.bottom > 0 && r.top < (window.innerHeight || document.documentElement.clientHeight);
 }
 
-/* ----- carrosséis de vídeo, um por categoria ----- */
-function montaVideos(){
-  const comVideo = CATEGORIAS.filter(function(c){
-    return VIDEOS.some(function(v){ return v.categoria === c.id; });
+/* ----- letra maiúscula em cada palavra, pro nome do nicho ficar bonito ----- */
+function capitalizaPalavra(t){
+  return String(t).replace(/(^|\s)\S/g, function(c){ return c.toUpperCase(); });
+}
+
+/* ----- tira o código do vídeo de qualquer formato de link do YouTube ----- */
+function idDoYoutube(link){
+  if (!link) return null;
+  const m = String(link).match(/(?:youtu\.be\/|shorts\/|watch\?v=|embed\/)([A-Za-z0-9_-]{6,})/);
+  return m ? m[1] : null;
+}
+
+/* ----- busca os vídeos no banco (editados lá no seu painel) -----
+   Quando você adiciona, edita, apaga ou reordena um vídeo no painel,
+   é esta busca que traz a mudança pro site, sem precisar publicar de
+   novo. Se o banco não responder por qualquer motivo, o site não
+   quebra: essa seção mostra uma frase simples no lugar dos vídeos. */
+function carregarEMontarVideos(){
+  if (!window.banco){ montaVideos([]); return; }
+  window.banco.from("videos").select("*").eq("visivel", true).order("ordem", { ascending: true })
+    .then(function(resp){
+      if (resp.error) throw resp.error;
+      const linhas = (resp.data || []).map(function(v){
+        return {
+          id: idDoYoutube(v.link),
+          categoria: String(v.nicho || "").trim().toLowerCase(),
+          marca: v.marca || "",
+          titulo: v.titulo || "",
+          destaque: v.destaque || ""
+        };
+      }).filter(function(v){ return v.id && v.categoria; });
+      montaVideos(linhas);
+    })
+    .catch(function(erro){
+      console.error("Não consegui carregar os vídeos do banco:", erro);
+      montaVideos([]);
+    });
+}
+
+let videosAtuais = [];
+
+/* ----- carrosséis de vídeo, um por nicho ----- */
+function montaVideos(lista){
+  videosAtuais = lista;
+
+  if (!lista.length){
+    $("#filtros").innerHTML = "";
+    $("#avisoFiltro").textContent = "";
+    $("#carrosseis").innerHTML = '<p class="intro-secao">Em breve, mais vídeos por aqui.</p>';
+    return;
+  }
+
+  const vistos = {};
+  const comVideo = [];
+  lista.forEach(function(v){
+    if (vistos[v.categoria]) return;
+    vistos[v.categoria] = true;
+    comVideo.push({ id: v.categoria, nome: capitalizaPalavra(v.categoria) });
   });
 
   $("#filtros").innerHTML =
@@ -718,8 +761,8 @@ function montaVideos(){
     }).join("");
 
   $("#carrosseis").innerHTML = comVideo.map(function(c){
-    const lista = VIDEOS.filter(function(v){ return v.categoria === c.id; });
-    const cards = lista.map(function(v){
+    const itensDoNicho = lista.filter(function(v){ return v.categoria === c.id; });
+    const cards = itensDoNicho.map(function(v){
       const nome = v.marca + ", " + v.titulo;
       return '' +
         '<article class="video-card">' +
@@ -733,6 +776,7 @@ function montaVideos(){
             '</button>' +
           '</div>' +
           '<div class="video-texto">' +
+            (v.destaque ? '<p class="video-destaque">' + esc(v.destaque) + '</p>' : '') +
             '<p class="video-marca">' + esc(v.marca) + '</p>' +
             '<h4 class="video-titulo">' + esc(v.titulo) + '</h4>' +
           '</div>' +
@@ -845,6 +889,7 @@ function montaVideos(){
   });
 
   atualizaSetas();
+  observaRevela(document.querySelectorAll("#carrosseis .revela"));
 }
 
 /* ----- visor: abre o vídeo grande e com som ----- */
@@ -855,7 +900,7 @@ function ligaVisor(){
   let focoAnterior = null;
 
   function abre(id){
-    const video = VIDEOS.filter(function(v){ return v.id === id; })[0];
+    const video = videosAtuais.filter(function(v){ return v.id === id; })[0];
     if (!video) return;
     focoAnterior = document.activeElement;
     visorAberto = true;
@@ -955,15 +1000,36 @@ function animaContador(el){
   requestAnimationFrame(passo);
 }
 
-/* ----- animação de entrada ao rolar ----- */
-function ligaObservadores(){
-  const alvos = document.querySelectorAll(".revela");
-  if (!("IntersectionObserver" in window) || reduzMovimento){
-    alvos.forEach(function(a){ a.classList.add("visivel"); });
-    document.querySelectorAll(".metrica b").forEach(animaContador);
+/* ----- animação de entrada ao rolar -----
+   Os vídeos chegam depois (vêm do banco, por uma busca que leva um
+   tempinho), então esse observador precisa poder ser chamado de novo
+   quando eles aparecerem na página, e não só uma vez no começo. */
+let observadorRevela = null;
+
+function observaRevela(lista){
+  lista = Array.prototype.slice.call(lista);
+  if (!lista.length) return;
+  if (!observadorRevela){
+    /* sem observador (reduz movimento ou navegador antigo): mostra direto */
+    lista.forEach(function(a){
+      a.classList.add("visivel");
+      const numero = a.querySelector("b[data-alvo]");
+      if (numero && !numero.dataset.pronto){
+        numero.dataset.pronto = "1";
+        animaContador(numero);
+      }
+    });
     return;
   }
-  const obs = new IntersectionObserver(function(entradas){
+  lista.forEach(function(a){ observadorRevela.observe(a); });
+}
+
+function ligaObservadores(){
+  if (!("IntersectionObserver" in window) || reduzMovimento){
+    observaRevela(document.querySelectorAll(".revela"));
+    return;
+  }
+  observadorRevela = new IntersectionObserver(function(entradas){
     entradas.forEach(function(e){
       if (!e.isIntersecting) return;
       e.target.classList.add("visivel");
@@ -972,10 +1038,10 @@ function ligaObservadores(){
         numero.dataset.pronto = "1";
         animaContador(numero);
       }
-      obs.unobserve(e.target);
+      observadorRevela.unobserve(e.target);
     });
   }, { threshold: 0.18, rootMargin: "0px 0px -40px 0px" });
-  alvos.forEach(function(a){ obs.observe(a); });
+  observaRevela(document.querySelectorAll(".revela"));
 }
 
 /* ----- menu sanduíche ----- */
@@ -1000,6 +1066,7 @@ function ligaMenu(){
 function ligaFormulario(){
   const form = $("#formContato");
   const aviso = $("#avisoContato");
+  const botao = form.querySelector('button[type="submit"]');
   form.addEventListener("submit", function(e){
     e.preventDefault();
     if (!form.checkValidity()){
@@ -1008,10 +1075,55 @@ function ligaFormulario(){
       form.reportValidity();
       return;
     }
-    const nome = $("#campoNome").value.trim().split(" ")[0];
-    aviso.hidden = false;
-    aviso.textContent = "Obrigada, " + nome + ". Recebi sua mensagem e respondo em até um dia útil.";
-    form.reset();
+    const nome = $("#campoNome").value.trim();
+    const primeiroNome = nome.split(" ")[0];
+    const email = $("#campoEmail").value.trim();
+    const mensagem = $("#campoMensagem").value.trim();
+
+    /* a mensagem vira um "lead" na sua base de marcas, lá no painel */
+    if (!window.banco){
+      aviso.hidden = false;
+      aviso.textContent = "Não consegui enviar agora. Tenta de novo em instantes ou me chama direto no WhatsApp.";
+      return;
+    }
+
+    botao.disabled = true;
+    const hoje = new Date();
+    const dataHoje = hoje.getFullYear() + "-" + String(hoje.getMonth() + 1).padStart(2, "0") + "-" + String(hoje.getDate()).padStart(2, "0");
+
+    window.banco.from("marcas").insert({
+      nome: nome,
+      email: email,
+      obs: mensagem,
+      situacao: "lead",
+      ultimo_contato: dataHoje
+    }).then(function(resp){
+      botao.disabled = false;
+      if (resp.error) throw resp.error;
+      aviso.hidden = false;
+      aviso.textContent = "Obrigada, " + primeiroNome + ". Recebi sua mensagem e respondo em até um dia útil.";
+      form.reset();
+    }).catch(function(erro){
+      botao.disabled = false;
+      console.error("Não consegui enviar a mensagem de contato:", erro);
+      aviso.hidden = false;
+      aviso.textContent = "Não consegui enviar agora. Tenta de novo em instantes ou me chama direto no WhatsApp.";
+    });
+  });
+}
+
+/* ----- registro simples de visita -----
+   Não pede nada pro visitante e não usa nenhum serviço de fora: só
+   grava a página e de onde a pessoa veio, pras métricas do painel. */
+function registraVisita(){
+  if (!window.banco) return;
+  window.banco.from("visitas").insert({
+    pagina: window.location.pathname || "/",
+    origem: document.referrer || ""
+  }).then(function(resp){
+    if (resp.error) console.error("Não consegui registrar a visita:", resp.error);
+  }).catch(function(erro){
+    console.error("Não consegui registrar a visita:", erro);
   });
 }
 
@@ -1079,7 +1191,7 @@ function ligaAno(){
 montaMarcas();
 montaCapaNumeros();
 montaDestaques();
-montaVideos();
+carregarEMontarVideos();
 montaServicos();
 montaNumeros();
 ligaObservadores();
@@ -1088,6 +1200,7 @@ ligaFormulario();
 ligaVisor();
 ligaCaptura();
 ligaAno();
+registraVisita();
 </script>
 </body>
 </html>
