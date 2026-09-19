@@ -114,7 +114,12 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 
 /* ===== 1. CAPA ===== */
 .capa{padding:clamp(40px,7vw,78px) 0 0;scroll-margin-top:var(--topo)}
-.capa-grade{display:grid;grid-template-columns:1.12fr .88fr;gap:clamp(28px,5vw,64px);align-items:center;padding-bottom:clamp(48px,7vw,80px)}
+.capa-grade{display:grid;grid-template-columns:1.12fr .88fr;grid-template-areas:"texto foto" "numeros foto";gap:0 clamp(28px,5vw,64px);align-items:center;padding-bottom:clamp(48px,7vw,80px)}
+.capa-texto{grid-area:texto}
+.capa-foto{grid-area:foto}
+.capa-numeros{grid-area:numeros}
+.capa-foto{width:100%;max-width:420px;margin-inline:auto}
+.foto{display:block;width:100%;height:auto;background:var(--azul-fundo)}
 .capa-nome{font-size:clamp(3.1rem,11vw,7rem);line-height:.92;letter-spacing:-.025em;margin-bottom:22px}
 .capa-frase{font-size:clamp(1.1rem,2.1vw,1.4rem);max-width:30ch;color:var(--tinta-media)}
 .capa-botoes{display:flex;flex-wrap:wrap;gap:14px;margin-top:32px}
@@ -262,6 +267,8 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   .destaques-grade,.servicos-grade,.resultados{grid-template-columns:1fr 1fr}
   .metricas{grid-template-columns:1fr 1fr}
   .capa-grade,.sobre-grade,.contato-grade{grid-template-columns:1fr}
+  .capa-grade{grid-template-areas:"texto" "foto" "numeros";gap:34px}
+  .capa-numeros{margin-top:0}
   .capa-foto{max-width:420px}
 }
 @media (max-width:900px){
@@ -321,16 +328,19 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
           <a class="btn" href="#contato">Falar comigo</a>
           <a class="btn btn--linha" href="#trabalhos">Ver os trabalhos</a>
         </div>
-        <ul class="capa-numeros revela" id="capaNumeros"></ul>
       </div>
       <div class="capa-foto revela">
-        <!-- COMO TROCAR PELA FOTO REAL: apague a div .midia abaixo e coloque no lugar
-             <img src="minha-foto.jpg" alt="Paloma Ribeiro gravando um vídeo" class="midia midia--45">
-             (a imagem precisa estar na mesma pasta do index.html) -->
+        <!-- COMO TROCAR A FOTO DA CAPA: coloque a nova imagem na mesma pasta do
+             index.html com o nome foto-capa.webp. Se ela tiver outra proporção,
+             troque também os números de width e height aqui embaixo pelos da
+             foto nova, para a página não dar um pulo enquanto carrega. -->
         <div class="moldura"><div class="moldura-interna">
-          <div class="midia midia--45"><span class="legenda">foto da creator 4:5</span></div>
+          <img src="foto-capa.webp" width="880" height="1322" fetchpriority="high"
+               alt="Paloma Ribeiro sorrindo, de blazer bege sobre camiseta branca e calça jeans"
+               class="foto">
         </div></div>
       </div>
+      <ul class="capa-numeros revela" id="capaNumeros"></ul>
     </div>
     <div class="faixa-marcas">
       <ul class="trilho" id="trilhoMarcas"></ul>
