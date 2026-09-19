@@ -113,7 +113,14 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .hamburguer[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
 
 /* ===== 1. CAPA ===== */
-.capa{padding:clamp(40px,7vw,78px) 0 0;scroll-margin-top:var(--topo)}
+.capa{
+  padding:clamp(40px,7vw,78px) 0 0;scroll-margin-top:var(--topo);
+  /* fundo decorativo só desta seção (o resto do site mantém a grade de bolinhas) */
+  background-color:var(--louca);
+  background-image:url('padrao-capa.webp');
+  background-repeat:repeat;
+  background-size:420px auto;
+}
 .capa-grade{display:grid;grid-template-columns:1.12fr .88fr;grid-template-areas:"texto foto" "numeros foto";gap:0 clamp(28px,5vw,64px);align-items:center;padding-bottom:clamp(48px,7vw,80px)}
 .capa-texto{grid-area:texto}
 .capa-foto{grid-area:foto}
@@ -150,6 +157,13 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 }
 .midia--916{aspect-ratio:9/16}
 .midia--45{aspect-ratio:4/5}
+
+/* ===== moldura de renda decorativa (seção Sobre) =====
+   a proporção 648/850 é a da própria imagem da moldura: mantendo os dois
+   do mesmo tamanho, a "janela" vazada dela cai certinho sobre a foto. */
+.foto-moldurada{position:relative;width:100%;max-width:400px;margin-inline:auto;aspect-ratio:648/850}
+.foto-moldurada .midia{position:absolute;inset:0;width:100%;height:100%}
+.moldura-decorativa{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none}
 .midia--11{aspect-ratio:1/1}
 .midia .legenda{font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;text-shadow:0 1px 6px rgba(22,35,59,.5)}
 .assistir{position:absolute;inset:0;margin:auto;width:70px;height:70px;background:var(--louca-clara);border:3px solid var(--cobalto);display:grid;place-items:center}
@@ -353,10 +367,11 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
     <div class="env sobre-grade">
       <div class="revela">
         <!-- COMO TROCAR PELA FOTO REAL: substitua a div .midia por
-             <img src="sobre.jpg" alt="Paloma Ribeiro no set de gravação" class="midia midia--45"> -->
-        <div class="moldura"><div class="moldura-interna">
-          <div class="midia midia--45"><span class="legenda">foto da creator 4:5</span></div>
-        </div></div>
+             <img src="sobre.jpg" alt="Paloma Ribeiro no set de gravação" class="midia"> -->
+        <div class="foto-moldurada">
+          <div class="midia"><span class="legenda">foto da creator</span></div>
+          <img src="moldura-sobre.webp" alt="" class="moldura-decorativa" aria-hidden="true">
+        </div>
       </div>
       <div class="revela">
         <p class="rotulo">Sobre mim</p>
