@@ -162,15 +162,45 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .destaque-titulo{font-size:1.25rem;margin-top:16px}
 .destaque-contexto{margin-top:8px;color:var(--tinta-media);font-size:.95rem}
 
-/* ===== 4. TRABALHOS ===== */
+/* ===== 4. TRABALHOS POR NICHO, EM CARROSSEL ===== */
 .filtros{display:flex;flex-wrap:wrap;gap:10px;margin-top:36px}
 .filtro{padding:10px 20px;border:2px solid var(--cobalto);background:transparent;color:var(--cobalto);cursor:pointer;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;transition:background .2s ease,color .2s ease}
 .filtro[aria-pressed="true"]{background:var(--cobalto);color:#fff}
-.trabalhos-grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(236px,1fr));gap:clamp(18px,2.6vw,30px);margin-top:34px}
-.trabalho-texto{padding:18px 16px 16px}
-.trabalho-marca{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cobalto)}
-.trabalho-titulo{font-size:1.08rem;margin-top:6px}
-.trabalho-descricao{margin-top:6px;font-size:.92rem;color:var(--tinta-media)}
+.carrossel{margin-top:46px}
+.carrossel[hidden]{display:none}
+.carrossel-topo{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px}
+.carrossel-nome{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:600;font-size:1.4rem;color:var(--cobalto);padding-bottom:8px;border-bottom:1px solid var(--cobalto)}
+.carrossel-setas{display:flex;gap:10px}
+.carrossel-setas[hidden]{display:none}
+.seta{width:48px;height:48px;border:2px solid var(--cobalto);background:transparent;color:var(--cobalto);cursor:pointer;display:grid;place-items:center;font-size:1rem;line-height:1;transition:background .2s ease,color .2s ease}
+.seta:hover:not(:disabled){background:var(--cobalto);color:#fff}
+.seta:disabled{opacity:.3;cursor:default}
+.trilho-videos{display:flex;gap:20px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;padding:22px 4px 18px;scrollbar-width:thin;scrollbar-color:var(--cobalto) var(--azul-fundo)}
+.trilho-videos::-webkit-scrollbar{height:8px}
+.trilho-videos::-webkit-scrollbar-track{background:var(--azul-fundo)}
+.trilho-videos::-webkit-scrollbar-thumb{background:var(--cobalto)}
+.video-card{flex:0 0 268px;scroll-snap-align:start;border:3px solid var(--cobalto);padding:5px;background:var(--louca-clara)}
+.video-quadro{position:relative;aspect-ratio:9/16;border:1px solid var(--cobalto);background:#0b1220;overflow:hidden}
+.video-quadro iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.video-carregando{position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;background:linear-gradient(145deg,var(--azul-fundo) 0%,var(--azul-claro) 48%,var(--cobalto) 100%)}
+.video-abrir{position:absolute;inset:0;z-index:2;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:pointer;display:flex;align-items:flex-end;justify-content:center}
+.selo-som{margin-bottom:14px;padding:8px 13px;background:var(--louca-clara);border:2px solid var(--cobalto);color:var(--cobalto);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;transition:background .2s ease,color .2s ease}
+.video-abrir:hover .selo-som,.video-abrir:focus-visible .selo-som{background:var(--cobalto);color:#fff}
+.video-texto{padding:16px 14px 12px}
+.video-marca{font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cobalto)}
+.video-titulo{font-size:1.05rem;margin-top:5px}
+
+/* ===== visor que abre o vídeo com som ===== */
+.visor{position:fixed;inset:0;z-index:130;display:grid;place-items:center;padding:18px;background:rgba(11,18,32,.9)}
+.visor[hidden]{display:none}
+.visor-caixa{display:grid;gap:14px;justify-items:center;max-height:96vh}
+.visor-quadro{position:relative;aspect-ratio:9/16;height:min(72vh,640px);max-width:92vw;border:3px solid var(--cobalto);background:#000}
+.visor-quadro iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.visor-legenda{text-align:center;color:#fff}
+.visor-legenda .video-marca{color:var(--azul-claro)}
+.visor-legenda h3{color:#fff;font-size:1.15rem;margin-top:4px}
+.visor-fechar{position:fixed;top:16px;right:16px;width:46px;height:46px;border:2px solid #fff;background:transparent;color:#fff;font-size:1.1rem;line-height:1;cursor:pointer}
+.visor-fechar:hover{background:#fff;color:var(--cobalto)}
 
 /* ===== 5. SERVIÇOS ===== */
 .servicos-grade{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.6vw,30px);margin-top:46px}
@@ -347,10 +377,10 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
     <div class="env">
       <p class="rotulo revela">Trabalhos por nicho</p>
       <h2 class="titulo-secao revela">O que eu já gravei</h2>
-      <p class="intro-secao revela">Escolha um nicho para ver só os trabalhos daquela categoria.</p>
-      <div class="filtros revela" id="filtros" role="group" aria-label="Filtrar trabalhos por nicho"></div>
+      <p class="intro-secao revela">Os vídeos rodam aqui sem som. Clique em qualquer um para abrir com o áudio.</p>
+      <div class="filtros revela" id="filtros" role="group" aria-label="Filtrar vídeos por categoria"></div>
       <p class="so-leitor" id="avisoFiltro" role="status" aria-live="polite"></p>
-      <div class="trabalhos-grade" id="grelhaTrabalhos"></div>
+      <div id="carrosseis"></div>
     </div>
   </section>
 
@@ -436,6 +466,18 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   </div>
 </footer>
 
+<!-- ============ VISOR DE VÍDEO COM SOM ============ -->
+<div class="visor" id="visor" hidden>
+  <div class="visor-caixa" role="dialog" aria-modal="true" aria-labelledby="visorTitulo">
+    <button class="visor-fechar" id="visorFechar" aria-label="Fechar o vídeo">&#10005;</button>
+    <div class="visor-quadro" id="visorQuadro"></div>
+    <div class="visor-legenda">
+      <p class="video-marca" id="visorMarca"></p>
+      <h3 id="visorTitulo"></h3>
+    </div>
+  </div>
+</div>
+
 <!-- ============ CARD DE CAPTURA ============ -->
 <div class="captura" id="captura" hidden>
   <div class="captura-card" role="dialog" aria-modal="true" aria-labelledby="tituloCaptura">
@@ -515,28 +557,27 @@ const DESTAQUES = [
   }
 ];
 
-/* --- 4) NICHOS DOS FILTROS (o id precisa bater com o campo nicho dos trabalhos) --- */
-const NICHOS = [
-  { id: "todos",    nome: "Todos" },
+/* --- 4) CATEGORIAS DOS VÍDEOS ---
+   Só aparece o carrossel da categoria que tiver pelo menos um vídeo na lista abaixo. */
+const CATEGORIAS = [
   { id: "beleza",   nome: "Beleza" },
   { id: "skincare", nome: "Skincare" },
   { id: "moda",     nome: "Moda" },
   { id: "tech",     nome: "Tech" }
 ];
 
-/* --- 5) TRABALHOS DA GALERIA ---
-   formato: aparece como legenda dentro do bloco com degradê.
-   Para usar a imagem real, troque a linha do bloco .midia dentro de montaTrabalhos por:
-   <img src="foto-do-trabalho.jpg" alt="Descrição do trabalho" class="midia midia--45"> */
-const TRABALHOS = [
-  { titulo: "Trabalho 01", marca: "Pantene",     nicho: "beleza",   formato: "vídeo 9:16", classe: "midia--916", descricao: "Escreva aqui o que você fez nesse trabalho." },
-  { titulo: "Trabalho 02", marca: "Aprilskin",   nicho: "skincare", formato: "foto 4:5",   classe: "midia--45",  descricao: "Escreva aqui o que você fez nesse trabalho." },
-  { titulo: "Trabalho 03", marca: "Meditherapy", nicho: "skincare", formato: "vídeo 9:16", classe: "midia--916", descricao: "Escreva aqui o que você fez nesse trabalho." },
-  { titulo: "Trabalho 04", marca: "Bioage",      nicho: "beleza",   formato: "foto 1:1",   classe: "midia--11",  descricao: "Escreva aqui o que você fez nesse trabalho." },
-  { titulo: "Trabalho 05", marca: "Eudora",      nicho: "beleza",   formato: "vídeo 9:16", classe: "midia--916", descricao: "Escreva aqui o que você fez nesse trabalho." },
-  { titulo: "Trabalho 06", marca: "Elseve",      nicho: "beleza",   formato: "foto 4:5",   classe: "midia--45",  descricao: "Escreva aqui o que você fez nesse trabalho." },
-  { titulo: "Trabalho 07", marca: "Marca 07",    nicho: "moda",     formato: "vídeo 9:16", classe: "midia--916", descricao: "Escreva aqui o que você fez nesse trabalho." },
-  { titulo: "Trabalho 08", marca: "Marca 08",    nicho: "tech",     formato: "foto 4:5",   classe: "midia--45",  descricao: "Escreva aqui o que você fez nesse trabalho." }
+/* --- 5) VÍDEOS DO CARROSSEL ---
+   Cada vídeo roda sozinho e sem som dentro do card, e abre com som quando alguém clica.
+   id:        AQUI ENTRA O CÓDIGO DO VÍDEO NO YOUTUBE, que é o pedaço final do endereço.
+              Em https://youtube.com/shorts/7XeWNnD0xCE o código é 7XeWNnD0xCE
+   categoria: precisa ser um dos ids da lista CATEGORIAS acima.
+   marca:     o nome da marca do trabalho.
+   titulo:    o nome do vídeo. */
+const VIDEOS = [
+  { id: "Q1XgR8XCRDo", categoria: "beleza", marca: "Aprilskin",    titulo: "Batom" },
+  { id: "e4SqXe4NIT4", categoria: "beleza", marca: "Garnier",      titulo: "Hidratante" },
+  { id: "YfBW8uTd_FE", categoria: "beleza", marca: "Celimax",      titulo: "Máscara" },
+  { id: "7XeWNnD0xCE", categoria: "tech",   marca: "Show Imports", titulo: "Mercado" }
 ];
 
 /* --- 6) SERVIÇOS --- */
@@ -625,45 +666,224 @@ function montaDestaques(){
   }).join("");
 }
 
-/* ----- galeria de trabalhos com filtro por nicho ----- */
-function montaTrabalhos(){
-  $("#filtros").innerHTML = NICHOS.map(function(n, i){
-    return '<button type="button" class="filtro" data-nicho="' + esc(n.id) + '" ' +
-           'aria-pressed="' + (i === 0 ? "true" : "false") + '">' + esc(n.nome) + '</button>';
-  }).join("");
+/* ----- endereço do vídeo no YouTube -----
+   sem som: roda sozinho, mudo e em repetição, dentro do card.
+   com som: usado no visor que abre quando alguém clica. */
+function enderecoVideo(id, comSom){
+  const codigo = encodeURIComponent(id);
+  const comum = "playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1&loop=1&playlist=" + codigo;
+  const extra = comSom
+    ? "&autoplay=1&mute=0&controls=1"
+    : "&autoplay=" + (reduzMovimento ? "0" : "1") + "&mute=1&controls=0&disablekb=1&fs=0";
+  return "https://www.youtube.com/embed/" + codigo + "?" + comum + extra;
+}
 
-  $("#grelhaTrabalhos").innerHTML = TRABALHOS.map(function(t){
+/* fala com o player do YouTube sem precisar carregar a biblioteca deles */
+function comandoVideo(frame, funcao){
+  if (!frame || !frame.getAttribute("src") || !frame.contentWindow) return;
+  try {
+    frame.contentWindow.postMessage('{"event":"command","func":"' + funcao + '","args":[]}', "*");
+  } catch (erro) { /* o player ainda não está pronto, não tem problema */ }
+}
+
+/* enquanto o visor estiver aberto, nenhum vídeo de fundo volta a tocar */
+let visorAberto = false;
+let retomaVideos = function(){};
+
+function estaNaTela(el){
+  const r = el.getBoundingClientRect();
+  return r.bottom > 0 && r.top < (window.innerHeight || document.documentElement.clientHeight);
+}
+
+/* ----- carrosséis de vídeo, um por categoria ----- */
+function montaVideos(){
+  const comVideo = CATEGORIAS.filter(function(c){
+    return VIDEOS.some(function(v){ return v.categoria === c.id; });
+  });
+
+  $("#filtros").innerHTML =
+    '<button type="button" class="filtro" data-categoria="todos" aria-pressed="true">Todos</button>' +
+    comVideo.map(function(c){
+      return '<button type="button" class="filtro" data-categoria="' + esc(c.id) + '" aria-pressed="false">' + esc(c.nome) + '</button>';
+    }).join("");
+
+  $("#carrosseis").innerHTML = comVideo.map(function(c){
+    const lista = VIDEOS.filter(function(v){ return v.categoria === c.id; });
+    const cards = lista.map(function(v){
+      const nome = v.marca + ", " + v.titulo;
+      return '' +
+        '<article class="video-card">' +
+          '<div class="video-quadro">' +
+            '<p class="video-carregando">carregando</p>' +
+            '<iframe data-src="' + esc(enderecoVideo(v.id, false)) + '" title="' + esc(nome) + '" ' +
+              'allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>' +
+            '<button type="button" class="video-abrir" data-id="' + esc(v.id) + '" ' +
+              'aria-label="Abrir o vídeo ' + esc(nome) + ' com som">' +
+              '<span class="selo-som">sem som, clique para ouvir</span>' +
+            '</button>' +
+          '</div>' +
+          '<div class="video-texto">' +
+            '<p class="video-marca">' + esc(v.marca) + '</p>' +
+            '<h4 class="video-titulo">' + esc(v.titulo) + '</h4>' +
+          '</div>' +
+        '</article>';
+    }).join("");
+
     return '' +
-      '<article class="moldura revela" data-nicho="' + esc(t.nicho) + '">' +
-        '<div class="moldura-interna">' +
-          /* AQUI ENTRA A FOTO REAL: troque a linha abaixo por
-             <img src="foto-do-trabalho.jpg" alt="Descrição" class="midia midia--45"> */
-          '<div class="midia ' + esc(t.classe) + '"><span class="legenda">' + esc(t.formato) + '</span></div>' +
-          '<div class="trabalho-texto">' +
-            '<p class="trabalho-marca">' + esc(t.marca) + '</p>' +
-            '<h3 class="trabalho-titulo">' + esc(t.titulo) + '</h3>' +
-            '<p class="trabalho-descricao">' + esc(t.descricao) + '</p>' +
+      '<section class="carrossel revela" data-categoria="' + esc(c.id) + '">' +
+        '<div class="carrossel-topo">' +
+          '<h3 class="carrossel-nome">' + esc(c.nome) + '</h3>' +
+          '<div class="carrossel-setas">' +
+            '<button type="button" class="seta" data-passo="-1" aria-label="Ver os vídeos anteriores de ' + esc(c.nome) + '">&#10094;</button>' +
+            '<button type="button" class="seta" data-passo="1" aria-label="Ver os próximos vídeos de ' + esc(c.nome) + '">&#10095;</button>' +
           '</div>' +
         '</div>' +
-      '</article>';
+        '<div class="trilho-videos" tabindex="0" role="group" ' +
+          'aria-label="Carrossel de ' + esc(c.nome) + '. Role para o lado para ver mais vídeos.">' +
+          cards +
+        '</div>' +
+      '</section>';
   }).join("");
 
-  const botoes = document.querySelectorAll("#filtros .filtro");
-  const cartoes = document.querySelectorAll("#grelhaTrabalhos [data-nicho]");
+  const carrosseis = document.querySelectorAll("#carrosseis .carrossel");
 
+  /* as setas ligam e desligam conforme sobra caminho para rolar */
+  function atualizaSetas(){
+    carrosseis.forEach(function(c){
+      const trilho = c.querySelector(".trilho-videos");
+      const sobra = trilho.scrollWidth - trilho.clientWidth;
+      /* se todos os vídeos já cabem na tela, as setas somem em vez de ficarem apagadas */
+      c.querySelector(".carrossel-setas").hidden = sobra <= 2;
+      c.querySelector('.seta[data-passo="-1"]').disabled = trilho.scrollLeft <= 2;
+      c.querySelector('.seta[data-passo="1"]').disabled = trilho.scrollLeft >= sobra - 2;
+    });
+  }
+
+  carrosseis.forEach(function(c){
+    const trilho = c.querySelector(".trilho-videos");
+    c.querySelectorAll(".seta").forEach(function(seta){
+      seta.addEventListener("click", function(){
+        const card = trilho.querySelector(".video-card");
+        const largura = card ? card.getBoundingClientRect().width + 20 : 288;
+        trilho.scrollBy({ left: largura * Number(seta.dataset.passo), behavior: reduzMovimento ? "auto" : "smooth" });
+      });
+    });
+    trilho.addEventListener("scroll", atualizaSetas, { passive: true });
+  });
+  window.addEventListener("resize", atualizaSetas);
+
+  /* o vídeo só carrega quando chega perto da tela, e pausa quando sai */
+  const cards = document.querySelectorAll("#carrosseis .video-card");
+  function carrega(card){
+    const frame = card.querySelector("iframe");
+    if (frame.getAttribute("src")) return frame;
+    frame.addEventListener("load", function(){
+      const aviso = card.querySelector(".video-carregando");
+      if (aviso) aviso.remove();
+    });
+    frame.setAttribute("src", frame.dataset.src);
+    return frame;
+  }
+  retomaVideos = function(){
+    cards.forEach(function(card){
+      const dono = card.closest(".carrossel");
+      if ((dono && dono.hidden) || !estaNaTela(card)) return;
+      const frame = card.querySelector("iframe");
+      if (!frame.getAttribute("src")) carrega(card);
+      else comandoVideo(frame, "playVideo");
+    });
+  };
+
+  if ("IntersectionObserver" in window){
+    const obs = new IntersectionObserver(function(entradas){
+      entradas.forEach(function(e){
+        const frame = e.target.querySelector("iframe");
+        if (e.isIntersecting){
+          if (visorAberto) return;
+          if (!frame.getAttribute("src")) carrega(e.target);
+          else comandoVideo(frame, "playVideo");
+        } else {
+          comandoVideo(frame, "pauseVideo");
+        }
+      });
+    }, { threshold: 0.4 });
+    cards.forEach(function(c){ obs.observe(c); });
+  } else {
+    cards.forEach(carrega);
+  }
+
+  /* filtro por categoria: mostra só os carrosséis escolhidos */
+  const botoes = document.querySelectorAll("#filtros .filtro");
   botoes.forEach(function(botao){
     botao.addEventListener("click", function(){
-      const alvo = botao.dataset.nicho;
+      const alvo = botao.dataset.categoria;
       botoes.forEach(function(b){ b.setAttribute("aria-pressed", b === botao ? "true" : "false"); });
-      let visiveis = 0;
-      cartoes.forEach(function(c){
-        const mostra = (alvo === "todos" || c.dataset.nicho === alvo);
+      let total = 0;
+      carrosseis.forEach(function(c){
+        const mostra = (alvo === "todos" || c.dataset.categoria === alvo);
         c.hidden = !mostra;
-        if (mostra) { visiveis++; c.classList.add("visivel"); }
+        if (mostra){
+          c.classList.add("visivel");
+          total += c.querySelectorAll(".video-card").length;
+        } else {
+          c.querySelectorAll("iframe").forEach(function(f){ comandoVideo(f, "pauseVideo"); });
+        }
       });
-      $("#avisoFiltro").textContent = visiveis + (visiveis === 1 ? " trabalho encontrado." : " trabalhos encontrados.");
+      $("#avisoFiltro").textContent = total + (total === 1 ? " vídeo encontrado." : " vídeos encontrados.");
+      atualizaSetas();
     });
   });
+
+  atualizaSetas();
+}
+
+/* ----- visor: abre o vídeo grande e com som ----- */
+function ligaVisor(){
+  const visor = $("#visor");
+  const quadro = $("#visorQuadro");
+  const fechar = $("#visorFechar");
+  let focoAnterior = null;
+
+  function abre(id){
+    const video = VIDEOS.filter(function(v){ return v.id === id; })[0];
+    if (!video) return;
+    focoAnterior = document.activeElement;
+    visorAberto = true;
+    document.querySelectorAll("#carrosseis iframe").forEach(function(f){ comandoVideo(f, "pauseVideo"); });
+    quadro.innerHTML = '<iframe src="' + esc(enderecoVideo(id, true)) + '" ' +
+      'title="' + esc(video.marca + ", " + video.titulo) + '" ' +
+      'allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
+    $("#visorMarca").textContent = video.marca;
+    $("#visorTitulo").textContent = video.titulo;
+    visor.hidden = false;
+    document.body.style.overflow = "hidden";
+    fechar.focus();
+    document.addEventListener("keydown", tecla);
+  }
+
+  function fecha(){
+    visor.hidden = true;
+    quadro.innerHTML = "";            /* tirar o iframe corta o som na hora */
+    document.body.style.overflow = "";
+    document.removeEventListener("keydown", tecla);
+    if (focoAnterior && focoAnterior.focus) focoAnterior.focus();
+    visorAberto = false;
+    retomaVideos();
+  }
+
+  function tecla(e){
+    if (e.key === "Escape"){ fecha(); return; }
+    if (e.key !== "Tab") return;
+    e.preventDefault();
+    fechar.focus();
+  }
+
+  document.addEventListener("click", function(e){
+    const botao = e.target.closest ? e.target.closest(".video-abrir") : null;
+    if (botao) abre(botao.dataset.id);
+  });
+  fechar.addEventListener("click", fecha);
+  visor.addEventListener("click", function(e){ if (e.target === visor) fecha(); });
 }
 
 /* ----- serviços ----- */
@@ -802,6 +1022,7 @@ function ligaCaptura(){
   }
   function abre(){
     if (jaViu()) return;
+    if (!$("#visor").hidden){ setTimeout(abre, 7000); return; }  /* não atropela o vídeo aberto */
     marcaVisto();
     focoAnterior = document.activeElement;
     caixa.hidden = false;
@@ -848,12 +1069,13 @@ function ligaAno(){
 montaMarcas();
 montaCapaNumeros();
 montaDestaques();
-montaTrabalhos();
+montaVideos();
 montaServicos();
 montaNumeros();
 ligaObservadores();
 ligaMenu();
 ligaFormulario();
+ligaVisor();
 ligaCaptura();
 ligaAno();
 </script>
