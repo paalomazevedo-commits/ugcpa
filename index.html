@@ -26,8 +26,6 @@
   --tinta:#2b2d35;           /* texto principal (a cor principal bem escurecida) */
   --tinta-media:#5c5f6b;     /* texto de apoio */
   --fio:rgba(134,142,166,.22); /* fio fino usado em divisórias */
-  --bege:#d9a796;             /* terracota, fundo da capa */
-  --bege-ponto:rgba(50,30,20,.08); /* textura fina de papel sobre o terracota */
   --topo:76px;               /* altura do menu fixo */
   --gutter:clamp(16px,5vw,48px);
 }
@@ -97,10 +95,8 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .topo{
   position:fixed;inset:0 0 auto 0;z-index:90;border-bottom:3px solid var(--cobalto);
   background-color:var(--louca);
-  background-image:url('padrao-cabecalho.webp');
-  background-repeat:repeat;
-  background-size:170px auto;
-  background-position:center -20px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='2' height='2' fill='%232b2d35' fill-opacity='.055'/%3E%3C/svg%3E");
+  background-size:4px 4px;
 }
 .barra{height:var(--topo);display:flex;align-items:center;justify-content:space-between;gap:16px}
 .marca-topo{font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:1.22rem;text-decoration:none;letter-spacing:.01em}
@@ -116,11 +112,9 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 /* ===== 1. CAPA ===== */
 .capa{
   padding:clamp(40px,7vw,78px) 0 0;scroll-margin-top:var(--topo);
-  /* fundo bege só desta seção, com uma textura fininha de papel por cima
-     (o resto do site fica liso, na cor --louca) */
-  background-color:var(--bege);
-  background-image:radial-gradient(circle, var(--bege-ponto) .7px, transparent 1px);
-  background-size:7px 7px;
+  background-color:var(--louca);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='2' height='2' fill='%232b2d35' fill-opacity='.055'/%3E%3C/svg%3E");
+  background-size:4px 4px;
 }
 .capa-grade{display:grid;grid-template-columns:1.12fr .88fr;grid-template-areas:"texto foto" "numeros foto";gap:0 clamp(28px,5vw,64px);align-items:center;padding-bottom:clamp(48px,7vw,80px)}
 .capa-texto{grid-area:texto}
