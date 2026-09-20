@@ -863,6 +863,20 @@ function montaVideos(lista){
     });
   };
 
+  /* passar o mouse ou o dedo em cima garante que aquele vídeo
+     esteja tocando (sem som), mesmo que o carregamento automático
+     ainda não tenha chegado nele */
+  function tocaAoPassar(){
+    if (visorAberto) return;
+    const frame = this.querySelector("iframe");
+    if (!frame.getAttribute("src")) carrega(this);
+    else comandoVideo(frame, "playVideo");
+  }
+  cards.forEach(function(card){
+    card.addEventListener("mouseenter", tocaAoPassar);
+    card.addEventListener("touchstart", tocaAoPassar, { passive: true });
+  });
+
   if ("IntersectionObserver" in window){
     const obs = new IntersectionObserver(function(entradas){
       entradas.forEach(function(e){
