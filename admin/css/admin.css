@@ -193,6 +193,8 @@ svg.icone{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6;
   color:var(--tinta-media);font-size:.8rem;cursor:pointer;border-radius:var(--raio);
 }
 .chip-filtro[aria-pressed="true"]{background:var(--cobalto);border-color:var(--cobalto);color:#fff}
+.chip-filtro--estrela{display:inline-flex;align-items:center;gap:6px}
+.chip-filtro--estrela[aria-pressed="true"]{background:var(--ambar);border-color:var(--ambar);color:#fff}
 .ferramentas-espaco{flex:1}
 
 /* ---------- botões ---------- */

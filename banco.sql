@@ -60,6 +60,8 @@ create table if not exists public.marcas (
   telefone        text not null default '',
   situacao        text not null default 'lead'
                   check (situacao in ('lead','conversando','cliente','parada')),
+  nicho           text not null default '',   -- texto livre, tipo "beleza", "moda", "tech"
+  favorita        boolean not null default false,
   obs             text not null default '',
   ultimo_contato  date,
   exemplo         boolean not null default false,

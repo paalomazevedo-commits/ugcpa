@@ -1,7 +1,9 @@
 /* ============================================================
    ABA 2 - MARCAS
    A base de contatos de empresa, em formato de planilha. Busca,
-   filtro por situação, adicionar, editar (clicando na linha),
+   filtro por situação e por nicho, favoritar com estrela (pra
+   depois filtrar só as favoritas, por exemplo pra mandar e-mail
+   só pra elas), adicionar, editar (clicando na linha), importar e
    baixar CSV, e atalhos pra WhatsApp e Instagram.
    ============================================================ */
 (function () {
@@ -9,6 +11,8 @@
   var todas = [];
   var termoBusca = "";
   var situacaoAtiva = "todas";
+  var nichoAtivo = "todos";
+  var soFavoritas = false;
 
   var SITUACOES = {
     lead: { rotulo: "Lead", pilula: "pilula--azul", ponto: "situacao-ponto--lead" },
@@ -18,8 +22,12 @@
   };
   var ORDEM_SITUACOES = ["lead", "conversando", "cliente", "parada"];
 
+  function capitalizaPalavra(t) {
+    return String(t || "").replace(/(^|\s)\S/g, function (c) { return c.toUpperCase(); });
+  }
+
   function montar(raiz) {
-    todas = []; termoBusca = ""; situacaoAtiva = "todas";
+    todas = []; termoBusca = ""; situacaoAtiva = "todas"; nichoAtivo = "todos"; soFavoritas = false;
     raiz.innerHTML =
       '<div class="ferramentas">' +
         '<div class="busca">' + A.icone("busca") + '<input type="text" id="mcBusca" placeholder="Buscar por nome, @ ou e-mail"></div>' +
@@ -29,9 +37,13 @@
         '<button type="button" class="botao botao--linha" id="mcBaixar">' + A.icone("baixar") + "Baixar CSV</button>" +
         '<button type="button" class="botao" id="mcNova">' + A.icone("mais") + "Adicionar marca</button>" +
       "</div>" +
+      '<div class="ferramentas">' +
+        '<div class="chips-filtro" id="mcChipsNicho"></div>' +
+        '<button type="button" class="chip-filtro chip-filtro--estrela" id="mcSoFavoritas" aria-pressed="false">' + A.icone("estrela") + "Só favoritas</button>" +
+      "</div>" +
       '<div class="tabela-scroll"><table class="tabela"><thead><tr>' +
-        "<th>Marca</th><th>Instagram</th><th>E-mail</th><th>Telefone</th><th>Situação</th><th>Observação</th><th>Último contato</th>" +
-      '</tr></thead><tbody id="mcTabela"><tr class="tabela-vazia"><td colspan="7">Carregando…</td></tr></tbody></table></div>';
+        '<th></th><th>Marca</th><th>Instagram</th><th>E-mail</th><th>Telefone</th><th>Nicho</th><th>Situação</th><th>Observação</th><th>Último contato</th>' +
+      '</tr></thead><tbody id="mcTabela"><tr class="tabela-vazia"><td colspan="9">Carregando…</td></tr></tbody></table></div>';
 
     var chips = ['<button type="button" class="chip-filtro" data-situacao="todas" aria-pressed="true">Todas</button>'];
     ORDEM_SITUACOES.forEach(function (s) {
@@ -51,6 +63,12 @@
       renderTabela();
     }, 200));
 
+    document.getElementById("mcSoFavoritas").addEventListener("click", function () {
+      soFavoritas = !soFavoritas;
+      document.getElementById("mcSoFavoritas").setAttribute("aria-pressed", String(soFavoritas));
+      renderTabela();
+    });
+
     document.getElementById("mcNova").addEventListener("click", function () { abrirFormulario(null); });
     document.getElementById("mcBaixar").addEventListener("click", baixarCSV);
     document.getElementById("mcImportar").addEventListener("click", abrirImportador);
@@ -61,13 +79,56 @@
   function carregar() {
     A.buscar("marcas", function (q) { return q.order("criado_em", { ascending: false }); }).then(function (r) {
       todas = r.dados;
+      montarChipsNicho();
       renderTabela();
+    });
+  }
+
+  /* os chips de nicho vêm dos nichos que já existem nas marcas
+     cadastradas (do mesmo jeito que o portfólio monta os carrosséis
+     por nicho), então nunca precisa mexer no código pra criar um
+     nicho novo: basta escrever ele numa marca. */
+  function montarChipsNicho() {
+    var vistos = {};
+    var nichos = [];
+    var temSemNicho = false;
+    todas.forEach(function (m) {
+      var n = (m.nicho || "").trim().toLowerCase();
+      if (!n) { temSemNicho = true; return; }
+      if (vistos[n]) return;
+      vistos[n] = true;
+      nichos.push(n);
+    });
+    nichos.sort();
+
+    if (nichoAtivo !== "todos" && nichoAtivo !== "sem-nicho" && nichos.indexOf(nichoAtivo) === -1) nichoAtivo = "todos";
+    if (nichoAtivo === "sem-nicho" && !temSemNicho) nichoAtivo = "todos";
+
+    var alvo = document.getElementById("mcChipsNicho");
+    if (!nichos.length && !temSemNicho) { alvo.innerHTML = ""; return; }
+
+    var chips = ['<button type="button" class="chip-filtro" data-nicho="todos" aria-pressed="' + (nichoAtivo === "todos") + '">Todos os nichos</button>'];
+    nichos.forEach(function (n) {
+      chips.push('<button type="button" class="chip-filtro" data-nicho="' + A.esc(n) + '" aria-pressed="' + (nichoAtivo === n) + '">' + A.esc(capitalizaPalavra(n)) + "</button>");
+    });
+    if (temSemNicho) chips.push('<button type="button" class="chip-filtro" data-nicho="sem-nicho" aria-pressed="' + (nichoAtivo === "sem-nicho") + '">Sem nicho</button>');
+    alvo.innerHTML = chips.join("");
+
+    alvo.querySelectorAll(".chip-filtro").forEach(function (c) {
+      c.addEventListener("click", function () {
+        nichoAtivo = c.dataset.nicho;
+        alvo.querySelectorAll(".chip-filtro").forEach(function (x) { x.setAttribute("aria-pressed", x === c ? "true" : "false"); });
+        renderTabela();
+      });
     });
   }
 
   function filtradas() {
     return todas.filter(function (m) {
       if (situacaoAtiva !== "todas" && m.situacao !== situacaoAtiva) return false;
+      if (soFavoritas && !m.favorita) return false;
+      if (nichoAtivo === "sem-nicho") { if ((m.nicho || "").trim()) return false; }
+      else if (nichoAtivo !== "todos" && (m.nicho || "").trim().toLowerCase() !== nichoAtivo) return false;
       if (!termoBusca) return true;
       var alvo = ((m.nome || "") + " " + (m.instagram || "") + " " + (m.email || "")).toLowerCase();
       return alvo.indexOf(termoBusca) !== -1;
@@ -91,7 +152,7 @@
     var corpo = document.getElementById("mcTabela");
     var lista = filtradas();
     if (!lista.length) {
-      corpo.innerHTML = '<tr class="tabela-vazia"><td colspan="7">' +
+      corpo.innerHTML = '<tr class="tabela-vazia"><td colspan="9">' +
         (todas.length ? "Nenhuma marca encontrada com esse filtro." : 'Nenhuma marca cadastrada ainda. Clique em "Adicionar marca" pra começar.') +
         "</td></tr>";
       return;
@@ -100,11 +161,13 @@
       var sit = SITUACOES[m.situacao] || SITUACOES.lead;
       var linkInsta = linkInstagram(m.instagram);
       var linkZap = linkWhatsapp(m.telefone);
-      return '<tr class="linha-clicavel' + (m.exemplo ? " linha-exemplo" : "") + '" data-id="' + A.esc(m.id) + '">' +
+      return '<tr class="linha-clicavel' + (m.favorita ? " linha-favorita" : "") + (m.exemplo ? " linha-exemplo" : "") + '" data-id="' + A.esc(m.id) + '">' +
+        '<td class="campanha-estrela-cel"><button type="button" class="botao-estrela" data-estrela="' + A.esc(m.id) + '" data-marcada="' + (m.favorita ? "true" : "false") + '" aria-label="Favoritar marca" data-parar>' + A.icone("estrela") + "</button></td>" +
         "<td>" + A.esc(m.nome) + (m.exemplo ? '<span class="etiqueta-exemplo">exemplo</span>' : "") + "</td>" +
         "<td>" + (linkInsta ? '<a class="link-contato" href="' + A.esc(linkInsta) + '" target="_blank" rel="noopener" data-parar>' + A.icone("instagram") + A.esc(m.instagram) + "</a>" : "-") + "</td>" +
         "<td>" + (m.email ? '<a class="link-contato" href="mailto:' + A.esc(m.email) + '" data-parar>' + A.esc(m.email) + "</a>" : "-") + "</td>" +
         "<td>" + (linkZap ? '<a class="link-contato" href="' + A.esc(linkZap) + '" target="_blank" rel="noopener" data-parar>' + A.icone("whatsapp") + A.esc(m.telefone) + "</a>" : (m.telefone || "-")) + "</td>" +
+        "<td>" + (m.nicho ? A.esc(capitalizaPalavra(m.nicho)) : "-") + "</td>" +
         '<td><span class="pilula ' + sit.pilula + '"><span class="situacao-ponto ' + sit.ponto + '"></span>' + sit.rotulo + "</span></td>" +
         '<td class="celula-truncada" title="' + A.esc(m.obs || "") + '">' + A.esc(m.obs || "-") + "</td>" +
         "<td>" + (A.formatarData(m.ultimo_contato) || "-") + "</td></tr>";
@@ -119,15 +182,27 @@
     corpo.querySelectorAll("[data-parar]").forEach(function (a) {
       a.addEventListener("click", function (e) { e.stopPropagation(); });
     });
+    corpo.querySelectorAll("[data-estrela]").forEach(function (b) {
+      b.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var novo = b.dataset.marcada !== "true";
+        A.gravar("marcas", "update", { id: b.dataset.estrela, valores: { favorita: novo } }).then(function (r) {
+          if (!r.ok) { A.toast("Não consegui salvar. Tenta de novo.", "erro"); return; }
+          var m = todas.filter(function (x) { return x.id === b.dataset.estrela; })[0];
+          if (m) m.favorita = novo;
+          renderTabela();
+        });
+      });
+    });
   }
 
   function baixarCSV() {
     var lista = filtradas();
     var linhas = lista.map(function (m) {
       var sit = SITUACOES[m.situacao] || SITUACOES.lead;
-      return [m.nome || "", m.instagram || "", m.email || "", m.telefone || "", sit.rotulo, m.obs || "", A.formatarData(m.ultimo_contato) || ""];
+      return [m.nome || "", m.instagram || "", m.email || "", m.telefone || "", m.nicho ? capitalizaPalavra(m.nicho) : "", sit.rotulo, m.favorita ? "Sim" : "Não", m.obs || "", A.formatarData(m.ultimo_contato) || ""];
     });
-    A.baixarCSV("minhas-marcas.csv", ["Marca", "Instagram", "E-mail", "Telefone", "Situação", "Observação", "Último contato"], linhas);
+    A.baixarCSV("minhas-marcas.csv", ["Marca", "Instagram", "E-mail", "Telefone", "Nicho", "Situação", "Favorita", "Observação", "Último contato"], linhas);
   }
 
   function abrirFormulario(marca) {
@@ -142,10 +217,14 @@
         "</div>" +
         '<label class="campo"><span>E-mail</span><input type="email" id="fmEmail" value="' + A.esc(marca ? marca.email : "") + '"></label>' +
         '<div class="campo-linha">' +
+          '<label class="campo"><span>Nicho</span><input type="text" id="fmNicho" placeholder="beleza, moda, tech..." value="' + A.esc(marca ? marca.nicho : "") + '"></label>' +
           '<label class="campo"><span>Situação</span><select id="fmSituacao">' +
             ORDEM_SITUACOES.map(function (s) { return '<option value="' + s + '"' + (marca && marca.situacao === s ? " selected" : "") + ">" + SITUACOES[s].rotulo + "</option>"; }).join("") +
           "</select></label>" +
+        "</div>" +
+        '<div class="campo-linha">' +
           '<label class="campo"><span>Último contato</span><input type="date" id="fmUltimoContato" value="' + A.esc(marca && marca.ultimo_contato ? String(marca.ultimo_contato).slice(0, 10) : "") + '"></label>' +
+          '<label class="campo-check" style="margin-top:22px"><input type="checkbox" id="fmFavorita"' + (marca && marca.favorita ? " checked" : "") + "> " + A.icone("estrela") + " Favoritar</label>" +
         "</div>" +
         '<label class="campo"><span>Observação</span><textarea id="fmObs">' + A.esc(marca ? marca.obs : "") + "</textarea></label>" +
         '<p class="erro-campo" id="fmErro" hidden></p>' +
@@ -170,7 +249,9 @@
             instagram: document.getElementById("fmInstagram").value.trim(),
             email: document.getElementById("fmEmail").value.trim(),
             telefone: document.getElementById("fmTelefone").value.trim(),
+            nicho: document.getElementById("fmNicho").value.trim().toLowerCase(),
             situacao: document.getElementById("fmSituacao").value,
+            favorita: document.getElementById("fmFavorita").checked,
             ultimo_contato: document.getElementById("fmUltimoContato").value || null,
             obs: document.getElementById("fmObs").value.trim()
           };
@@ -214,7 +295,9 @@
     { id: "instagram", rotulo: "Instagram" },
     { id: "email", rotulo: "E-mail" },
     { id: "telefone", rotulo: "Telefone" },
+    { id: "nicho", rotulo: "Nicho" },
     { id: "situacao", rotulo: "Situação" },
+    { id: "favorita", rotulo: "Favorita" },
     { id: "obs", rotulo: "Observação" },
     { id: "ultimo_contato", rotulo: "Último contato" }
   ];
@@ -231,6 +314,8 @@
     if (/instagram|insta/.test(h)) return "instagram";
     if (/ultimo|último|data/.test(h)) return "ultimo_contato";
     if (/whatsapp|zap|celular|telefone|fone|contato/.test(h)) return "telefone";
+    if (/nicho|categoria|segmento|\barea\b|área/.test(h)) return "nicho";
+    if (/favorit|destaq|prioridade|\bvip\b/.test(h)) return "favorita";
     if (/situacao|situação|status|etapa|estagio|estágio|funil/.test(h)) return "situacao";
     if (/^obs|observacao|observação|nota|comentario|comentário/.test(h)) return "obs";
     if (/nome|marca|empresa|company|cliente|razao|razão/.test(h)) return "nome";
@@ -245,6 +330,12 @@
     if (/convers|negocia|proposta|andamento/.test(h)) return "conversando";
     if (/parad|perdid|frio|sem resposta|nao respond/.test(h)) return "parada";
     return "lead";
+  }
+
+  /* aceita "sim", "s", "true", "verdadeiro", "1", "x" ou "yes" como marcado */
+  function adivinharBooleano(t) {
+    var h = semAcento(t);
+    return /^(sim|s|true|verdadeiro|1|x|yes|y)$/.test(h);
   }
 
   /* aceita dd/mm/aaaa, dd-mm-aaaa ou aaaa-mm-dd; qualquer outro formato vira "sem data" */
@@ -411,7 +502,9 @@
         instagram: obj.instagram || "",
         email: obj.email || "",
         telefone: obj.telefone || "",
+        nicho: obj.nicho ? obj.nicho.toLowerCase() : "",
         situacao: obj.situacao ? adivinharSituacao(obj.situacao) : "lead",
+        favorita: obj.favorita ? adivinharBooleano(obj.favorita) : false,
         obs: obj.obs || "",
         ultimo_contato: obj.ultimo_contato ? adivinharData(obj.ultimo_contato) : null,
         exemplo: false
