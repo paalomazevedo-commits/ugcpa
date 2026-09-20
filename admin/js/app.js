@@ -34,6 +34,7 @@ window.Admin = (function () {
     estrela: '<svg class="icone" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.2 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.2 6.1-.6L12 3z"/></svg>',
     busca: '<svg class="icone" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>',
     baixar: '<svg class="icone" viewBox="0 0 24 24"><path d="M12 3v13M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>',
+    subir: '<svg class="icone" viewBox="0 0 24 24"><path d="M12 21V8M7 12l5-5 5 5"/><path d="M4 20h16"/></svg>',
     whatsapp: '<svg class="icone" viewBox="0 0 24 24"><path d="M21 11.6a8.4 8.4 0 0 1-12.2 7.5L4 20l1-4.6a8.4 8.4 0 1 1 16-3.8z"/><path d="M8.6 8.6c.2-.5.9-1.5 1.5-.8.4.5.9 1.3.6 1.8-.3.5-.6.6-.3 1.1a5 5 0 0 0 2.9 2.3c.5.2.6-.2 1-.5.5-.4 1.3.4 1.7.7.5.4-.1 1.3-.6 1.6-1 .6-2.4.3-4-.6a8 8 0 0 1-3-3.4c-.3-.9-.2-1.5.2-2.2z"/></svg>',
     instagram: '<svg class="icone" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r=".6" fill="currentColor" stroke="none"/></svg>',
     setaEsq: '<svg class="icone" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>',

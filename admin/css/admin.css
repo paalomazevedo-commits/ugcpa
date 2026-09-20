@@ -291,6 +291,20 @@ tr.linha-favorita{box-shadow:inset 3px 0 0 var(--ambar)}
   width:min(420px,100%);max-height:92vh;overflow-y:auto;background:var(--louca-clara);
   border:2px solid var(--cobalto);border-radius:var(--raio);padding:22px;
 }
+.modal-caixa--largo{width:min(880px,94vw)}
+.texto-apoio{font-size:.86rem;color:var(--tinta-media);margin-bottom:16px;line-height:1.5}
+.campo-arquivo{
+  display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;
+  border:2px dashed var(--fio-forte);border-radius:var(--raio);padding:30px 18px;
+  cursor:pointer;color:var(--tinta-media);margin-bottom:14px;transition:border-color .2s ease,color .2s ease;
+}
+.campo-arquivo:hover,.campo-arquivo:focus-within{border-color:var(--cobalto);color:var(--cobalto)}
+.campo-arquivo input{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.mapa-colunas{display:grid;gap:10px;margin-bottom:18px}
+.mapa-linha{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:center}
+.mapa-coluna-nome{font-size:.86rem;font-weight:600}
+.mapa-coluna-exemplo{font-size:.76rem;color:var(--tinta-media);margin-top:2px}
+.mapa-linha select{width:100%;padding:9px 10px;border:1px solid var(--fio-forte);background:var(--louca-clara);border-radius:var(--raio);font:inherit}
 .gaveta-fechar,.modal-fechar{
   position:absolute;top:16px;right:16px;width:32px;height:32px;border:1px solid var(--fio-forte);
   background:var(--louca-clara);cursor:pointer;display:grid;place-items:center;border-radius:var(--raio);color:var(--tinta-media);
