@@ -191,6 +191,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .carrossel[hidden]{display:none}
 .carrossel-topo{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px}
 .carrossel-nome{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:600;font-size:1.4rem;color:var(--cobalto-texto);padding-bottom:8px;border-bottom:1px solid var(--cobalto)}
+.carrossel-contagem{font-family:"Jost",sans-serif;font-style:normal;font-weight:400;font-size:.8rem;color:var(--tinta-media);vertical-align:super}
 .carrossel-setas{display:flex;gap:10px}
 .carrossel-setas[hidden]{display:none}
 .seta{width:48px;height:48px;border:2px solid var(--cobalto);background:transparent;color:var(--cobalto-texto);cursor:pointer;display:grid;place-items:center;font-size:1rem;line-height:1;transition:background .2s ease,color .2s ease}
@@ -681,14 +682,16 @@ function montaDestaques(){
 }
 
 /* ----- endereço do vídeo no YouTube -----
-   sem som: roda sozinho, mudo e em repetição, dentro do card.
-   com som: usado no visor que abre quando alguém clica. */
+   sem som: só toca quando o mouse ou o dedo passa em cima do card
+   (veja tocaAoPassar), por isso nasce com autoplay=0.
+   com som: usado no visor que abre quando alguém clica, esse sim
+   toca sozinho assim que abre. */
 function enderecoVideo(id, comSom){
   const codigo = encodeURIComponent(id);
   const comum = "playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1&loop=1&playlist=" + codigo;
   const extra = comSom
     ? "&autoplay=1&mute=0&controls=1"
-    : "&autoplay=" + (reduzMovimento ? "0" : "1") + "&mute=1&controls=0&disablekb=1&fs=0";
+    : "&autoplay=0&mute=1&controls=0&disablekb=1&fs=0";
   return "https://www.youtube.com/embed/" + codigo + "?" + comum + extra;
 }
 
@@ -700,14 +703,9 @@ function comandoVideo(frame, funcao){
   } catch (erro) { /* o player ainda não está pronto, não tem problema */ }
 }
 
-/* enquanto o visor estiver aberto, nenhum vídeo de fundo volta a tocar */
+/* enquanto o visor estiver aberto, nenhum card de fundo toca ao passar o mouse */
 let visorAberto = false;
 let retomaVideos = function(){};
-
-function estaNaTela(el){
-  const r = el.getBoundingClientRect();
-  return r.bottom > 0 && r.top < (window.innerHeight || document.documentElement.clientHeight);
-}
 
 /* ----- letra maiúscula em cada palavra, pro nome do nicho ficar bonito ----- */
 function capitalizaPalavra(t){
@@ -801,7 +799,7 @@ function montaVideos(lista){
     return '' +
       '<section class="carrossel revela" data-categoria="' + esc(c.id) + '">' +
         '<div class="carrossel-topo">' +
-          '<h3 class="carrossel-nome">' + esc(c.nome) + '</h3>' +
+          '<h3 class="carrossel-nome">' + esc(c.nome) + ' <span class="carrossel-contagem">' + String(itensDoNicho.length).padStart(2, "0") + '</span></h3>' +
           '<div class="carrossel-setas">' +
             '<button type="button" class="seta" data-passo="-1" aria-label="Ver os vídeos anteriores de ' + esc(c.nome) + '">&#10094;</button>' +
             '<button type="button" class="seta" data-passo="1" aria-label="Ver os próximos vídeos de ' + esc(c.nome) + '">&#10095;</button>' +
@@ -841,7 +839,10 @@ function montaVideos(lista){
   });
   window.addEventListener("resize", atualizaSetas);
 
-  /* o vídeo só carrega quando chega perto da tela, e pausa quando sai */
+  /* o vídeo só carrega quando chega perto da tela (pra não baixar os
+     17 de uma vez), mas só COMEÇA A TOCAR quando o mouse ou o dedo
+     passa em cima dele (tocaAoPassar). Ele nasce carregado e parado,
+     igual a uma foto, até alguém passar o mouse. */
   const cards = document.querySelectorAll("#carrosseis .video-card");
   function carrega(card){
     const frame = card.querySelector("iframe");
@@ -853,43 +854,37 @@ function montaVideos(lista){
     frame.setAttribute("src", frame.dataset.src);
     return frame;
   }
-  retomaVideos = function(){
-    cards.forEach(function(card){
-      const dono = card.closest(".carrossel");
-      if ((dono && dono.hidden) || !estaNaTela(card)) return;
-      const frame = card.querySelector("iframe");
-      if (!frame.getAttribute("src")) carrega(card);
-      else comandoVideo(frame, "playVideo");
-    });
-  };
+  retomaVideos = function(){};
 
-  /* passar o mouse ou o dedo em cima garante que aquele vídeo
-     esteja tocando (sem som), mesmo que o carregamento automático
-     ainda não tenha chegado nele */
+  /* passar o mouse ou o dedo em cima toca o vídeo (sem som); tirar o
+     mouse de cima pausa de novo, pra não ficar tudo tocando ao mesmo
+     tempo depois que a pessoa passa por vários cards */
   function tocaAoPassar(){
     if (visorAberto) return;
     const frame = this.querySelector("iframe");
     if (!frame.getAttribute("src")) carrega(this);
     else comandoVideo(frame, "playVideo");
   }
+  function pausaAoSair(){
+    const frame = this.querySelector("iframe");
+    if (frame.getAttribute("src")) comandoVideo(frame, "pauseVideo");
+  }
   cards.forEach(function(card){
     card.addEventListener("mouseenter", tocaAoPassar);
+    card.addEventListener("mouseleave", pausaAoSair);
     card.addEventListener("touchstart", tocaAoPassar, { passive: true });
   });
 
   if ("IntersectionObserver" in window){
     const obs = new IntersectionObserver(function(entradas){
       entradas.forEach(function(e){
-        const frame = e.target.querySelector("iframe");
         if (e.isIntersecting){
-          if (visorAberto) return;
-          if (!frame.getAttribute("src")) carrega(e.target);
-          else comandoVideo(frame, "playVideo");
+          carrega(e.target);
         } else {
-          comandoVideo(frame, "pauseVideo");
+          comandoVideo(e.target.querySelector("iframe"), "pauseVideo");
         }
       });
-    }, { threshold: 0.4 });
+    }, { threshold: 0.2 });
     cards.forEach(function(c){ obs.observe(c); });
   } else {
     cards.forEach(carrega);
