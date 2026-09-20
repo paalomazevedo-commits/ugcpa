@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/admin.css?v=2">
 </head>
 <body>
 
@@ -49,16 +49,21 @@
 
 <!-- biblioteca do Supabase (CDN) + a configuração do banco -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../js/banco.js"></script>
+<script src="../js/banco.js?v=2"></script>
 
-<!-- armação do painel e o código de cada aba -->
-<script src="js/app.js"></script>
-<script src="js/portfolio.js"></script>
-<script src="js/marcas.js"></script>
-<script src="js/calendario.js"></script>
-<script src="js/campanhas.js"></script>
-<script src="js/checklist.js"></script>
-<script src="../js/biblioteca.js"></script>
+<!-- armação do painel e o código de cada aba
+     O "?v=" no fim de cada arquivo existe só pra forçar o navegador a
+     buscar a versão nova depois que o admin é atualizado (sem isso, o
+     navegador de quem já usou o painel antes pode continuar mostrando
+     uma cópia antiga em cache, sem a mudança). Sempre que este arquivo
+     ou algum js/*.js do admin for editado de novo, aumente esse número. -->
+<script src="js/app.js?v=2"></script>
+<script src="js/portfolio.js?v=2"></script>
+<script src="js/marcas.js?v=2"></script>
+<script src="js/calendario.js?v=2"></script>
+<script src="js/campanhas.js?v=2"></script>
+<script src="js/checklist.js?v=2"></script>
+<script src="../js/biblioteca.js?v=2"></script>
 
 <script>
 /* ============================================================
