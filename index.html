@@ -365,6 +365,14 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   .menu.aberto{display:flex}
   .menu a{padding:14px 0;border-bottom:1px solid var(--fio)}
 }
+/* entre o tablet e o celular os quatro dados ficariam em colunas
+   estreitas demais, com as palavras quebrando no meio. Nessa faixa eles
+   passam a ser dois por linha */
+@media (min-width:721px) and (max-width:980px){
+  .capa-numeros li{flex:1 1 46%}
+  .capa-numeros li:nth-child(2n){border-right:0}
+  .capa-numeros li:nth-child(-n+2){border-bottom:1px solid var(--fio)}
+}
 @media (max-width:720px){
   .secao{padding:66px 0}
   .servicos-grade,.resultados,.depoimentos,.metricas{grid-template-columns:1fr}
@@ -685,11 +693,27 @@ const ESPECIALIDADES = [
   "YouTube Ads"
 ];
 
-/* --- 2) OS TRÊS NÚMEROS CURTOS DA CAPA --- */
+/* --- 2) OS QUATRO DADOS DA CAPA ---
+   Esta é a primeira coisa que a marca lê depois do seu nome, então aqui
+   não entra volume ("50 vídeos", "25 marcas"): volume qualquer criador
+   promete, e número baixo trabalha contra você. Entra o que responde a
+   pergunta que a marca está fazendo em silêncio, que é "posso confiar
+   dinheiro nessa pessoa?".
+
+   Os quatro cobrem as quatro dúvidas dela, nesta ordem:
+   1. já fizeram isso com gente do meu tamanho?  -> Brasil e Coreia
+   2. é profissão ou é hobby?                    -> 2 anos
+   3. vai travar a minha campanha?               -> 72h
+   4. e se vier uma coisa que eu não quero?      -> roteiro aprovado antes
+
+   Todos saem de coisas que já estão no site (os logos das marcas
+   coreanas na faixa do "sobre mim" e as promessas ao lado da sua foto),
+   então nenhum deles é promessa nova. */
 const CAPA_NUMEROS = [
-  { valor: "50",    rotulo: "vídeos entregues" },
-  { valor: "25",    rotulo: "marcas atendidas" },
-  { valor: "+0,0M", rotulo: "views somadas" }   /* <<< TROQUE PELO NÚMERO REAL DE VIEWS SOMADAS */
+  { valor: "Brasil e Coreia", rotulo: "marcas nacionais e K-Beauty" },
+  { valor: "2 anos",          rotulo: "gravando para marcas" },
+  { valor: "72h",             rotulo: "do roteiro aprovado ao vídeo pronto" },
+  { valor: "Zero surpresa",   rotulo: "você aprova o roteiro antes de gravar" }
 ];
 
 /* --- 3) CONTEÚDOS DE DESTAQUE (os três vídeos grandes) ---
