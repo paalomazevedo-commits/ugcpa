@@ -52,7 +52,7 @@ button,input,textarea{font:inherit;color:inherit}
 p{margin:0}
 h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;line-height:1.12;letter-spacing:-.01em}
 :focus-visible{outline:3px solid var(--cobalto);outline-offset:3px}
-.faixa-marcas :focus-visible,.rodape :focus-visible{outline-color:#fff}
+.rodape :focus-visible{outline-color:#fff}
 .so-leitor{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .pular{position:absolute;left:-9999px;top:0;z-index:200;background:var(--cobalto);color:#fff;padding:12px 18px;text-decoration:none}
 .pular:focus{left:0}
@@ -149,10 +149,14 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .capa-numeros span{font-size:.86rem;letter-spacing:.06em;text-transform:uppercase;color:var(--tinta-media)}
 
 /* faixa fina com os nomes das marcas */
-.faixa-marcas{background:var(--cobalto);color:#fff;overflow:hidden;border-top:3px solid var(--cobalto);border-bottom:3px solid var(--cobalto)}
+/* a faixa não tem fundo próprio: ela deixa passar a textura da capa,
+   que é onde os logos redondos ficam apoiados, como na referência */
+.faixa-marcas{overflow:hidden;border-top:3px solid var(--cobalto);border-bottom:3px solid var(--cobalto)}
 .trilho{display:flex;width:max-content;animation:desliza 42s linear infinite}
-.trilho li{display:flex;align-items:center;gap:26px;padding:13px 26px;white-space:nowrap;font-family:"Playfair Display",Georgia,serif;font-size:.98rem;letter-spacing:.14em;text-transform:uppercase}
-.trilho li::after{content:"";width:6px;height:6px;background:var(--azul-claro);display:block}
+/* o hover pausa a faixa, pra dar tempo de olhar um logo específico */
+.faixa-marcas:hover .trilho,.faixa-marcas:focus-within .trilho{animation-play-state:paused}
+.marca-logo{flex:0 0 auto;padding:clamp(12px,1.6vw,18px) clamp(8px,1.1vw,14px)}
+.marca-logo img{display:block;width:clamp(72px,8.6vw,106px);height:auto;border-radius:50%}
 @keyframes desliza{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ===== 2. SOBRE ===== */
@@ -600,10 +604,31 @@ document.documentElement.classList.add('js');
    Troque o texto entre as aspas e salve. Não precisa mexer no HTML.
    ========================================================= */
 
-/* --- 1) MARCAS DA FAIXA DA CAPA --- */
+/* --- 1) MARCAS DA FAIXA DA CAPA ---
+   A faixa que desliza embaixo da capa. Cada marca tem:
+   nome:    o nome que aparece pra quem usa leitor de tela (e no título
+            que surge quando o mouse para em cima do logo).
+   arquivo: o nome do arquivo dentro da pasta "marcas".
+
+   PRA ADICIONAR UMA MARCA NOVA: salve o logo dela em marcas/nome.webp
+   (redondo, fundo transparente, 300 por 300) e acrescente uma linha
+   aqui. A faixa se ajusta sozinha, não precisa mexer em mais nada. */
 const MARCAS = [
-  "Pantene","Aprilskin","Meditherapy","Bioage","Eudora","Elseve",
-  "Marca 07","Marca 08","Marca 09","Marca 10","Marca 11","Marca 12"
+  { nome: "Pantene",         arquivo: "pantene" },
+  { nome: "Garnier",         arquivo: "garnier" },
+  { nome: "Elseve",          arquivo: "elseve" },
+  { nome: "Eudora",          arquivo: "eudora" },
+  { nome: "Aprilskin",       arquivo: "aprilskin" },
+  { nome: "Bioage",          arquivo: "bioage" },
+  { nome: "Medicube",        arquivo: "medicube" },
+  { nome: "Meditherapy",     arquivo: "meditherapy" },
+  { nome: "Celimax",         arquivo: "celimax" },
+  { nome: "Byri",            arquivo: "byri" },
+  { nome: "Claré Essence",   arquivo: "clare-essence" },
+  { nome: "Show Imports",    arquivo: "show-imports" },
+  { nome: "Dreamy Brownie",  arquivo: "dreamy-brownie" },
+  { nome: "Andrey Reis",     arquivo: "andrey-reis" },
+  { nome: "Marca parceira",  arquivo: "marca-sem-nome" }   /* <<< TROQUE PELO NOME REAL DESSA MARCA (o logo azul com o símbolo dourado) */
 ];
 
 /* --- 2) OS TRÊS NÚMEROS CURTOS DA CAPA --- */
@@ -700,10 +725,21 @@ function esc(t){
   });
 }
 
-/* ----- faixa de marcas (a segunda volta é só visual, por isso fica escondida do leitor de tela) ----- */
+/* ----- faixa de marcas -----
+   A lista é escrita duas vezes seguidas: a primeira é a de verdade e a
+   segunda é um eco só visual. Quando a animação termina de arrastar a
+   primeira volta (os -50% do @keyframes), a segunda está exatamente no
+   lugar onde a primeira começou, então o laço reinicia sem emenda.
+   O eco fica escondido do leitor de tela pra ele não ler tudo em
+   dobro. */
 function montaMarcas(){
   const item = function(m, eco){
-    return '<li class="' + (eco ? 'eco' : '') + '"' + (eco ? ' aria-hidden="true"' : '') + '>' + esc(m) + '</li>';
+    return '<li class="marca-logo' + (eco ? ' eco' : '') + '"' + (eco ? ' aria-hidden="true"' : '') + '>' +
+             '<img src="marcas/' + esc(m.arquivo) + '.webp" width="300" height="300" ' +
+                  'loading="lazy" decoding="async" ' +
+                  'alt="' + (eco ? '' : 'Logo da marca ' + esc(m.nome)) + '" ' +
+                  'title="' + esc(m.nome) + '">' +
+           '</li>';
   };
   $("#trilhoMarcas").innerHTML =
     MARCAS.map(function(m){ return item(m, false); }).join("") +
