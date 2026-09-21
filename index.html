@@ -298,21 +298,6 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .servico h3{font-size:1.22rem;margin-top:10px}
 .servico p{margin-top:10px;color:var(--tinta-media);font-size:.96rem}
 
-/* ===== 6. NÚMEROS E DEPOIMENTOS ===== */
-.metricas{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(16px,2.4vw,26px);margin-top:46px}
-.metrica{text-align:center;padding:30px 18px}
-.metrica b{display:block;font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:clamp(2.1rem,4.4vw,2.9rem);color:var(--cobalto-texto);line-height:1}
-.metrica span{display:block;margin-top:8px;font-size:.84rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-media)}
-.subtitulo{margin-top:64px;font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:1.35rem;color:var(--cobalto-texto);padding-bottom:8px;border-bottom:1px solid var(--cobalto);display:inline-block}
-.resultados{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.6vw,30px);margin-top:26px}
-.resultado b{display:block;font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:1.9rem;color:var(--cobalto-texto);line-height:1}
-.resultado .marca{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tinta-media);margin-bottom:12px}
-.resultado-rotulo{font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta-media)}
-.resultado p{margin-top:10px;color:var(--tinta-media);font-size:.95rem}
-.depoimentos{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(18px,2.6vw,30px);margin-top:26px}
-.depoimento blockquote{margin:0;font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:1.12rem;line-height:1.5}
-.depoimento figcaption{margin-top:18px;padding-top:14px;border-top:1px solid var(--fio);font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;color:var(--cobalto-texto)}
-.depoimento figcaption i{font-style:normal;display:block;color:var(--tinta-media);letter-spacing:.04em;text-transform:none;font-size:.92rem;margin-top:2px}
 
 /* ===== 7. CONTATO ===== */
 /* o min-width:0 deixa as colunas encolherem abaixo do conteúdo. Sem ele,
@@ -355,8 +340,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 
 /* ===== responsivo ===== */
 @media (max-width:980px){
-  .servicos-grade,.resultados{grid-template-columns:1fr 1fr}
-  .metricas{grid-template-columns:1fr 1fr}
+  .servicos-grade{grid-template-columns:1fr 1fr}
   .sobre-grade,.contato-grade,.destaques-grade{grid-template-columns:1fr}
 }
 @media (max-width:900px){
@@ -375,7 +359,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 }
 @media (max-width:720px){
   .secao{padding:66px 0}
-  .servicos-grade,.resultados,.depoimentos,.metricas{grid-template-columns:1fr}
+  .servicos-grade{grid-template-columns:1fr}
   .capa-numeros li{flex:1 1 100%;border-right:0;border-bottom:1px solid var(--fio)}
   .capa-numeros li:last-child{border-bottom:0}
   .btn{width:100%}
@@ -412,7 +396,6 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
       <a href="#destaques">Destaques</a>
       <a href="#trabalhos">Trabalhos</a>
       <a href="#servicos">Serviços</a>
-      <a href="#numeros">Números</a>
       <a href="#contato">Contato</a>
     </nav>
   </div>
@@ -516,19 +499,6 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
       <p class="rotulo revela">Como eu te ajudo</p>
       <h2 class="titulo-secao revela">Seis formas de trabalhar comigo</h2>
       <div class="servicos-grade" id="grelhaServicos"></div>
-    </div>
-  </section>
-
-  <!-- ============ 6. NÚMEROS E DEPOIMENTOS ============ -->
-  <section id="numeros" class="secao">
-    <div class="env">
-      <p class="rotulo revela">Números e depoimentos</p>
-      <h2 class="titulo-secao revela">O que os números e os clientes dizem</h2>
-      <div class="metricas" id="grelhaMetricas"></div>
-      <p class="subtitulo revela">Resultados de campanha</p>
-      <div class="resultados" id="grelhaResultados"></div>
-      <p class="subtitulo revela">Quem já trabalhou comigo</p>
-      <div class="depoimentos" id="grelhaDepoimentos"></div>
     </div>
   </section>
 
@@ -767,28 +737,6 @@ const SERVICOS = [
   { numero: "06", titulo: "Pacote mensal",          texto: "Um número fechado de entregas por mês, com calendário combinado e prioridade na agenda." }
 ];
 
-/* --- 5) MÉTRICAS COM CONTADOR (o número anima quando aparece na tela) --- */
-const METRICAS = [
-  { valor: 50, prefixo: "",  sufixo: "",  rotulo: "vídeos entregues" },
-  { valor: 25, prefixo: "",  sufixo: "",  rotulo: "marcas atendidas" },
-  { valor: 4,  prefixo: "",  sufixo: "",  rotulo: "nichos atendidos" },
-  { valor: 0,  prefixo: "+", sufixo: "M", rotulo: "views somadas" }   /* <<< TROQUE O 0 PELO NÚMERO REAL */
-];
-
-/* --- 6) RESULTADOS DE CAMPANHA --- */
-const RESULTADOS = [
-  { marca: "Campanha 01", valor: "+0,0M", rotulo: "views no reels", texto: "Escreva aqui o resultado dessa campanha em uma linha." },  /* <<< TROQUE PELOS DADOS REAIS */
-  { marca: "Campanha 02", valor: "+0%",   rotulo: "de cliques",     texto: "Escreva aqui o resultado dessa campanha em uma linha." },  /* <<< TROQUE PELOS DADOS REAIS */
-  { marca: "Campanha 03", valor: "+0",    rotulo: "vendas no mês",  texto: "Escreva aqui o resultado dessa campanha em uma linha." }   /* <<< TROQUE PELOS DADOS REAIS */
-];
-
-/* --- 7) DEPOIMENTOS --- */
-const DEPOIMENTOS = [
-  { texto: "Escreva aqui o depoimento com as palavras do cliente.", nome: "Cliente 01", empresa: "Marca 01" },
-  { texto: "Escreva aqui o depoimento com as palavras do cliente.", nome: "Cliente 02", empresa: "Marca 02" },
-  { texto: "Escreva aqui o depoimento com as palavras do cliente.", nome: "Cliente 03", empresa: "Marca 03" },
-  { texto: "Escreva aqui o depoimento com as palavras do cliente.", nome: "Cliente 04", empresa: "Marca 04" }
-];
 
 /* =========================================================
    DAQUI PARA BAIXO É O FUNCIONAMENTO DO SITE
@@ -1216,54 +1164,6 @@ function montaServicos(){
   }).join("");
 }
 
-/* ----- métricas, resultados e depoimentos ----- */
-function montaNumeros(){
-  $("#grelhaMetricas").innerHTML = METRICAS.map(function(m){
-    return '<article class="bloco metrica revela">' +
-             '<b data-alvo="' + m.valor + '" data-prefixo="' + esc(m.prefixo) + '" data-sufixo="' + esc(m.sufixo) + '">' +
-               esc(m.prefixo) + '0' + esc(m.sufixo) +
-             '</b>' +
-             '<span>' + esc(m.rotulo) + '</span>' +
-           '</article>';
-  }).join("");
-
-  $("#grelhaResultados").innerHTML = RESULTADOS.map(function(r){
-    return '<article class="bloco resultado revela">' +
-             '<p class="marca">' + esc(r.marca) + '</p>' +
-             '<b>' + esc(r.valor) + '</b>' +
-             '<p class="resultado-rotulo">' + esc(r.rotulo) + '</p>' +
-             '<p>' + esc(r.texto) + '</p>' +
-           '</article>';
-  }).join("");
-
-  $("#grelhaDepoimentos").innerHTML = DEPOIMENTOS.map(function(d){
-    return '<figure class="bloco depoimento revela">' +
-             '<blockquote>' + esc(d.texto) + '</blockquote>' +
-             '<figcaption>' + esc(d.nome) + '<i>' + esc(d.empresa) + '</i></figcaption>' +
-           '</figure>';
-  }).join("");
-}
-
-/* ----- contador animado ----- */
-function animaContador(el){
-  const alvo = Number(el.dataset.alvo) || 0;
-  const prefixo = el.dataset.prefixo || "";
-  const sufixo = el.dataset.sufixo || "";
-  if (reduzMovimento || alvo === 0){
-    el.textContent = prefixo + alvo.toLocaleString("pt-BR") + sufixo;
-    return;
-  }
-  const duracao = 1500;
-  const inicio = performance.now();
-  function passo(agora){
-    const p = Math.min((agora - inicio) / duracao, 1);
-    const suave = 1 - Math.pow(1 - p, 3);
-    el.textContent = prefixo + Math.round(alvo * suave).toLocaleString("pt-BR") + sufixo;
-    if (p < 1) requestAnimationFrame(passo);
-  }
-  requestAnimationFrame(passo);
-}
-
 /* ----- animação de entrada ao rolar -----
    Os vídeos chegam depois (vêm do banco, por uma busca que leva um
    tempinho), então esse observador precisa poder ser chamado de novo
@@ -1275,14 +1175,7 @@ function observaRevela(lista){
   if (!lista.length) return;
   if (!observadorRevela){
     /* sem observador (reduz movimento ou navegador antigo): mostra direto */
-    lista.forEach(function(a){
-      a.classList.add("visivel");
-      const numero = a.querySelector("b[data-alvo]");
-      if (numero && !numero.dataset.pronto){
-        numero.dataset.pronto = "1";
-        animaContador(numero);
-      }
-    });
+    lista.forEach(function(a){ a.classList.add("visivel"); });
     return;
   }
   lista.forEach(function(a){ observadorRevela.observe(a); });
@@ -1297,11 +1190,6 @@ function ligaObservadores(){
     entradas.forEach(function(e){
       if (!e.isIntersecting) return;
       e.target.classList.add("visivel");
-      const numero = e.target.querySelector("b[data-alvo]");
-      if (numero && !numero.dataset.pronto){
-        numero.dataset.pronto = "1";
-        animaContador(numero);
-      }
       observadorRevela.unobserve(e.target);
     });
   }, { threshold: 0.18, rootMargin: "0px 0px -40px 0px" });
@@ -1458,7 +1346,6 @@ montaCapaNumeros();
 montaDestaques();
 carregarEMontarVideos();
 montaServicos();
-montaNumeros();
 ligaObservadores();
 ligaMenu();
 ligaFormulario();
