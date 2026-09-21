@@ -151,12 +151,30 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 /* faixa fina com os nomes das marcas */
 /* a faixa não tem fundo próprio: ela deixa passar a textura da capa,
    que é onde os logos redondos ficam apoiados, como na referência */
-.faixa-marcas{overflow:hidden;border-top:3px solid var(--cobalto);border-bottom:3px solid var(--cobalto)}
+/* as duas faixas embaixo da capa: em cima os logos das marcas, andando
+   pra esquerda, e embaixo as especialidades, andando pra direita. Os
+   sentidos opostos são de propósito: uma puxa o olho contra a outra, e
+   isso faz as duas serem notadas em vez de virarem um borrão só */
+.faixa-marcas{overflow:hidden;border-top:3px solid var(--cobalto)}
 .trilho{display:flex;width:max-content;animation:desliza 42s linear infinite}
-/* o hover pausa a faixa, pra dar tempo de olhar um logo específico */
-.faixa-marcas:hover .trilho,.faixa-marcas:focus-within .trilho{animation-play-state:paused}
+/* o hover pausa a faixa, pra dar tempo de ler ou de olhar um logo */
+.faixa-marcas:hover .trilho,.faixa-marcas:focus-within .trilho,
+.faixa-especialidades:hover .trilho,.faixa-especialidades:focus-within .trilho{animation-play-state:paused}
 .marca-logo{flex:0 0 auto;padding:clamp(12px,1.6vw,18px) clamp(8px,1.1vw,14px)}
 .marca-logo img{display:block;width:clamp(72px,8.6vw,106px);height:auto;border-radius:50%}
+/* a mesma animação de sempre, só que ao contrário: em vez de arrastar de
+   0 até -50%, ela arrasta de -50% até 0, que é o mesmo caminho andado
+   pro outro lado. Como as duas voltas da lista são idênticas, o laço
+   fecha sem emenda igual */
+.faixa-especialidades{overflow:hidden;background:var(--cobalto);color:#fff}
+/* a faixa azul é bem mais comprida que a dos logos (são 16 termos), então
+   ela precisa de mais tempo pra andar no MESMO ritmo: as duas ficam em
+   cerca de 48 pixels por segundo, senão uma parece disparada ao lado da
+   outra e o texto passa rápido demais pra ler */
+.faixa-especialidades .trilho{animation-direction:reverse;animation-duration:93s}
+.especialidade{flex:0 0 auto;display:flex;align-items:center;gap:26px;padding:13px 26px;white-space:nowrap;
+  font-family:"Playfair Display",Georgia,serif;font-size:.98rem;letter-spacing:.14em;text-transform:uppercase}
+.especialidade::after{content:"";width:6px;height:6px;background:var(--azul-claro);display:block}
 @keyframes desliza{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 /* ===== 2. SOBRE ===== */
@@ -420,6 +438,9 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
     <div class="faixa-marcas">
       <ul class="trilho" id="trilhoMarcas"></ul>
     </div>
+    <div class="faixa-especialidades">
+      <ul class="trilho" id="trilhoEspecialidades"></ul>
+    </div>
   </section>
 
   <!-- ============ 2. SOBRE MIM ============ -->
@@ -631,6 +652,34 @@ const MARCAS = [
   { nome: "Marca parceira",  arquivo: "marca-sem-nome" }   /* <<< TROQUE PELO NOME REAL DESSA MARCA (o logo azul com o símbolo dourado) */
 ];
 
+/* --- 1b) ESPECIALIDADES DA FAIXA AZUL ---
+   A faixa que desliza logo abaixo dos logos, no sentido contrário.
+   Enquanto a de cima mostra COM QUEM você já trabalhou, esta mostra O
+   QUE você entrega. É a resposta rápida pra marca que chega no site
+   sem saber o que pedir.
+
+   Pra acrescentar ou tirar: é só mexer nesta lista, a faixa se ajusta
+   sozinha. Termos curtos funcionam melhor, porque eles passam
+   deslizando e precisam ser lidos de relance. */
+const ESPECIALIDADES = [
+  "UGC",
+  "Storytelling",
+  "Conteúdo para ADS",
+  "Roteiros estratégicos",
+  "Fotos lifestyle",
+  "Conteúdo para marketplace",
+  "Publipost",
+  "Unboxing",
+  "Demonstração de produto",
+  "Review honesto",
+  "Gancho nos 3 primeiros segundos",
+  "Corte para anúncio",
+  "Vídeo vertical 9:16",
+  "Foto para página de produto",
+  "Direção de cena",
+  "YouTube Ads"
+];
+
 /* --- 2) OS TRÊS NÚMEROS CURTOS DA CAPA --- */
 const CAPA_NUMEROS = [
   { valor: "50",    rotulo: "vídeos entregues" },
@@ -744,6 +793,18 @@ function montaMarcas(){
   $("#trilhoMarcas").innerHTML =
     MARCAS.map(function(m){ return item(m, false); }).join("") +
     MARCAS.map(function(m){ return item(m, true); }).join("");
+}
+
+/* ----- faixa das especialidades (mesma lógica da faixa de logos: duas
+   voltas iguais, a segunda só visual, pro laço fechar sem emenda) ----- */
+function montaEspecialidades(){
+  const item = function(t, eco){
+    return '<li class="especialidade' + (eco ? ' eco' : '') + '"' + (eco ? ' aria-hidden="true"' : '') + '>' +
+             esc(t) + '</li>';
+  };
+  $("#trilhoEspecialidades").innerHTML =
+    ESPECIALIDADES.map(function(t){ return item(t, false); }).join("") +
+    ESPECIALIDADES.map(function(t){ return item(t, true); }).join("");
 }
 
 /* ----- números curtos da capa ----- */
@@ -1363,6 +1424,7 @@ function ligaAno(){
 
 /* ----- liga tudo ----- */
 montaMarcas();
+montaEspecialidades();
 montaCapaNumeros();
 montaDestaques();
 carregarEMontarVideos();
