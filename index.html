@@ -151,11 +151,13 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 /* faixa fina com os nomes das marcas */
 /* a faixa não tem fundo próprio: ela deixa passar a textura da capa,
    que é onde os logos redondos ficam apoiados, como na referência */
-/* as duas faixas embaixo da capa: em cima os logos das marcas, andando
-   pra esquerda, e embaixo as especialidades, andando pra direita. Os
-   sentidos opostos são de propósito: uma puxa o olho contra a outra, e
-   isso faz as duas serem notadas em vez de virarem um borrão só */
-.faixa-marcas{overflow:hidden;border-top:3px solid var(--cobalto)}
+/* duas faixas que deslizam: a das especialidades fica embaixo da capa,
+   andando pra direita, e a dos logos fecha o "sobre mim", andando pra
+   esquerda. Os sentidos opostos são de propósito, pra uma não parecer
+   repetição da outra */
+.marcas-titulo{margin-top:clamp(48px,6vw,76px);margin-bottom:22px;text-align:center}
+.marcas-titulo .rotulo{margin-bottom:0}
+.faixa-marcas{overflow:hidden;border-top:3px solid var(--cobalto);border-bottom:3px solid var(--cobalto)}
 .trilho{display:flex;width:max-content;animation:desliza 42s linear infinite}
 /* o hover pausa a faixa, pra dar tempo de ler ou de olhar um logo */
 .faixa-marcas:hover .trilho,.faixa-marcas:focus-within .trilho,
@@ -435,9 +437,6 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
       </div>
       <ul class="capa-numeros revela" id="capaNumeros"></ul>
     </div>
-    <div class="faixa-marcas">
-      <ul class="trilho" id="trilhoMarcas"></ul>
-    </div>
     <div class="faixa-especialidades">
       <ul class="trilho" id="trilhoEspecialidades"></ul>
     </div>
@@ -464,6 +463,12 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
         </ul>
         <p class="assinatura">Paloma Ribeiro</p>
       </div>
+    </div>
+    <div class="env marcas-titulo revela">
+      <p class="rotulo">Marcas que já confiaram no meu trabalho</p>
+    </div>
+    <div class="faixa-marcas">
+      <ul class="trilho" id="trilhoMarcas"></ul>
     </div>
   </section>
 
