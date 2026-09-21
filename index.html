@@ -178,23 +178,42 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .moldura-decorativa{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none}
 .midia--11{aspect-ratio:1/1}
 .midia .legenda{font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;text-shadow:0 1px 6px rgba(22,35,59,.5)}
-.assistir{position:absolute;inset:0;margin:auto;width:70px;height:70px;background:var(--louca-clara);border:3px solid var(--cobalto);display:grid;place-items:center}
+.assistir{position:absolute;inset:0;margin:auto;width:70px;height:70px;background:var(--louca-clara);border:3px solid var(--cobalto);border-radius:50%;display:grid;place-items:center}
 .assistir::after{content:"";width:0;height:0;margin-left:6px;border-left:20px solid var(--cobalto);border-top:13px solid transparent;border-bottom:13px solid transparent}
 .assistir--video{width:52px;height:52px;border-radius:50%;transition:opacity .2s ease}
 .assistir--video::after{border-left-width:15px;border-top-width:10px;border-bottom-width:10px}
 .video-abrir:hover .assistir--video,.video-abrir:focus-visible .assistir--video{opacity:0}
 
 /* ===== 3. DESTAQUES ===== */
-.destaques-grade{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,34px);margin-top:46px}
-.destaque{text-decoration:none;color:inherit;display:block;background:var(--louca-clara);border:3px solid var(--cobalto);padding:5px;transition:transform .25s ease,box-shadow .25s ease}
-.destaque:hover{transform:translateY(-5px);box-shadow:0 14px 0 -4px var(--azul-claro)}
-.destaque-capa{border:1px solid var(--cobalto);position:relative}
+.destaques-grade{display:grid;grid-template-columns:.92fr 1.08fr;gap:clamp(28px,5vw,64px);align-items:center}
+.destaques-gancho{margin-top:20px;font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:1.3rem;color:var(--cobalto-texto)}
+.destaques-palco{position:relative;display:flex;align-items:center;gap:clamp(6px,1vw,12px);min-width:0}
+.destaque-seta{flex:0 0 auto}
+.destaques-trilho{
+  /* o position:relative faz o offsetLeft dos cards ser medido a partir do
+     próprio trilho, que é o que a conta de "quem está no meio" espera */
+  position:relative;flex:1;min-width:0;display:flex;gap:clamp(12px,1.6vw,20px);
+  overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;
+  padding:12px 4px 16px;scrollbar-width:none;
+}
+.destaques-trilho::-webkit-scrollbar{display:none}
+/* o card em evidência fica nítido e os outros desfocados. Sem mouse em
+   cima, quem manda é o card ativo (o que as setas escolhem); com o mouse
+   em cima do carrossel, quem manda é o card sob o cursor. */
+.destaque{
+  flex:0 0 min(232px,64%);scroll-snap-align:center;text-decoration:none;color:inherit;display:block;
+  background:var(--louca-clara);border:3px solid var(--cobalto);padding:5px;border-radius:22px;
+  filter:blur(3px);opacity:.5;transform:scale(.93);
+  transition:filter .35s ease,opacity .35s ease,transform .35s ease;
+}
+.destaque[data-ativo="true"]{filter:none;opacity:1;transform:none}
+.destaques-trilho:hover .destaque,.destaques-trilho:focus-within .destaque{filter:blur(3px);opacity:.5;transform:scale(.93)}
+.destaques-trilho .destaque:hover,.destaques-trilho .destaque:focus-visible{filter:none;opacity:1;transform:none}
+.destaque-capa{border:1px solid var(--cobalto);position:relative;border-radius:17px;overflow:hidden}
 .destaque-capa .legenda{position:absolute;left:14px;right:14px;bottom:14px}
-.destaque-texto{padding:22px 18px 20px}
-.destaque-valor{font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:2.1rem;color:var(--cobalto-texto);line-height:1}
-.destaque-rotulo{font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta-media)}
-.destaque-titulo{font-size:1.25rem;margin-top:16px}
-.destaque-contexto{margin-top:8px;color:var(--tinta-media);font-size:.95rem}
+.destaque-texto{padding:16px 14px 12px}
+.destaque-titulo{font-size:1.1rem}
+.destaque-contexto{margin-top:6px;color:var(--tinta-media);font-size:.92rem}
 
 /* ===== 4. TRABALHOS POR NICHO, EM CARROSSEL ===== */
 .filtros{display:flex;flex-wrap:wrap;gap:10px;margin-top:36px}
@@ -257,6 +276,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .resultados{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.6vw,30px);margin-top:26px}
 .resultado b{display:block;font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:1.9rem;color:var(--cobalto-texto);line-height:1}
 .resultado .marca{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tinta-media);margin-bottom:12px}
+.resultado-rotulo{font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta-media)}
 .resultado p{margin-top:10px;color:var(--tinta-media);font-size:.95rem}
 .depoimentos{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(18px,2.6vw,30px);margin-top:26px}
 .depoimento blockquote{margin:0;font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:1.12rem;line-height:1.5}
@@ -299,9 +319,9 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 
 /* ===== responsivo ===== */
 @media (max-width:980px){
-  .destaques-grade,.servicos-grade,.resultados{grid-template-columns:1fr 1fr}
+  .servicos-grade,.resultados{grid-template-columns:1fr 1fr}
   .metricas{grid-template-columns:1fr 1fr}
-  .sobre-grade,.contato-grade{grid-template-columns:1fr}
+  .sobre-grade,.contato-grade,.destaques-grade{grid-template-columns:1fr}
 }
 @media (max-width:900px){
   .hamburguer{display:grid}
@@ -311,18 +331,25 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 }
 @media (max-width:720px){
   .secao{padding:66px 0}
-  .destaques-grade,.servicos-grade,.resultados,.depoimentos,.metricas{grid-template-columns:1fr}
+  .servicos-grade,.resultados,.depoimentos,.metricas{grid-template-columns:1fr}
   .capa-numeros li{flex:1 1 100%;border-right:0;border-bottom:1px solid var(--fio)}
   .capa-numeros li:last-child{border-bottom:0}
   .btn{width:100%}
   .capa-botoes{flex-direction:column;align-items:stretch}
+  /* no celular as setas passam a flutuar por cima do carrossel: sentadas ao
+     lado do trilho elas comiam a largura e o card do meio ficava estreito
+     demais pra ler o texto */
+  .destaques-palco{display:block}
+  .destaque-seta{position:absolute;top:44%;transform:translateY(-50%);z-index:3;
+    width:42px;height:42px;background:var(--louca-clara)}
+  .destaque-seta[data-passo="-1"]{left:0}
+  .destaque-seta[data-passo="1"]{right:0}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   .js .revela{opacity:1;transform:none;transition:none}
   .trilho{animation:none;width:100%;flex-wrap:wrap;justify-content:center}
   .trilho .eco{display:none}
-  .destaque:hover{transform:none}
   *{animation-duration:.001ms !important;transition-duration:.001ms !important}
 }
 </style>
@@ -405,11 +432,18 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 
   <!-- ============ 3. CONTEÚDOS DE DESTAQUE ============ -->
   <section id="destaques" class="secao">
-    <div class="env">
-      <p class="rotulo revela">Conteúdos de destaque</p>
-      <h2 class="titulo-secao revela">Três conteúdos que eu gosto de mostrar</h2>
-      <p class="intro-secao revela">Clique em qualquer um para assistir no Instagram.</p>
-      <div class="destaques-grade" id="grelhaDestaques"></div>
+    <div class="env destaques-grade">
+      <div class="destaques-texto">
+        <p class="rotulo revela">O que mais performou</p>
+        <h2 class="titulo-secao revela">Três conteúdos que viraram resultado</h2>
+        <p class="destaques-gancho revela">Será que algum deles já passou no seu feed?</p>
+        <p class="intro-secao revela">Esse trio é o que eu mostro quando alguém pergunta o que funciona de verdade. De tudo que já gravei, foram os conteúdos que melhor performaram para as marcas. Passe o mouse ou deslize para ver cada um de perto, e clique para assistir no Instagram.</p>
+      </div>
+      <div class="destaques-palco revela">
+        <button type="button" class="seta destaque-seta" data-passo="-1" aria-label="Ver o conteúdo anterior">&#10094;</button>
+        <div class="destaques-trilho" id="grelhaDestaques" tabindex="0" role="group" aria-label="Carrossel dos três conteúdos de destaque"></div>
+        <button type="button" class="seta destaque-seta" data-passo="1" aria-label="Ver o próximo conteúdo">&#10095;</button>
+      </div>
     </div>
   </section>
 
@@ -571,32 +605,25 @@ const CAPA_NUMEROS = [
    capa:     AQUI ENTRA A CAPA. Hoje é um bloco com degradê e a legenda que você lê abaixo.
              Para usar a imagem real, troque a linha do bloco .midia dentro de montaDestaques por:
              <img src="capa-do-video.jpg" alt="Descrição da capa" class="midia midia--916">
-   valor:    o número forte do vídeo.
-   rotulo:   o que esse número significa.
+             É a capa real que faz o desfoque dos cards de trás aparecer de verdade.
    titulo:   o nome do conteúdo.
    contexto: uma linha curta explicando o vídeo. */
 const DESTAQUES = [
   {
     link: "https://www.instagram.com/reel/DdRMcP-OlIq/?stkn=cml4amkxaDJjemJu",
     capa: "capa vertical 9:16",
-    valor: "+0,0M",                                  /* <<< TROQUE PELO NÚMERO REAL */
-    rotulo: "views no reels",
     titulo: "Nome do conteúdo 01",                   /* <<< TROQUE PELO TÍTULO REAL */
     contexto: "Escreva aqui uma linha curta contando o que esse vídeo fez pela marca."
   },
   {
     link: "https://www.instagram.com/reel/DY5O7N7v3kG/?stkn=MWh5eDNyazQzMHJnNw==",
     capa: "capa vertical 9:16",
-    valor: "+0,0M",                                  /* <<< TROQUE PELO NÚMERO REAL */
-    rotulo: "views no reels",
     titulo: "Nome do conteúdo 02",                   /* <<< TROQUE PELO TÍTULO REAL */
     contexto: "Escreva aqui uma linha curta contando o que esse vídeo fez pela marca."
   },
   {
     link: "https://www.instagram.com/reel/DY-NXF8PKUF/?stkn=eTU2OXhqdnU5djIw",
     capa: "capa vertical 9:16",
-    valor: "+0,0M",                                  /* <<< TROQUE PELO NÚMERO REAL */
-    rotulo: "views no reels",
     titulo: "Nome do conteúdo 03",                   /* <<< TROQUE PELO TÍTULO REAL */
     contexto: "Escreva aqui uma linha curta contando o que esse vídeo fez pela marca."
   }
@@ -672,12 +699,16 @@ function montaCapaNumeros(){
   }).join("");
 }
 
-/* ----- conteúdos de destaque ----- */
+/* ----- conteúdos de destaque -----
+   Os três ficam num carrossel: o card ativo aparece nítido e os outros
+   desfocados. As setas trocam quem é o ativo; passar o mouse por cima
+   de qualquer um deixa ele nítido e desfoca os outros (isso é só CSS). */
 function montaDestaques(){
-  $("#grelhaDestaques").innerHTML = DESTAQUES.map(function(d){
+  const trilho = $("#grelhaDestaques");
+  trilho.innerHTML = DESTAQUES.map(function(d, i){
     return '' +
-      '<a class="destaque revela" href="' + esc(d.link) + '" target="_blank" rel="noopener" ' +
-         'aria-label="Assistir o conteúdo ' + esc(d.titulo) + '">' +
+      '<a class="destaque" href="' + esc(d.link) + '" target="_blank" rel="noopener" ' +
+         'data-indice="' + i + '" aria-label="Assistir o conteúdo ' + esc(d.titulo) + '">' +
         '<div class="destaque-capa">' +
           /* AQUI ENTRA A CAPA REAL: troque a linha abaixo por
              <img src="capa-do-video.jpg" alt="Capa do vídeo" class="midia midia--916"> */
@@ -686,13 +717,62 @@ function montaDestaques(){
           '</div>' +
         '</div>' +
         '<div class="destaque-texto">' +
-          '<p class="destaque-valor">' + esc(d.valor) + '</p>' +
-          '<p class="destaque-rotulo">' + esc(d.rotulo) + '</p>' +
           '<h3 class="destaque-titulo">' + esc(d.titulo) + '</h3>' +
           '<p class="destaque-contexto">' + esc(d.contexto) + '</p>' +
         '</div>' +
       '</a>';
   }).join("");
+
+  /* começa com o do meio em evidência, como na referência */
+  let ativo = Math.floor(DESTAQUES.length / 2);
+
+  function marcaAtivo(){
+    Array.prototype.forEach.call(trilho.children, function(card, i){
+      card.setAttribute("data-ativo", i === ativo ? "true" : "false");
+    });
+  }
+
+  function pinta(){
+    marcaAtivo();
+    const card = trilho.children[ativo];
+    if (!card) return;
+    /* rola só o trilho, nunca a página */
+    const alvo = card.offsetLeft - (trilho.clientWidth - card.clientWidth) / 2;
+    trilho.scrollTo({ left: Math.max(0, alvo), behavior: reduzMovimento ? "auto" : "smooth" });
+  }
+
+  /* deslizando o carrossel na mão (celular), quem para mais perto do
+     meio vira o card em evidência, senão o nítido ficaria fora da tela */
+  let esperaRolagem = null;
+  trilho.addEventListener("scroll", function(){
+    clearTimeout(esperaRolagem);
+    esperaRolagem = setTimeout(function(){
+      const meio = trilho.scrollLeft + trilho.clientWidth / 2;
+      let maisPerto = ativo, menorDistancia = Infinity;
+      Array.prototype.forEach.call(trilho.children, function(card, i){
+        const distancia = Math.abs((card.offsetLeft + card.clientWidth / 2) - meio);
+        if (distancia < menorDistancia){ menorDistancia = distancia; maisPerto = i; }
+      });
+      if (maisPerto !== ativo){ ativo = maisPerto; marcaAtivo(); }
+    }, 120);
+  }, { passive: true });
+
+  document.querySelectorAll(".destaque-seta").forEach(function(seta){
+    seta.addEventListener("click", function(){
+      const passo = Number(seta.dataset.passo);
+      ativo = (ativo + passo + DESTAQUES.length) % DESTAQUES.length;
+      pinta();
+    });
+  });
+
+  /* quem o mouse ou o teclado encosta vira o ativo, pra quando sair o
+     desfoque não voltar pro card de antes */
+  Array.prototype.forEach.call(trilho.children, function(card, i){
+    card.addEventListener("mouseenter", function(){ ativo = i; pinta(); });
+    card.addEventListener("focus", function(){ ativo = i; pinta(); });
+  });
+
+  pinta();
 }
 
 /* ----- endereço do vídeo no YouTube -----
@@ -1006,7 +1086,7 @@ function montaNumeros(){
     return '<article class="bloco resultado revela">' +
              '<p class="marca">' + esc(r.marca) + '</p>' +
              '<b>' + esc(r.valor) + '</b>' +
-             '<p class="destaque-rotulo">' + esc(r.rotulo) + '</p>' +
+             '<p class="resultado-rotulo">' + esc(r.rotulo) + '</p>' +
              '<p>' + esc(r.texto) + '</p>' +
            '</article>';
   }).join("");
