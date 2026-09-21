@@ -15,9 +15,12 @@
    Branco de louça, azul cobalto, cantos retos e moldura dupla
    ========================================================= */
 :root{
-  /* paleta pedida pela Paloma: #868EA6, #F2F0EB (fundo do site) e #D9A796 */
-  --louca:#f2f0eb;           /* fundo do site */
-  --louca-clara:#fafaf8;     /* quase branco, fundo dos blocos */
+  /* paleta: o azul #868EA6 da Paloma com o creme #FFFBF7, que e a cor de
+     fundo da capa do portfolio dela no Canva, medida direto da imagem */
+  --louca:#fffbf7;           /* fundo do site, o creme quente da referência */
+  --louca-clara:#ffffff;     /* branco, fundo dos blocos: sobre o creme novo
+                                o antigo #fafaf8 ficaria mais escuro que a
+                                página, e os blocos pareceriam afundados */
   --cobalto:#868ea6;         /* cor principal, azul acinzentado */
   --cobalto-escuro:#6e7488;  /* mais fechado, hover dos botões */
   --cobalto-texto:#3c404b;   /* a cor principal escurecida, só pra texto: em cima do bege e do fundo do site, a cor principal pura não tinha contraste suficiente pra ler bem */
@@ -116,31 +119,29 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 }
 .capa-grade{display:flex;flex-direction:column;align-items:center;text-align:center;padding-bottom:clamp(48px,7vw,80px)}
 .foto{display:block;width:100%;height:auto;background:var(--azul-fundo)}
-/* ===== nome atrás, foto sem fundo na frente, os dois centralizados =====
-   a foto fica posicionada por cima do meio do bloco de duas linhas do
-   nome (a costura entre "Paloma" e "Ribeiro"), então ela cobre parte de
-   cada linha e o nome aparece "atrás" da foto, como na referência */
-/* o tamanho do nome mora aqui no bloco de fora, e não no <h1>, porque
-   assim a foto pode ser medida em "em" desse mesmo tamanho. Resultado:
-   foto e nome crescem sempre na mesma proporção, em qualquer tela */
-.capa-camada{position:relative;font-size:clamp(3.4rem,13vw,9rem);margin:.8em 0}
-.capa-nome{
-  font-family:"Libre Baskerville",Georgia,serif;font-weight:700;color:var(--cobalto);
-  font-size:1em;line-height:1.28;letter-spacing:-.01em;
+/* ===== a frase grande da capa =====
+   a palavra "espontâneo" sai no azul da marca, que é o mesmo destaque que
+   a referência faz nela, só que na paleta do site em vez do marrom */
+.capa-titulo{
+  margin-top:clamp(16px,2.2vw,26px);
+  /* as 21ch fazem a frase quebrar nas mesmas três linhas da referência,
+     em "parece / pensado pra / converter" */
+  font-size:clamp(2.1rem,5.4vw,4.1rem);line-height:1.14;max-width:21ch;color:var(--tinta);
 }
-.capa-nome-linha{display:block}
-.capa-foto-recorte{
-  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;
-  /* 2.6em do tamanho do nome: é a largura em que a cabeça passa por cima
-     de "Paloma", o corpo desce por baixo de "Ribeiro" e mesmo assim
-     sobram letras dos dois lados pra dar pra ler o nome */
-  width:2.6em;height:auto;pointer-events:none;user-select:none;
+.capa-titulo em{font-style:normal;color:var(--cobalto)}
+.capa-frase{
+  margin-top:clamp(18px,2.4vw,28px);
+  font-size:.92rem;letter-spacing:.09em;text-transform:uppercase;max-width:42ch;
+  color:var(--cobalto-texto);font-weight:500;line-height:1.6;
+}
+.capa-foto{
+  display:block;width:clamp(230px,34vw,440px);height:auto;
+  margin:clamp(20px,3vw,38px) auto 0;
   /* o corte reto embaixo da foto vira um desvanecido, pra ela se apoiar
      no fundo em vez de parecer recortada com tesoura */
   -webkit-mask-image:linear-gradient(to bottom,#000 86%,transparent 100%);
   mask-image:linear-gradient(to bottom,#000 86%,transparent 100%);
 }
-.capa-frase{font-size:clamp(1.1rem,2.1vw,1.4rem);max-width:30ch;color:var(--tinta-media)}
 .capa-botoes{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:32px}
 .capa-numeros{display:flex;flex-wrap:wrap;gap:0;width:100%;margin-top:46px;border-top:1px solid var(--cobalto);border-bottom:1px solid var(--cobalto);text-align:left}
 .capa-numeros li{flex:1 1 130px;padding:20px 18px;border-right:1px solid var(--fio)}
@@ -155,7 +156,24 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
    andando pra direita, e a dos logos fecha o "sobre mim", andando pra
    esquerda. Os sentidos opostos são de propósito, pra uma não parecer
    repetição da outra */
-.marcas-titulo{margin-top:clamp(48px,6vw,76px);margin-bottom:22px;text-align:center}
+/* a grade de dados do "sobre mim", igual à da referência: o termo em
+   maiúsculas em cima e a explicação embaixo, dois por linha */
+.sobre-dados{margin:clamp(24px,3vw,34px) 0 0;display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.2vw,26px) clamp(20px,3vw,40px)}
+.sobre-dados dt{font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--cobalto-texto)}
+.sobre-dados dd{margin:5px 0 0;color:var(--tinta-media);font-size:.98rem}
+
+/* as três credenciais em pílula, ligadas por um fio, como na referência.
+   O fio fica atrás e some no celular, onde as pílulas quebram em mais de
+   uma linha e ele passaria cortando o meio delas */
+.pilulas{position:relative;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
+  gap:clamp(10px,1.4vw,16px);margin-top:clamp(44px,5.5vw,72px)}
+.pilulas li{position:relative;z-index:1;padding:11px 22px;border:2px solid var(--cobalto);border-radius:999px;
+  background:var(--louca-clara);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;
+  font-weight:500;color:var(--cobalto-texto);text-align:center}
+@media (min-width:721px){
+  .pilulas::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--cobalto)}
+}
+.marcas-titulo{margin-top:clamp(36px,4.5vw,56px);margin-bottom:22px;text-align:center}
 .marcas-titulo .rotulo{margin-bottom:0}
 .faixa-marcas{overflow:hidden;border-top:3px solid var(--cobalto);border-bottom:3px solid var(--cobalto)}
 .trilho{display:flex;width:max-content;animation:desliza 42s linear infinite}
@@ -360,6 +378,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 @media (max-width:720px){
   .secao{padding:66px 0}
   .servicos-grade{grid-template-columns:1fr}
+  .sobre-dados{grid-template-columns:1fr}
   .capa-numeros li{flex:1 1 100%;border-right:0;border-bottom:1px solid var(--fio)}
   .capa-numeros li:last-child{border-bottom:0}
   .btn{width:100%}
@@ -406,22 +425,17 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   <!-- ============ 1. CAPA ============ -->
   <section id="capa" class="capa">
     <div class="env capa-grade">
-      <p class="rotulo revela">Portfólio UGC, Praia Grande</p>
-      <div class="capa-camada revela">
-        <h1 class="capa-nome">
-          <span class="capa-nome-linha">Paloma</span>
-          <span class="capa-nome-linha">Ribeiro</span>
-        </h1>
-        <!-- COMO TROCAR A FOTO DA CAPA: troque foto-capa-recorte.png por uma
-             foto sua já sem fundo (em PNG, com transparência). Se ela tiver
-             outra proporção, troque também os números de width e height
-             aqui embaixo pelos da foto nova, para a página não dar um pulo
-             enquanto carrega. -->
-        <img src="foto-capa-recorte.png" width="700" height="887" fetchpriority="high"
-             alt="Paloma Ribeiro sorrindo, de blazer bege sobre camiseta branca"
-             class="capa-foto-recorte">
-      </div>
-      <p class="capa-frase revela">Conteúdo que parece espontâneo, pensado pra converter.</p>
+      <p class="rotulo revela">Paloma Ribeiro UGC</p>
+      <h1 class="capa-titulo revela">Conteúdo que parece <em>espontâneo</em>, pensado pra converter</h1>
+      <p class="capa-frase revela">Construído estrategicamente para gerar identificação e conversão.</p>
+      <!-- COMO TROCAR A FOTO DA CAPA: troque foto-capa-recorte.png por uma
+           foto sua já sem fundo (em PNG, com transparência). Se ela tiver
+           outra proporção, troque também os números de width e height
+           aqui embaixo pelos da foto nova, para a página não dar um pulo
+           enquanto carrega. -->
+      <img src="foto-capa-recorte.png" width="700" height="887" fetchpriority="high"
+           alt="Paloma Ribeiro sorrindo, de blazer bege sobre camiseta branca"
+           class="capa-foto revela">
       <div class="capa-botoes revela">
         <a class="btn" href="#contato">Falar comigo</a>
         <a class="btn btn--linha" href="#trabalhos">Ver os trabalhos</a>
@@ -444,7 +458,13 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
       </div>
       <div class="revela">
         <p class="rotulo">Sobre mim</p>
-        <h2 class="titulo-secao">Prazer, eu sou a Paloma</h2>
+        <h2 class="titulo-secao">Oiiii, eu sou a Paloma</h2>
+        <dl class="sobre-dados">
+          <div><dt>Tenho 29 anos</dt><dd>Criadora de conteúdo UGC.</dd></div>
+          <div><dt>Localização</dt><dd>Praia Grande • SP</dd></div>
+          <div><dt>Mãe de dois meninos</dt><dd>Especialista em conteúdo lifestyle.</dd></div>
+          <div><dt>Especialidade</dt><dd>Skincare, beleza e rotina.</dd></div>
+        </dl>
         <p class="intro-secao">Eu moro em Praia Grande e gravo conteúdo para marcas de beleza, skincare, moda e tech. Gosto de vídeo que não parece propaganda: a luz da minha casa, a minha voz, o produto entrando na rotina de verdade. É isso que faz quem assiste parar, ouvir até o fim e querer comprar.</p>
         <p class="intro-secao">Trabalho com roteiro antes de ligar a câmera, porque conteúdo bonito que não vende não serve pra ninguém. Cada entrega sai pensada pro objetivo da campanha, seja alcance, seja clique, seja venda.</p>
         <ul class="promessas">
@@ -455,8 +475,15 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
         <p class="assinatura">Paloma Ribeiro</p>
       </div>
     </div>
+    <div class="env revela">
+      <ul class="pilulas">
+        <li>Marcas nacionais &amp; internacionais</li>
+        <li>+ 12 parcerias recorrentes</li>
+        <li>+ de 1 ano criando UGC</li>
+      </ul>
+    </div>
     <div class="env marcas-titulo revela">
-      <p class="rotulo">Marcas que já confiaram no meu trabalho</p>
+      <p class="rotulo">Marcas que já criaram comigo</p>
     </div>
     <div class="faixa-marcas">
       <ul class="trilho" id="trilhoMarcas"></ul>
