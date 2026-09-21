@@ -180,7 +180,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .midia .legenda{font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;text-shadow:0 1px 6px rgba(22,35,59,.5)}
 .assistir{position:absolute;inset:0;margin:auto;width:70px;height:70px;background:var(--louca-clara);border:3px solid var(--cobalto);display:grid;place-items:center}
 .assistir::after{content:"";width:0;height:0;margin-left:6px;border-left:20px solid var(--cobalto);border-top:13px solid transparent;border-bottom:13px solid transparent}
-.assistir--video{width:52px;height:52px;transition:opacity .2s ease}
+.assistir--video{width:52px;height:52px;border-radius:50%;transition:opacity .2s ease}
 .assistir--video::after{border-left-width:15px;border-top-width:10px;border-bottom-width:10px}
 .video-abrir:hover .assistir--video,.video-abrir:focus-visible .assistir--video{opacity:0}
 
@@ -198,7 +198,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 
 /* ===== 4. TRABALHOS POR NICHO, EM CARROSSEL ===== */
 .filtros{display:flex;flex-wrap:wrap;gap:10px;margin-top:36px}
-.filtro{padding:10px 20px;border:2px solid var(--cobalto);background:transparent;color:var(--cobalto-texto);cursor:pointer;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;transition:background .2s ease,color .2s ease}
+.filtro{padding:10px 20px;border:2px solid var(--cobalto);background:transparent;color:var(--cobalto-texto);cursor:pointer;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;transition:background .2s ease,color .2s ease}
 .filtro[aria-pressed="true"]{background:var(--cobalto);color:#fff}
 .carrossel{margin-top:46px}
 .carrossel[hidden]{display:none}
@@ -207,19 +207,23 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .carrossel-contagem{font-family:"Jost",sans-serif;font-style:normal;font-weight:400;font-size:.8rem;color:var(--tinta-media);vertical-align:super}
 .carrossel-setas{display:flex;gap:10px}
 .carrossel-setas[hidden]{display:none}
-.seta{width:48px;height:48px;border:2px solid var(--cobalto);background:transparent;color:var(--cobalto-texto);cursor:pointer;display:grid;place-items:center;font-size:1rem;line-height:1;transition:background .2s ease,color .2s ease}
+.seta{width:48px;height:48px;border:2px solid var(--cobalto);background:transparent;color:var(--cobalto-texto);cursor:pointer;display:grid;place-items:center;font-size:1rem;line-height:1;border-radius:50%;transition:background .2s ease,color .2s ease}
 .seta:hover:not(:disabled){background:var(--cobalto);color:#fff}
 .seta:disabled{opacity:.3;cursor:default}
 .trilho-videos{display:flex;gap:20px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;padding:22px 4px 18px;scrollbar-width:thin;scrollbar-color:var(--cobalto) var(--azul-fundo)}
 .trilho-videos::-webkit-scrollbar{height:8px}
-.trilho-videos::-webkit-scrollbar-track{background:var(--azul-fundo)}
-.trilho-videos::-webkit-scrollbar-thumb{background:var(--cobalto)}
-.video-card{flex:0 0 268px;scroll-snap-align:start;border:3px solid var(--cobalto);padding:5px;background:var(--louca-clara)}
-.video-quadro{position:relative;aspect-ratio:9/16;border:1px solid var(--cobalto);background:#0b1220;overflow:hidden}
-.video-quadro iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.trilho-videos::-webkit-scrollbar-track{background:var(--azul-fundo);border-radius:999px}
+.trilho-videos::-webkit-scrollbar-thumb{background:var(--cobalto);border-radius:999px}
+.video-card{flex:0 0 268px;scroll-snap-align:start;border:3px solid var(--cobalto);padding:5px;background:var(--louca-clara);border-radius:22px}
+/* o raio de dentro é o de fora menos o respiro da borda (22 - 5), pra
+   curva interna acompanhar a externa em vez de brigar com ela */
+.video-quadro{position:relative;aspect-ratio:9/16;border:1px solid var(--cobalto);background:#0b1220;overflow:hidden;border-radius:17px}
+/* alguns navegadores não cortam o iframe pelo overflow do pai, então a
+   curva vai também no próprio iframe */
+.video-quadro iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;border-radius:16px}
 .video-carregando{position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;background:linear-gradient(145deg,var(--azul-fundo) 0%,var(--azul-claro) 48%,var(--cobalto) 100%)}
 .video-abrir{position:absolute;inset:0;z-index:2;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:pointer;display:flex;align-items:flex-end;justify-content:center}
-.selo-som{margin-bottom:14px;padding:8px 13px;background:var(--louca-clara);border:2px solid var(--cobalto);color:var(--cobalto-texto);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;transition:background .2s ease,color .2s ease}
+.selo-som{margin-bottom:14px;padding:8px 13px;background:var(--louca-clara);border:2px solid var(--cobalto);color:var(--cobalto-texto);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;border-radius:999px;transition:background .2s ease,color .2s ease}
 .video-abrir:hover .selo-som,.video-abrir:focus-visible .selo-som{background:var(--cobalto);color:#fff}
 .video-texto{padding:16px 14px 12px}
 .video-destaque{font-size:.9rem;font-weight:600;color:var(--cobalto-texto);margin-bottom:3px}
