@@ -120,17 +120,21 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
    a foto fica posicionada por cima do meio do bloco de duas linhas do
    nome (a costura entre "Paloma" e "Ribeiro"), então ela cobre parte de
    cada linha e o nome aparece "atrás" da foto, como na referência */
-.capa-camada{position:relative;margin:clamp(40px,7vw,86px) 0}
+/* o tamanho do nome mora aqui no bloco de fora, e não no <h1>, porque
+   assim a foto pode ser medida em "em" desse mesmo tamanho. Resultado:
+   foto e nome crescem sempre na mesma proporção, em qualquer tela */
+.capa-camada{position:relative;font-size:clamp(3.4rem,13vw,9rem);margin:.8em 0}
 .capa-nome{
   font-family:"Libre Baskerville",Georgia,serif;font-weight:700;color:var(--cobalto);
-  font-size:clamp(3.2rem,12vw,8rem);line-height:1.45;letter-spacing:-.01em;
+  font-size:1em;line-height:1.28;letter-spacing:-.01em;
 }
 .capa-nome-linha{display:block}
 .capa-foto-recorte{
   position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:2;
-  /* a largura acompanha a mesma curva do tamanho do nome, pra foto e
-     texto crescerem juntos e as duas linhas continuarem legíveis */
-  width:clamp(120px,23vw,252px);height:auto;pointer-events:none;user-select:none;
+  /* 2.6em do tamanho do nome: é a largura em que a cabeça passa por cima
+     de "Paloma", o corpo desce por baixo de "Ribeiro" e mesmo assim
+     sobram letras dos dois lados pra dar pra ler o nome */
+  width:2.6em;height:auto;pointer-events:none;user-select:none;
   /* o corte reto embaixo da foto vira um desvanecido, pra ela se apoiar
      no fundo em vez de parecer recortada com tesoura */
   -webkit-mask-image:linear-gradient(to bottom,#000 86%,transparent 100%);
