@@ -187,6 +187,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 /* ===== 3. DESTAQUES ===== */
 .destaques-grade{display:grid;grid-template-columns:.92fr 1.08fr;gap:clamp(28px,5vw,64px);align-items:center}
 .destaques-gancho{margin-top:20px;font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:1.3rem;color:var(--cobalto-texto)}
+.destaques-dica{margin-top:16px;font-size:.88rem;color:var(--tinta-media)}
 .destaques-palco{position:relative;display:flex;align-items:center;gap:clamp(6px,1vw,12px);min-width:0}
 .destaque-seta{flex:0 0 auto}
 .destaques-trilho{
@@ -212,6 +213,8 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .destaque-capa{border:1px solid var(--cobalto);position:relative;border-radius:17px;overflow:hidden}
 .destaque-capa .legenda{position:absolute;left:14px;right:14px;bottom:14px}
 .destaque-texto{padding:16px 14px 12px}
+/* a etiqueta do formato é a primeira coisa que a marca lê no card */
+.destaque-formato{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--cobalto-texto);margin-bottom:6px}
 .destaque-titulo{font-size:1.1rem}
 .destaque-contexto{margin-top:6px;color:var(--tinta-media);font-size:.92rem}
 
@@ -434,10 +437,11 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   <section id="destaques" class="secao">
     <div class="env destaques-grade">
       <div class="destaques-texto">
-        <p class="rotulo revela">O que mais performou</p>
-        <h2 class="titulo-secao revela">Três conteúdos que viraram resultado</h2>
-        <p class="destaques-gancho revela">Será que algum deles já passou no seu feed?</p>
-        <p class="intro-secao revela">Esse trio é o que eu mostro quando alguém pergunta o que funciona de verdade. De tudo que já gravei, foram os conteúdos que melhor performaram para as marcas. Passe o mouse ou deslize para ver cada um de perto, e clique para assistir no Instagram.</p>
+        <p class="rotulo revela">Três formatos, um mesmo foco</p>
+        <h2 class="titulo-secao revela">O produto no centro, contado de três jeitos</h2>
+        <p class="destaques-gancho revela">De um lançamento de tecnologia a um creme de skincare, o que muda é só a forma de contar.</p>
+        <p class="intro-secao revela">Esses foram os conteúdos que melhor performaram, e nenhum deles usa a mesma receita. No primeiro, o produto entra no meio da rotina, dentro de uma história que a pessoa acompanha até o fim. No segundo, ele é demonstrado num cenário nada óbvio, do tipo que faz a funcionalidade aparecer sozinha, sem ninguém precisar explicar. O terceiro é review, com o produto na mão e a opinião de quem já usou. Juntos, eles mostram como eu trabalho com qualquer categoria: o produto sempre no centro, de um jeito natural e criativo, que prende quem assiste e faz a pessoa se identificar.</p>
+        <p class="destaques-dica revela">Passe o mouse ou deslize para ver cada um de perto, e clique para assistir no Instagram.</p>
       </div>
       <div class="destaques-palco revela">
         <button type="button" class="seta destaque-seta" data-passo="-1" aria-label="Ver o conteúdo anterior">&#10094;</button>
@@ -606,26 +610,31 @@ const CAPA_NUMEROS = [
              Para usar a imagem real, troque a linha do bloco .midia dentro de montaDestaques por:
              <img src="capa-do-video.jpg" alt="Descrição da capa" class="midia midia--916">
              É a capa real que faz o desfoque dos cards de trás aparecer de verdade.
-   titulo:   o nome do conteúdo.
-   contexto: uma linha curta explicando o vídeo. */
+   formato:  o tipo de conteúdo, em uma ou duas palavras. É o que a marca lê
+             primeiro no card, então é ele que mostra o seu repertório.
+   titulo:   o que o vídeo faz, em uma linha.
+   contexto: duas linhas explicando o formato por dentro. */
 const DESTAQUES = [
   {
     link: "https://www.instagram.com/reel/DdRMcP-OlIq/?stkn=cml4amkxaDJjemJu",
     capa: "capa vertical 9:16",
-    titulo: "Nome do conteúdo 01",                   /* <<< TROQUE PELO TÍTULO REAL */
-    contexto: "Escreva aqui uma linha curta contando o que esse vídeo fez pela marca."
+    formato: "Storytelling",
+    titulo: "O produto dentro da rotina",
+    contexto: "Uma história do dia a dia em que o produto entra como parte da cena, e não como intervalo comercial."
   },
   {
     link: "https://www.instagram.com/reel/DY5O7N7v3kG/?stkn=MWh5eDNyazQzMHJnNw==",
     capa: "capa vertical 9:16",
-    titulo: "Nome do conteúdo 02",                   /* <<< TROQUE PELO TÍTULO REAL */
-    contexto: "Escreva aqui uma linha curta contando o que esse vídeo fez pela marca."
+    formato: "Demonstração",
+    titulo: "A função aparecendo fora do óbvio",
+    contexto: "Um cenário inesperado que coloca o produto à prova e deixa a funcionalidade falar sozinha."
   },
   {
     link: "https://www.instagram.com/reel/DY-NXF8PKUF/?stkn=eTU2OXhqdnU5djIw",
     capa: "capa vertical 9:16",
-    titulo: "Nome do conteúdo 03",                   /* <<< TROQUE PELO TÍTULO REAL */
-    contexto: "Escreva aqui uma linha curta contando o que esse vídeo fez pela marca."
+    formato: "Review",
+    titulo: "A opinião de quem usou",
+    contexto: "O produto testado na frente da câmera, com o mesmo tom de quem indica uma coisa boa para uma amiga."
   }
 ];
 
@@ -708,7 +717,7 @@ function montaDestaques(){
   trilho.innerHTML = DESTAQUES.map(function(d, i){
     return '' +
       '<a class="destaque" href="' + esc(d.link) + '" target="_blank" rel="noopener" ' +
-         'data-indice="' + i + '" aria-label="Assistir o conteúdo ' + esc(d.titulo) + '">' +
+         'data-indice="' + i + '" aria-label="Assistir o conteúdo em ' + esc(d.formato) + ': ' + esc(d.titulo) + '">' +
         '<div class="destaque-capa">' +
           /* AQUI ENTRA A CAPA REAL: troque a linha abaixo por
              <img src="capa-do-video.jpg" alt="Capa do vídeo" class="midia midia--916"> */
@@ -717,6 +726,7 @@ function montaDestaques(){
           '</div>' +
         '</div>' +
         '<div class="destaque-texto">' +
+          '<p class="destaque-formato">' + esc(d.formato) + '</p>' +
           '<h3 class="destaque-titulo">' + esc(d.titulo) + '</h3>' +
           '<p class="destaque-contexto">' + esc(d.contexto) + '</p>' +
         '</div>' +
