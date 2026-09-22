@@ -211,14 +211,23 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
    única, reaproveitada em qualquer trecho que precise desse efeito; só
    muda a regra de gatilho (qual ancestral vira ".visivel") por baixo. */
 .marca-texto{
-  /* o <mark> nasce com fundo amarelo do navegador; sem apagar isso aqui,
-     a parte que o degradê ainda não cobriu mostra amarelo por baixo em
-     vez do creme da página, e isso só aparece no meio do movimento (no
-     fim, com o degradê cobrindo tudo, o amarelo já estava escondido) */
-  background-color:transparent;
+  /* o <mark> nasce com fundo amarelo E com o texto preto puro do
+     navegador (nenhum dos dois é a cor do site); sem sobrescrever os
+     dois, a parte que o degradê ainda não cobriu mostra amarelo por
+     baixo em vez do creme da página (só aparece no meio do movimento,
+     por isso passou batido antes), e o texto fica sempre um pouquinho
+     diferente do resto do parágrafo em vez de herdar a cor dele */
+  background-color:transparent;color:inherit;
   background-image:linear-gradient(90deg,var(--ceu) 0 100%);
   background-repeat:no-repeat;background-size:0% 100%;background-position:0 0;
   padding:.04em .1em;transition:background-size 1.1s ease .5s;
+  /* quando o trecho grifado quebra em duas linhas (tipo "sua marca"),
+     sem isso o navegador trata as duas linhas como uma caixa só: o
+     degradê cresce ao longo de tudo junto, e no meio do caminho a
+     segunda linha aparece com um pedaço fixo pintado em vez de crescer
+     junto com a primeira. Com isso aqui, cada linha vira sua própria
+     caixa e cresce da esquerda pra direita, do jeito esperado */
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;
 }
 .marcas-titulo.visivel .marca-texto,
 .titulo-secao.visivel .marca-texto{background-size:100% 100%}
@@ -556,7 +565,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   <section id="trabalhos" class="secao">
     <div class="env">
       <p class="rotulo revela">Trabalhos por nicho</p>
-      <h2 class="titulo-secao revela">O que eu já gravei</h2>
+      <h2 class="titulo-secao revela">Qual <mark class="marca-texto">formato</mark> eu posso criar para a <mark class="marca-texto">sua marca</mark>?</h2>
       <p class="intro-secao revela">Os vídeos rodam aqui sem som. Clique em qualquer um para abrir com o áudio.</p>
       <div class="filtros revela" id="filtros" role="group" aria-label="Filtrar vídeos por categoria"></div>
       <p class="so-leitor" id="avisoFiltro" role="status" aria-live="polite"></p>
