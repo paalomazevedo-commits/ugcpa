@@ -61,6 +61,9 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .pular:focus{left:0}
 .env{width:min(1180px,100% - (2 * var(--gutter)));margin-inline:auto}
 .secao{padding:92px 0;scroll-margin-top:calc(var(--topo) + 16px)}
+/* o "sobre mim" pediu fundo liso, sem a textura pontilhada fininha que
+   o resto do site usa (a cor é a mesma, só sem o padrão) */
+#sobre{background-color:var(--louca);background-image:none}
 
 /* ===== molduras de azulejo ===== */
 .bloco{
@@ -226,9 +229,14 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
    retângulo entre 18,519%/65,741% na horizontal e 11,647%/77,294% na
    vertical), pra não vazar por baixo dos buraquinhos do desenho da renda
    e o efeito ficar de moldura de verdade, não de foto colada por cima. */
-.foto-moldurada{position:relative;width:100%;max-width:400px;margin-inline:auto;aspect-ratio:648/850}
+/* a proporção do container e as porcentagens da foto vêm da mesma
+   medição usada na moldura anterior: acho o retângulo transparente
+   (a "janela") dentro do PNG da moldura e calculo onde ele fica em
+   porcentagem do canto do arquivo, com uma pequena folga pra foto não
+   encostar no desenho rendado */
+.foto-moldurada{position:relative;width:100%;max-width:400px;margin-inline:auto;aspect-ratio:800/1166}
 .foto-moldurada .midia{position:absolute;inset:0;width:100%;height:100%}
-.foto-real{position:absolute;left:18.519%;top:11.647%;width:65.741%;height:77.294%;object-fit:cover;display:block}
+.foto-real{position:absolute;left:15.8%;top:13.3%;width:71.4%;height:73.6%;object-fit:cover;display:block}
 .moldura-decorativa{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none}
 .midia--11{aspect-ratio:1/1}
 .midia .legenda{font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;text-shadow:0 1px 6px rgba(22,35,59,.5)}
@@ -477,8 +485,8 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
           <div><dt>Mãe de dois meninos</dt><dd>Especialista em conteúdo lifestyle.</dd></div>
           <div><dt>Especialidade</dt><dd>Skincare, beleza e rotina.</dd></div>
         </dl>
-        <p class="intro-secao">Antes de ligar a câmera eu estudo o produto: o que ele resolve, para quem, e qual é o detalhe que faria alguém parar de rolar o feed. Esse trabalho de bastidor é o que faz o vídeo soar como conversa entre amigas, e não como anúncio. Quando o produto entra assim, no meio da rotina, quem assiste não sente que está sendo vendido. Sente vontade de ter.</p>
-        <p class="intro-secao">Já gravei para marcas grandes daqui e para marcas coreanas de skincare, passando por moda, marketplace e anúncio em vídeo. Em todas, o roteiro sai antes, pensado para o objetivo da campanha. É o que separa o conteúdo bonito do conteúdo que a pessoa lembra, procura e compra.</p>
+        <p class="intro-secao">Antes de ligar a câmera eu estudo o produto: o que ele resolve, para quem, e qual é o detalhe que faria alguém parar de rolar o feed. Cada produto é estudado de forma única e estratégica, porque não existe fórmula pronta que sirva pra todos. É desse estudo que nasce o roteiro, e um roteiro bem elaborado conta uma história que conecta, gera identificação e conversão.</p>
+        <p class="intro-secao">Com mais de 1 ano de experiência, já trabalhei com marcas nacionais e internacionais, passando por skincare coreano, moda, marketplace e anúncio em vídeo. Em todas, o roteiro sai antes, pensado para o objetivo da campanha. É o que separa o conteúdo bonito do conteúdo que a pessoa lembra, procura e compra.</p>
         <ul class="promessas">
           <li><span><b>Roteiro aprovado antes de gravar.</b> Você lê, comenta e aprova. Nada é gravado na surpresa.</span></li>
           <li><span><b>Uma rodada de ajuste inclusa.</b> Se algo não ficou do jeito que a marca precisa, eu refaço sem custo extra.</span></li>
