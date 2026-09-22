@@ -228,6 +228,10 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   transition:background-size 1.1s ease .5s;
 }
 .marcas-titulo.visivel .marca-texto{background-size:100% 100%}
+/* "sua marca" saiu do marca-texto: sem fundo, só o texto em negrito e
+   itálico, na cor azul original do site (a mesma da referência que a
+   Paloma mandou) */
+.destaque-azul{font-weight:700;font-style:italic;color:var(--cobalto)}
 .faixa-marcas{overflow:hidden;border-top:3px solid var(--cobalto);border-bottom:3px solid var(--cobalto)}
 .trilho{display:flex;width:max-content;animation:desliza 42s linear infinite}
 /* o hover pausa a faixa, pra dar tempo de ler ou de olhar um logo */
@@ -562,7 +566,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   <section id="trabalhos" class="secao">
     <div class="env">
       <p class="rotulo revela">Trabalhos por nicho</p>
-      <h2 class="titulo-secao revela">Qual <mark class="marca-texto">formato</mark> eu posso criar para a <mark class="marca-texto">sua marca</mark>?</h2>
+      <h2 class="titulo-secao revela">Qual <mark class="marca-texto">formato</mark> eu posso criar para a <span class="destaque-azul">sua marca</span>?</h2>
       <p class="intro-secao revela">Os vídeos rodam aqui sem som. Clique em qualquer um para abrir com o áudio.</p>
       <div class="filtros revela" id="filtros" role="group" aria-label="Filtrar vídeos por categoria"></div>
       <p class="so-leitor" id="avisoFiltro" role="status" aria-live="polite"></p>
