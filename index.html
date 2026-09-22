@@ -173,17 +173,12 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .sobre-dados dt{font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--cobalto-texto)}
 .sobre-dados dd{margin:5px 0 0;color:var(--tinta-media);font-size:.98rem}
 
-/* as três credenciais em pílula, ligadas por um fio, como na referência.
-   O fio fica atrás e some no celular, onde as pílulas quebram em mais de
-   uma linha e ele passaria cortando o meio delas */
-.pilulas{position:relative;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;
-  gap:clamp(10px,1.4vw,16px);margin-top:clamp(44px,5.5vw,72px)}
-.pilulas li{position:relative;z-index:1;padding:11px 22px;border:2px solid var(--cobalto);border-radius:999px;
+/* as três credenciais em pílula, agora dentro da coluna de texto, no
+   lugar de onde saíram os marcadores de promessa e a assinatura */
+.pilulas{display:flex;flex-wrap:wrap;gap:clamp(10px,1.4vw,16px);margin-top:36px}
+.pilulas li{padding:11px 22px;border:2px solid var(--cobalto);border-radius:999px;
   background:var(--louca-clara);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;
   font-weight:500;color:var(--cobalto-texto);text-align:center}
-@media (min-width:721px){
-  .pilulas::before{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:var(--cobalto)}
-}
 .marcas-titulo{margin-top:clamp(36px,4.5vw,56px);margin-bottom:22px;text-align:center}
 .marcas-titulo .rotulo{margin-bottom:0}
 .faixa-marcas{overflow:hidden;border-top:3px solid var(--cobalto);border-bottom:3px solid var(--cobalto)}
@@ -210,10 +205,14 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 
 /* ===== 2. SOBRE ===== */
 .sobre-grade{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(28px,5vw,64px);align-items:start}
-.promessas{margin-top:30px;display:grid;gap:16px}
-.promessas li{display:flex;gap:14px;align-items:flex-start}
-.promessas li::before{content:"";flex:0 0 auto;width:12px;height:12px;margin-top:9px;background:var(--cobalto);box-shadow:0 0 0 3px var(--louca-clara),0 0 0 4px var(--azul-claro)}
-.assinatura{margin-top:36px;padding-top:22px;border-top:1px solid var(--cobalto);font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:1.6rem;color:var(--cobalto-texto)}
+/* marca-texto: grifa a informação mais importante de cada parágrafo com
+   o mesmo azul dos botões, texto em branco por cima pra continuar
+   legível. O box-decoration-break é o que faz o fundo acompanhar
+   direitinho quando o trecho grifado quebra em duas linhas */
+mark.grifo{
+  background:var(--cobalto);color:#fff;padding:.05em .3em;border-radius:3px;
+  box-decoration-break:clone;-webkit-box-decoration-break:clone;
+}
 
 /* ===== blocos de mídia com degradê ===== */
 .midia{
@@ -485,22 +484,14 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
           <div><dt>Mãe de dois meninos</dt><dd>Especialista em conteúdo lifestyle.</dd></div>
           <div><dt>Especialidade</dt><dd>Skincare, beleza e rotina.</dd></div>
         </dl>
-        <p class="intro-secao">Com mais de 1 ano de experiência, já trabalhei com marcas nacionais e internacionais.</p>
-        <p class="intro-secao">Cada produto é estudado de forma única e estratégica, e é desse estudo que nasce um roteiro bem elaborado: um roteiro que transforma o produto em história, conecta com o público e gera identificação e conversão.</p>
-        <ul class="promessas">
-          <li><span><b>Roteiro aprovado antes de gravar.</b> Você lê, comenta e aprova. Nada é gravado na surpresa.</span></li>
-          <li><span><b>Uma rodada de ajuste inclusa.</b> Se algo não ficou do jeito que a marca precisa, eu refaço sem custo extra.</span></li>
-          <li><span><b>Entrega em até 72 horas úteis.</b> Do aceite do roteiro ao arquivo final na sua mão.</span></li>
+        <p class="intro-secao">Com mais de <mark class="grifo">1 ano de experiência</mark>, já trabalhei com <mark class="grifo">marcas nacionais e internacionais</mark>.</p>
+        <p class="intro-secao">Cada produto é estudado de forma <mark class="grifo">única e estratégica</mark>, e é desse estudo que nasce um roteiro bem elaborado: um roteiro que transforma o produto em história, conecta com o público e gera <mark class="grifo">identificação e conversão</mark>.</p>
+        <ul class="pilulas">
+          <li>Marcas nacionais &amp; internacionais</li>
+          <li>+ 12 parcerias recorrentes</li>
+          <li>+ de 1 ano criando UGC</li>
         </ul>
-        <p class="assinatura">Paloma Ribeiro</p>
       </div>
-    </div>
-    <div class="env revela">
-      <ul class="pilulas">
-        <li>Marcas nacionais &amp; internacionais</li>
-        <li>+ 12 parcerias recorrentes</li>
-        <li>+ de 1 ano criando UGC</li>
-      </ul>
     </div>
     <div class="env marcas-titulo revela">
       <p class="rotulo">Marcas que já criaram comigo</p>
