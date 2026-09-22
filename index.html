@@ -207,8 +207,10 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 /* marca-texto: uma barra do azul dos botões que "pinta" o texto da
    esquerda pra direita. É um degradê que nasce com 0% de largura e
    cresce até 100% quando a frase entra na tela (a classe "visivel" é a
-   mesma que o resto do site usa pro efeito de aparecer rolando) */
-.marcas-titulo .grifo-marcas{
+   mesma que o resto do site usa pro efeito de aparecer rolando). Classe
+   única, reaproveitada em qualquer trecho que precise desse efeito; só
+   muda a regra de gatilho (qual ancestral vira ".visivel") por baixo. */
+.marca-texto{
   /* o <mark> nasce com fundo amarelo do navegador; sem apagar isso aqui,
      a parte que o degradê ainda não cobriu mostra amarelo por baixo em
      vez do creme da página, e isso só aparece no meio do movimento (no
@@ -216,9 +218,10 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   background-color:transparent;
   background-image:linear-gradient(90deg,var(--ceu) 0 100%);
   background-repeat:no-repeat;background-size:0% 100%;background-position:0 0;
-  padding:.06em .1em;transition:background-size 1.1s ease .5s;
+  padding:.04em .1em;transition:background-size 1.1s ease .5s;
 }
-.marcas-titulo.visivel .grifo-marcas{background-size:100% 100%}
+.marcas-titulo.visivel .marca-texto,
+.titulo-secao.visivel .marca-texto{background-size:100% 100%}
 .faixa-marcas{overflow:hidden;border-top:3px solid var(--cobalto);border-bottom:3px solid var(--cobalto)}
 .trilho{display:flex;width:max-content;animation:desliza 42s linear infinite}
 /* o hover pausa a faixa, pra dar tempo de ler ou de olhar um logo */
@@ -525,7 +528,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
       </div>
     </div>
     <div class="env marcas-titulo revela">
-      <p class="rotulo"><mark class="grifo-marcas">Marcas que já criaram comigo</mark></p>
+      <p class="rotulo"><mark class="marca-texto">Marcas que já criaram comigo</mark></p>
     </div>
     <div class="faixa-marcas">
       <ul class="trilho" id="trilhoMarcas"></ul>
@@ -536,8 +539,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   <section id="destaques" class="secao">
     <div class="env destaques-grade">
       <div class="destaques-texto">
-        <p class="rotulo revela">Os três que mais performaram</p>
-        <h2 class="titulo-secao revela">Algum deles já passou no seu feed?</h2>
+        <h2 class="titulo-secao revela">Algum deles já passou no seu <mark class="marca-texto">feed</mark>?</h2>
         <p class="destaques-gancho revela">Três produtos diferentes, três formatos diferentes, e os três funcionaram.</p>
         <p class="intro-secao revela">Eu leio o produto antes de gravar e escolho o formato que conecta ele com o público. Com o seu não é diferente: existe um formato certo para ele, e achar esse formato é o meu trabalho.</p>
         <p class="destaques-dica revela">Passe o mouse ou deslize.</p>
