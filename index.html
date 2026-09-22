@@ -117,37 +117,43 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='2' height='2' fill='%232b2d35' fill-opacity='.055'/%3E%3C/svg%3E");
   background-size:4px 4px;
 }
-.capa-grade{display:flex;flex-direction:column;align-items:center;text-align:center;padding-bottom:clamp(48px,7vw,80px)}
+/* a capa segue a referência: texto alinhado à esquerda numa coluna e a
+   foto na outra, com o padrão azul por trás dela */
+.capa-grade{display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(24px,4vw,56px);align-items:center;padding-bottom:clamp(48px,7vw,80px)}
 .foto{display:block;width:100%;height:auto;background:var(--azul-fundo)}
 /* ===== a frase grande da capa =====
    a palavra "espontâneo" sai no azul da marca, que é o mesmo destaque que
    a referência faz nela, só que na paleta do site em vez do marrom */
 .capa-titulo{
-  margin-top:clamp(16px,2.2vw,26px);
-  /* as 21ch fazem a frase quebrar nas mesmas três linhas da referência,
-     em "parece / pensado pra / converter" */
-  font-size:clamp(2.1rem,5.4vw,4.1rem);line-height:1.14;max-width:21ch;color:var(--tinta);
+  margin-top:clamp(14px,1.8vw,22px);
+  /* 19ch é onde a frase quebra nas mesmas três linhas da referência,
+     em "parece / pensado pra / converter". Com 17ch ela virava quatro */
+  font-size:clamp(2rem,4.3vw,3.5rem);line-height:1.14;max-width:19ch;color:var(--tinta);
 }
 .capa-titulo em{font-style:normal;color:var(--cobalto)}
 .capa-frase{
-  margin-top:clamp(18px,2.4vw,28px);
-  font-size:.92rem;letter-spacing:.09em;text-transform:uppercase;max-width:42ch;
+  margin-top:clamp(16px,2vw,24px);
+  font-size:.88rem;letter-spacing:.09em;text-transform:uppercase;max-width:38ch;
   color:var(--cobalto-texto);font-weight:500;line-height:1.6;
 }
+/* ===== a foto com o padrão atrás =====
+   o padrão é um painel arredondado que fica um pouco mais baixo e mais
+   estreito que a foto, então ela sai por cima dele em cima e desce um
+   pouco por baixo, que é o efeito da referência */
+.capa-visual{position:relative;display:flex;justify-content:center;align-items:flex-end;min-width:0}
+.capa-padrao{
+  position:absolute;z-index:0;left:50%;transform:translateX(-50%);bottom:11%;
+  width:min(92%,410px);aspect-ratio:1/1.12;border-radius:clamp(22px,2.6vw,38px);
+  background-image:url("padrao-capa.webp");background-size:cover;background-position:center;
+}
 .capa-foto{
-  display:block;width:clamp(230px,34vw,440px);height:auto;
-  margin:clamp(20px,3vw,38px) auto 0;
+  position:relative;z-index:1;display:block;width:min(100%,470px);height:auto;
   /* o corte reto embaixo da foto vira um desvanecido, pra ela se apoiar
      no fundo em vez de parecer recortada com tesoura */
-  -webkit-mask-image:linear-gradient(to bottom,#000 86%,transparent 100%);
-  mask-image:linear-gradient(to bottom,#000 86%,transparent 100%);
+  -webkit-mask-image:linear-gradient(to bottom,#000 88%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 88%,transparent 100%);
 }
-.capa-botoes{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:32px}
-.capa-numeros{display:flex;flex-wrap:wrap;gap:0;width:100%;margin-top:46px;border-top:1px solid var(--cobalto);border-bottom:1px solid var(--cobalto);text-align:left}
-.capa-numeros li{flex:1 1 130px;padding:20px 18px;border-right:1px solid var(--fio)}
-.capa-numeros li:last-child{border-right:0}
-.capa-numeros b{display:block;font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:clamp(1.7rem,3.4vw,2.3rem);color:var(--cobalto-texto);line-height:1}
-.capa-numeros span{font-size:.86rem;letter-spacing:.06em;text-transform:uppercase;color:var(--tinta-media)}
+.capa-botoes{display:flex;flex-wrap:wrap;gap:14px;margin-top:clamp(24px,3vw,34px)}
 
 /* faixa fina com os nomes das marcas */
 /* a faixa não tem fundo próprio: ela deixa passar a textura da capa,
@@ -367,20 +373,17 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   .menu.aberto{display:flex}
   .menu a{padding:14px 0;border-bottom:1px solid var(--fio)}
 }
-/* entre o tablet e o celular os quatro dados ficariam em colunas
-   estreitas demais, com as palavras quebrando no meio. Nessa faixa eles
-   passam a ser dois por linha */
-@media (min-width:721px) and (max-width:980px){
-  .capa-numeros li{flex:1 1 46%}
-  .capa-numeros li:nth-child(2n){border-right:0}
-  .capa-numeros li:nth-child(-n+2){border-bottom:1px solid var(--fio)}
+@media (max-width:900px){
+  /* empilhado, o texto centralizado equilibra melhor com a foto embaixo */
+  .capa-grade{grid-template-columns:1fr;gap:clamp(20px,4vw,34px)}
+  .capa-texto{text-align:center}
+  .capa-titulo,.capa-frase{margin-left:auto;margin-right:auto}
+  .capa-botoes{justify-content:center}
 }
 @media (max-width:720px){
   .secao{padding:66px 0}
   .servicos-grade{grid-template-columns:1fr}
   .sobre-dados{grid-template-columns:1fr}
-  .capa-numeros li{flex:1 1 100%;border-right:0;border-bottom:1px solid var(--fio)}
-  .capa-numeros li:last-child{border-bottom:0}
   .btn{width:100%}
   .capa-botoes{flex-direction:column;align-items:stretch}
   /* no celular as setas passam a flutuar por cima do carrossel: sentadas ao
@@ -425,22 +428,29 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   <!-- ============ 1. CAPA ============ -->
   <section id="capa" class="capa">
     <div class="env capa-grade">
-      <p class="rotulo revela">Paloma Ribeiro UGC</p>
-      <h1 class="capa-titulo revela">Conteúdo que parece <em>espontâneo</em>, pensado pra converter</h1>
-      <p class="capa-frase revela">Construído estrategicamente para gerar identificação e conversão.</p>
-      <!-- COMO TROCAR A FOTO DA CAPA: troque foto-capa-recorte.png por uma
-           foto sua já sem fundo (em PNG, com transparência). Se ela tiver
-           outra proporção, troque também os números de width e height
-           aqui embaixo pelos da foto nova, para a página não dar um pulo
-           enquanto carrega. -->
-      <img src="foto-capa-recorte.png" width="700" height="887" fetchpriority="high"
-           alt="Paloma Ribeiro sorrindo, de blazer bege sobre camiseta branca"
-           class="capa-foto revela">
-      <div class="capa-botoes revela">
-        <a class="btn" href="#contato">Falar comigo</a>
-        <a class="btn btn--linha" href="#trabalhos">Ver os trabalhos</a>
+      <div class="capa-texto">
+        <p class="rotulo revela">Paloma Ribeiro UGC</p>
+        <h1 class="capa-titulo revela">Conteúdo que parece <em>espontâneo</em>, pensado pra converter</h1>
+        <p class="capa-frase revela">Construído estrategicamente para gerar identificação e conversão.</p>
+        <div class="capa-botoes revela">
+          <a class="btn" href="#contato">Falar comigo</a>
+          <a class="btn btn--linha" href="#trabalhos">Ver os trabalhos</a>
+        </div>
       </div>
-      <ul class="capa-numeros revela" id="capaNumeros"></ul>
+      <div class="capa-visual revela">
+        <!-- COMO TROCAR O ELEMENTO DE TRÁS: troque padrao-capa.webp por outra
+             imagem de padrão. Ele é só decoração, por isso fica num <span>
+             vazio com aria-hidden: leitor de tela ignora. -->
+        <span class="capa-padrao" aria-hidden="true"></span>
+        <!-- COMO TROCAR A FOTO DA CAPA: troque foto-capa-recorte.png por uma
+             foto sua já sem fundo (em PNG, com transparência). Se ela tiver
+             outra proporção, troque também os números de width e height
+             aqui embaixo pelos da foto nova, para a página não dar um pulo
+             enquanto carrega. -->
+        <img src="foto-capa-recorte.png" width="700" height="887" fetchpriority="high"
+             alt="Paloma Ribeiro sorrindo, de blazer bege sobre camiseta branca"
+             class="capa-foto">
+      </div>
     </div>
     <div class="faixa-especialidades">
       <ul class="trilho" id="trilhoEspecialidades"></ul>
@@ -690,29 +700,6 @@ const ESPECIALIDADES = [
   "YouTube Ads"
 ];
 
-/* --- 2) OS QUATRO DADOS DA CAPA ---
-   Esta é a primeira coisa que a marca lê depois do seu nome, então aqui
-   não entra volume ("50 vídeos", "25 marcas"): volume qualquer criador
-   promete, e número baixo trabalha contra você. Entra o que responde a
-   pergunta que a marca está fazendo em silêncio, que é "posso confiar
-   dinheiro nessa pessoa?".
-
-   Os quatro cobrem as quatro dúvidas dela, nesta ordem:
-   1. já fizeram isso com gente do meu tamanho?  -> Brasil e Coreia
-   2. é profissão ou é hobby?                    -> 2 anos
-   3. vai travar a minha campanha?               -> 72h
-   4. e se vier uma coisa que eu não quero?      -> roteiro aprovado antes
-
-   Todos saem de coisas que já estão no site (os logos das marcas
-   coreanas na faixa do "sobre mim" e as promessas ao lado da sua foto),
-   então nenhum deles é promessa nova. */
-const CAPA_NUMEROS = [
-  { valor: "Brasil e Coreia", rotulo: "marcas nacionais e K-Beauty" },
-  { valor: "2 anos",          rotulo: "gravando para marcas" },
-  { valor: "72h",             rotulo: "do roteiro aprovado ao vídeo pronto" },
-  { valor: "Zero surpresa",   rotulo: "você aprova o roteiro antes de gravar" }
-];
-
 /* --- 3) CONTEÚDOS DE DESTAQUE (os três vídeos grandes) ---
    link:     AQUI ENTRA O LINK DO VÍDEO (Instagram, TikTok, YouTube ou Drive).
    capa:     AQUI ENTRA A CAPA. Hoje é um bloco com degradê e a legenda que você lê abaixo.
@@ -809,13 +796,6 @@ function montaEspecialidades(){
   $("#trilhoEspecialidades").innerHTML =
     ESPECIALIDADES.map(function(t){ return item(t, false); }).join("") +
     ESPECIALIDADES.map(function(t){ return item(t, true); }).join("");
-}
-
-/* ----- números curtos da capa ----- */
-function montaCapaNumeros(){
-  $("#capaNumeros").innerHTML = CAPA_NUMEROS.map(function(n){
-    return '<li><b>' + esc(n.valor) + '</b><span>' + esc(n.rotulo) + '</span></li>';
-  }).join("");
 }
 
 /* ----- conteúdos de destaque -----
@@ -1369,7 +1349,6 @@ function ligaAno(){
 /* ----- liga tudo ----- */
 montaMarcas();
 montaEspecialidades();
-montaCapaNumeros();
 montaDestaques();
 carregarEMontarVideos();
 montaServicos();
