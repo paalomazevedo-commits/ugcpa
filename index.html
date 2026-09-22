@@ -30,13 +30,14 @@
   --tinta-media:#5c5f6b;     /* texto de apoio */
   --fio:rgba(134,142,166,.22); /* fio fino usado em divisórias */
   --topo:76px;               /* altura do menu fixo */
+  --tarja:40px;              /* altura da tarja da contagem regressiva */
   --gutter:clamp(16px,5vw,48px);
 }
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{
   margin:0;
-  padding-top:var(--topo);
+  padding-top:calc(var(--tarja) + var(--topo));
   font-family:"Jost",system-ui,-apple-system,"Segoe UI",sans-serif;
   font-weight:300;
   font-size:1.02rem;
@@ -60,7 +61,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .pular{position:absolute;left:-9999px;top:0;z-index:200;background:var(--cobalto);color:#fff;padding:12px 18px;text-decoration:none}
 .pular:focus{left:0}
 .env{width:min(1180px,100% - (2 * var(--gutter)));margin-inline:auto}
-.secao{padding:92px 0;scroll-margin-top:calc(var(--topo) + 16px)}
+.secao{padding:92px 0;scroll-margin-top:calc(var(--tarja) + var(--topo) + 16px)}
 /* o "sobre mim" pediu fundo liso, sem a textura pontilhada fininha que
    o resto do site usa (a cor é a mesma, só sem o padrão) */
 #sobre{background-color:var(--louca);background-image:none}
@@ -106,6 +107,15 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='2' height='2' fill='%232b2d35' fill-opacity='.055'/%3E%3C/svg%3E");
   background-size:4px 4px;
 }
+/* tarja da contagem regressiva, sentada em cima do menu. O texto nasce
+   vazio e é preenchido pelo JS (monta a data certa toda vez que a
+   página carrega, sozinha, sem precisar editar nada aqui) */
+.tarja-contagem{
+  height:var(--tarja);display:flex;align-items:center;justify-content:center;
+  padding:0 var(--gutter);background:var(--cobalto);color:#fff;
+  font-size:clamp(.66rem,2.6vw,.82rem);letter-spacing:.05em;text-transform:uppercase;
+  font-weight:500;text-align:center;line-height:1.25;
+}
 .barra{height:var(--topo);display:flex;align-items:center;justify-content:space-between;gap:16px}
 .marca-topo{font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:1.22rem;text-decoration:none;letter-spacing:.01em}
 .menu{display:flex;align-items:center;gap:26px}
@@ -119,7 +129,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 
 /* ===== 1. CAPA ===== */
 .capa{
-  padding:clamp(40px,7vw,78px) 0 0;scroll-margin-top:var(--topo);
+  padding:clamp(40px,7vw,78px) 0 0;scroll-margin-top:calc(var(--tarja) + var(--topo));
   background-color:var(--louca);
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='2' height='2' fill='%232b2d35' fill-opacity='.055'/%3E%3C/svg%3E");
   background-size:4px 4px;
@@ -374,7 +384,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 }
 @media (max-width:900px){
   .hamburguer{display:grid}
-  .menu{position:fixed;top:var(--topo);left:0;right:0;flex-direction:column;align-items:stretch;gap:0;padding:6px var(--gutter) 22px;background:var(--louca);border-bottom:3px solid var(--cobalto);display:none}
+  .menu{position:fixed;top:calc(var(--tarja) + var(--topo));left:0;right:0;flex-direction:column;align-items:stretch;gap:0;padding:6px var(--gutter) 22px;background:var(--louca);border-bottom:3px solid var(--cobalto);display:none}
   .menu.aberto{display:flex}
   .menu a{padding:14px 0;border-bottom:1px solid var(--fio)}
 }
@@ -413,6 +423,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 <a class="pular" href="#conteudo">Pular para o conteúdo</a>
 
 <header class="topo">
+  <p class="tarja-contagem" id="tarjaContagem"></p>
   <div class="env barra">
     <a class="marca-topo" href="#capa">Paloma Ribeiro</a>
     <button class="hamburguer" id="hamburguer" aria-expanded="false" aria-controls="menu" aria-label="Abrir o menu">
@@ -793,6 +804,45 @@ function montaEspecialidades(){
   $("#trilhoEspecialidades").innerHTML =
     ESPECIALIDADES.map(function(t){ return item(t, false); }).join("") +
     ESPECIALIDADES.map(function(t){ return item(t, true); }).join("");
+}
+
+/* ----- tarja da contagem regressiva pra Black Friday -----
+   Roda de novo sozinha toda vez que a página carrega, então o número
+   sempre bate com o dia de hoje, sem precisar editar nada aqui.
+
+   Black Friday não tem data fixa no calendário: ela é sempre a
+   sexta-feira depois da quarta quinta-feira de novembro (a mesma conta
+   usada nos EUA pro Thanksgiving, um dia antes). Por isso o cálculo
+   acha o dia certo pra qualquer ano, sozinho. */
+function achaBlackFriday(ano){
+  const primeiroDeNovembro = new Date(ano, 10, 1);
+  const diasAteAPrimeiraQuinta = (4 - primeiroDeNovembro.getDay() + 7) % 7;
+  const quartaQuinta = 1 + diasAteAPrimeiraQuinta + 21;
+  const blackFriday = new Date(ano, 10, quartaQuinta + 1);
+  return blackFriday;
+}
+
+function montaTarjaContagem(){
+  const el = $("#tarjaContagem");
+  if (!el) return;
+
+  const agora = new Date();
+  /* compara só a data, sem a hora, pra "faltam N dias" não variar
+     dependendo de que horas a pessoa abriu o site */
+  const hoje = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
+
+  let blackFriday = achaBlackFriday(hoje.getFullYear());
+  if (blackFriday < hoje) blackFriday = achaBlackFriday(hoje.getFullYear() + 1);
+
+  const umDiaEmMs = 24 * 60 * 60 * 1000;
+  const dias = Math.round((blackFriday - hoje) / umDiaEmMs);
+
+  let texto;
+  if (dias === 0) texto = "A Black Friday é hoje";
+  else if (dias === 1) texto = "Falta 1 dia para a Black Friday";
+  else texto = "Faltam " + dias + " dias para a Black Friday";
+
+  el.textContent = texto;
 }
 
 /* ----- conteúdos de destaque -----
@@ -1346,6 +1396,7 @@ function ligaAno(){
 /* ----- liga tudo ----- */
 montaMarcas();
 montaEspecialidades();
+montaTarjaContagem();
 montaDestaques();
 carregarEMontarVideos();
 montaServicos();
