@@ -82,6 +82,10 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 }
 .titulo-secao{font-size:clamp(2rem,4.6vw,3.2rem);max-width:20ch}
 .intro-secao{margin-top:18px;max-width:58ch;color:var(--tinta-media)}
+/* a Jost só carrega até o peso 600 (veja o <link> no <head>); "bolder"
+   sem número, a partir do peso 300 do parágrafo, o navegador só sobe pra
+   400, que não parece negrito nenhum. Por isso o peso vem explícito */
+.intro-secao b{font-weight:600}
 
 /* ===== botões ===== */
 .btn{
@@ -205,14 +209,6 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 
 /* ===== 2. SOBRE ===== */
 .sobre-grade{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(28px,5vw,64px);align-items:start}
-/* marca-texto: grifa a informação mais importante de cada parágrafo com
-   o mesmo azul dos botões, texto em branco por cima pra continuar
-   legível. O box-decoration-break é o que faz o fundo acompanhar
-   direitinho quando o trecho grifado quebra em duas linhas */
-mark.grifo{
-  background:var(--cobalto);color:#fff;padding:.05em .3em;border-radius:3px;
-  box-decoration-break:clone;-webkit-box-decoration-break:clone;
-}
 
 /* ===== blocos de mídia com degradê ===== */
 .midia{
@@ -484,8 +480,8 @@ mark.grifo{
           <div><dt>Mãe de dois meninos</dt><dd>Especialista em conteúdo lifestyle.</dd></div>
           <div><dt>Especialidade</dt><dd>Skincare, beleza e rotina.</dd></div>
         </dl>
-        <p class="intro-secao">Com mais de <mark class="grifo">1 ano de experiência</mark>, já trabalhei com <mark class="grifo">marcas nacionais e internacionais</mark>.</p>
-        <p class="intro-secao">Cada produto é estudado de forma <mark class="grifo">única e estratégica</mark>, e é desse estudo que nasce um roteiro bem elaborado: um roteiro que transforma o produto em história, conecta com o público e gera <mark class="grifo">identificação e conversão</mark>.</p>
+        <p class="intro-secao">Com mais de <b>1 ano de experiência</b>, já trabalhei com <b>marcas nacionais e internacionais</b>.</p>
+        <p class="intro-secao">Cada produto é estudado de forma <b>única e estratégica</b>, e é desse estudo que nasce um roteiro bem elaborado: um roteiro que transforma o produto em história, conecta com o público e gera <b>identificação e conversão</b>.</p>
         <ul class="pilulas">
           <li>Marcas nacionais &amp; internacionais</li>
           <li>+ 12 parcerias recorrentes</li>
