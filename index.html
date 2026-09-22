@@ -206,8 +206,8 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .marcas-titulo .rotulo{margin-bottom:0;font-size:clamp(1.25rem,2.6vw,1.6rem)}
 /* marca-texto: uma barra fixa do azul dos botões atrás do trecho em
    destaque, com o texto por dentro em branco e itálico. Sem animação,
-   sem gatilho de rolagem: já nasce assim, e fica assim. Classe única,
-   reaproveitada em qualquer trecho do site que precise desse efeito. */
+   sem gatilho de rolagem: já nasce assim, e fica assim. Esse é o
+   padrão, usado em "feed" e em "formato"/"sua marca". */
 .marca-texto{
   background-color:var(--ceu);color:#fff;font-style:italic;
   padding:.04em .1em;
@@ -217,6 +217,17 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
      caixa, abraçando só o texto dela */
   box-decoration-break:clone;-webkit-box-decoration-break:clone;
 }
+/* "Marcas que já criaram comigo" volta a ser como era antes de todas
+   essas voltas: texto na cor normal do entorno (não branco) e o
+   degradê nascendo com 0% de largura, crescendo até 100% quando a
+   frase entra na tela, em vez de já nascer pronto */
+.marcas-titulo .marca-texto{
+  background-color:transparent;color:inherit;font-style:inherit;
+  background-image:linear-gradient(90deg,var(--ceu) 0 100%);
+  background-repeat:no-repeat;background-size:0% 100%;background-position:0 0;
+  transition:background-size 1.1s ease .5s;
+}
+.marcas-titulo.visivel .marca-texto{background-size:100% 100%}
 .faixa-marcas{overflow:hidden;border-top:3px solid var(--cobalto);border-bottom:3px solid var(--cobalto)}
 .trilho{display:flex;width:max-content;animation:desliza 42s linear infinite}
 /* o hover pausa a faixa, pra dar tempo de ler ou de olhar um logo */
