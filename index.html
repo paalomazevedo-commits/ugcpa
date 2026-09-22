@@ -141,10 +141,12 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
    estreito que a foto, então ela sai por cima dele em cima e desce um
    pouco por baixo, que é o efeito da referência */
 .capa-visual{position:relative;display:flex;justify-content:center;align-items:flex-end;min-width:0}
+/* cor lisa, a mesma do botão "Falar comigo" (var(--cobalto)), no lugar
+   da imagem do padrão estampado */
 .capa-padrao{
   position:absolute;z-index:0;left:50%;transform:translateX(-50%);bottom:11%;
   width:min(92%,410px);aspect-ratio:1/1.12;border-radius:clamp(22px,2.6vw,38px);
-  background-image:url("padrao-capa.webp");background-size:cover;background-position:center;
+  background:var(--cobalto);
 }
 .capa-foto{
   position:relative;z-index:1;display:block;width:min(100%,470px);height:auto;
