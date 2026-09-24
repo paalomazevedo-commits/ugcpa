@@ -323,6 +323,19 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .destaque-titulo{font-size:1.1rem}
 .destaque-contexto{margin-top:6px;color:var(--tinta-media);font-size:.92rem}
 
+/* ===== 3.5 YOUTUBE ADS =====
+   uma seção pequena e só pra esse formato: o vídeo já vem na horizontal
+   (do jeito que o YouTube mostra mesmo), grande, sem precisar clicar em
+   nada pra abrir. */
+.youtube-ads{text-align:center}
+.youtube-ads .titulo-secao{margin-inline:auto}
+.youtube-ads-video{
+  position:relative;width:100%;max-width:900px;margin:clamp(24px,3.5vw,36px) auto 0;
+  aspect-ratio:16/9;border:3px solid var(--cobalto);border-radius:17px;overflow:hidden;background:#000;
+}
+.youtube-ads-video iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.youtube-ads-texto{max-width:52ch;margin:20px auto 0;color:var(--tinta-media);font-size:.92rem}
+
 /* ===== 4. TRABALHOS POR NICHO, EM CARROSSEL ===== */
 .filtros{display:flex;flex-wrap:wrap;gap:10px;margin-top:36px}
 .filtro{padding:10px 20px;border:2px solid var(--cobalto);background:transparent;color:var(--cobalto-texto);cursor:pointer;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;transition:background .2s ease,color .2s ease}
@@ -575,6 +588,20 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
     </div>
   </section>
 
+  <!-- ============ 4.5 YOUTUBE ADS ============ -->
+  <section id="youtubeAds" class="secao youtube-ads">
+    <div class="env">
+      <p class="rotulo revela">YouTube Ads</p>
+      <h2 class="titulo-secao revela">Mais visibilidade para a sua marca</h2>
+      <div class="youtube-ads-video revela">
+        <iframe src="https://www.youtube.com/embed/jAowcJkJrJg?rel=0&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1"
+          title="Exemplo de vídeo para YouTube Ads" loading="lazy"
+          allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+      </div>
+      <p class="youtube-ads-texto revela">Vídeos pensados estrategicamente para o formato do YouTube Ads, feitos para trazer mais visibilidade e mais alcance para a sua marca.</p>
+    </div>
+  </section>
+
   <!-- ============ 5. COMO EU TE AJUDO ============ -->
   <section id="servicos" class="secao">
     <div class="env">
@@ -741,8 +768,7 @@ const ESPECIALIDADES = [
   "Corte para anúncio",
   "Vídeo vertical 9:16",
   "Foto para página de produto",
-  "Direção de cena",
-  "YouTube Ads"
+  "Direção de cena"
 ];
 
 /* --- 3) CONTEÚDOS DE DESTAQUE (os três vídeos grandes) ---
