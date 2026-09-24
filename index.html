@@ -314,7 +314,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 }
 .destaque[data-ativo="true"]{filter:none;opacity:1;transform:none}
 .destaques-trilho:hover .destaque,.destaques-trilho:focus-within .destaque{filter:blur(3px);opacity:.5;transform:scale(.93)}
-.destaques-trilho .destaque:hover,.destaques-trilho .destaque:focus-visible{filter:none;opacity:1;transform:none}
+.destaques-trilho .destaque:hover,.destaques-trilho .destaque:focus-within{filter:none;opacity:1;transform:none}
 .destaque-capa{border:1px solid var(--cobalto);position:relative;border-radius:17px;overflow:hidden}
 .destaque-capa .legenda{position:absolute;left:14px;right:14px;bottom:14px}
 .destaque-texto{padding:16px 14px 12px}
@@ -746,9 +746,13 @@ const ESPECIALIDADES = [
 ];
 
 /* --- 3) CONTEÚDOS DE DESTAQUE (os três vídeos grandes) ---
-   link:     AQUI ENTRA O LINK DO VÍDEO (Instagram, TikTok, YouTube ou Drive).
+   link:     o link do vídeo no YouTube. Não abre mais em outra aba: o
+             site tira o código do vídeo desse link e toca ele aqui
+             dentro, no mesmo visor com som que os carrosséis usam.
    capa:     o caminho do arquivo de imagem da capa (pasta destaques/), o
              melhor frame de cada vídeo, já recortado no formato vertical 9:16.
+   marca:    o nome da marca do produto, mostrado no visor quando o
+             vídeo abre.
    formato:  o tipo de conteúdo, em uma ou duas palavras. É o que a marca lê
              primeiro no card, então é ele que mostra o seu repertório.
    titulo:   o que o vídeo faz, em uma linha.
@@ -757,6 +761,7 @@ const DESTAQUES = [
   {
     link: "https://youtube.com/shorts/XJ9iKnRe_lc?feature=share",
     capa: "destaques/bioage.webp",
+    marca: "Bioage",
     formato: "Storytelling",
     titulo: "O produto dentro da rotina",
     contexto: "Parte da cena, nunca intervalo comercial."
@@ -764,6 +769,7 @@ const DESTAQUES = [
   {
     link: "https://youtube.com/shorts/7XeWNnD0xCE?feature=share",
     capa: "destaques/show-imports.webp",
+    marca: "Show Imports",
     formato: "Demonstração",
     titulo: "A função fora do óbvio",
     contexto: "Um cenário inesperado que prova o produto."
@@ -771,6 +777,7 @@ const DESTAQUES = [
   {
     link: "https://youtube.com/shorts/Bidkv15i5zY?feature=share",
     capa: "destaques/celimax.webp",
+    marca: "Celimax",
     formato: "Review",
     titulo: "A opinião de quem usou",
     contexto: "Testado na frente da câmera, sem script."
@@ -887,20 +894,24 @@ function montaTarjaContagem(){
 function montaDestaques(){
   const trilho = $("#grelhaDestaques");
   trilho.innerHTML = DESTAQUES.map(function(d, i){
+    const idVideo = idDoYoutube(d.link);
     return '' +
-      '<a class="destaque" href="' + esc(d.link) + '" target="_blank" rel="noopener" ' +
-         'data-indice="' + i + '" aria-label="Assistir o conteúdo em ' + esc(d.formato) + ': ' + esc(d.titulo) + '">' +
+      '<article class="destaque" data-indice="' + i + '">' +
         '<div class="destaque-capa">' +
           '<img src="' + esc(d.capa) + '" alt="Capa do vídeo: ' + esc(d.titulo) + '" ' +
             'class="midia midia--916" loading="lazy" decoding="async">' +
-          '<span class="assistir" aria-hidden="true"></span>' +
+          '<button type="button" class="video-abrir" data-id="' + esc(idVideo || "") + '" ' +
+             'data-marca="' + esc(d.marca) + '" data-titulo="' + esc(d.titulo) + '" ' +
+             'aria-label="Assistir o conteúdo em ' + esc(d.formato) + ': ' + esc(d.titulo) + '">' +
+            '<span class="assistir" aria-hidden="true"></span>' +
+          '</button>' +
         '</div>' +
         '<div class="destaque-texto">' +
           '<p class="destaque-formato">' + esc(d.formato) + '</p>' +
           '<h3 class="destaque-titulo">' + esc(d.titulo) + '</h3>' +
           '<p class="destaque-contexto">' + esc(d.contexto) + '</p>' +
         '</div>' +
-      '</a>';
+      '</article>';
   }).join("");
 
   /* começa com o do meio em evidência, como na referência */
@@ -949,7 +960,10 @@ function montaDestaques(){
      desfoque não voltar pro card de antes */
   Array.prototype.forEach.call(trilho.children, function(card, i){
     card.addEventListener("mouseenter", function(){ ativo = i; pinta(); });
-    card.addEventListener("focus", function(){ ativo = i; pinta(); });
+    /* focusin em vez de focus: quem recebe o foco de verdade agora é o
+       botão de assistir lá dentro do card, e só focusin borbulha até
+       aqui pra avisar o card pai */
+    card.addEventListener("focusin", function(){ ativo = i; pinta(); });
   });
 
   pinta();
@@ -1198,17 +1212,31 @@ function ligaVisor(){
   const fechar = $("#visorFechar");
   let focoAnterior = null;
 
-  function abre(id){
-    const video = videosAtuais.filter(function(v){ return v.id === id; })[0];
-    if (!video) return;
+  /* marcaForcada/tituloForcado servem pros três cards de destaque, que
+     não fazem parte da lista de vídeos do painel (videosAtuais): eles já
+     chegam com a marca e o título prontos no próprio botão. Sem esses
+     dois, o visor busca o vídeo em videosAtuais, como sempre fez pros
+     carrosséis. */
+  function abre(id, marcaForcada, tituloForcado){
+    if (!id) return;
+    let marca, titulo;
+    if (marcaForcada || tituloForcado){
+      marca = marcaForcada || "";
+      titulo = tituloForcado || "";
+    } else {
+      const video = videosAtuais.filter(function(v){ return v.id === id; })[0];
+      if (!video) return;
+      marca = video.marca;
+      titulo = video.titulo;
+    }
     focoAnterior = document.activeElement;
     visorAberto = true;
     document.querySelectorAll("#carrosseis iframe").forEach(function(f){ comandoVideo(f, "pauseVideo"); });
     quadro.innerHTML = '<iframe src="' + esc(enderecoVideo(id, true)) + '" ' +
-      'title="' + esc(video.marca + ", " + video.titulo) + '" ' +
+      'title="' + esc(marca + ", " + titulo) + '" ' +
       'allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
-    $("#visorMarca").textContent = video.marca;
-    $("#visorTitulo").textContent = video.titulo;
+    $("#visorMarca").textContent = marca;
+    $("#visorTitulo").textContent = titulo;
     visor.hidden = false;
     document.body.style.overflow = "hidden";
     fechar.focus();
@@ -1234,7 +1262,7 @@ function ligaVisor(){
 
   document.addEventListener("click", function(e){
     const botao = e.target.closest ? e.target.closest(".video-abrir") : null;
-    if (botao) abre(botao.dataset.id);
+    if (botao) abre(botao.dataset.id, botao.dataset.marca, botao.dataset.titulo);
   });
   fechar.addEventListener("click", fecha);
   visor.addEventListener("click", function(e){ if (e.target === visor) fecha(); });
