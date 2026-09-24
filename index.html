@@ -1036,6 +1036,17 @@ function carregarEMontarVideos(){
 
 let videosAtuais = [];
 
+/* ----- ordem fixa dos nichos na página de conteúdos -----
+   Sem isso, a ordem dos botões de filtro e dos carrosséis seguia a
+   ordem dos vídeos no banco, que não é a ordem que faz sentido pra
+   quem visita o site. tiraAcento ignora acento e o "s" do final, pra
+   "Experiência" e "Experiências" caírem no mesmo lugar da lista,
+   não importa como o nicho foi escrito lá no painel. */
+const ORDEM_NICHOS = ["beleza", "experiencia", "moda", "tech", "marketplace"];
+function tiraAcento(t){
+  return String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim().replace(/s$/, "");
+}
+
 /* ----- carrosséis de vídeo, um por nicho ----- */
 function montaVideos(lista){
   videosAtuais = lista;
@@ -1053,6 +1064,14 @@ function montaVideos(lista){
     if (vistos[v.categoria]) return;
     vistos[v.categoria] = true;
     comVideo.push({ id: v.categoria, nome: capitalizaPalavra(v.categoria) });
+  });
+
+  /* nichos fora da lista fixa (se algum dia aparecer um novo) ficam no
+     final, na ordem em que chegaram, em vez de desaparecer */
+  comVideo.sort(function(a, b){
+    const ia = ORDEM_NICHOS.indexOf(tiraAcento(a.id));
+    const ib = ORDEM_NICHOS.indexOf(tiraAcento(b.id));
+    return (ia === -1 ? ORDEM_NICHOS.length : ia) - (ib === -1 ? ORDEM_NICHOS.length : ib);
   });
 
   $("#filtros").innerHTML =
