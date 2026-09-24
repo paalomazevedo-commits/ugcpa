@@ -264,6 +264,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 }
 .midia--916{aspect-ratio:9/16}
 .midia--45{aspect-ratio:4/5}
+.destaque-capa img.midia{display:block;width:100%;object-fit:cover;padding:0;background:none}
 
 /* ===== moldura de renda decorativa (seção Sobre) =====
    a proporção 648/850 é a da própria imagem da moldura. A foto não cobre
@@ -746,10 +747,8 @@ const ESPECIALIDADES = [
 
 /* --- 3) CONTEÚDOS DE DESTAQUE (os três vídeos grandes) ---
    link:     AQUI ENTRA O LINK DO VÍDEO (Instagram, TikTok, YouTube ou Drive).
-   capa:     AQUI ENTRA A CAPA. Hoje é um bloco com degradê e a legenda que você lê abaixo.
-             Para usar a imagem real, troque a linha do bloco .midia dentro de montaDestaques por:
-             <img src="capa-do-video.jpg" alt="Descrição da capa" class="midia midia--916">
-             É a capa real que faz o desfoque dos cards de trás aparecer de verdade.
+   capa:     o caminho do arquivo de imagem da capa (pasta destaques/), o
+             melhor frame de cada vídeo, já recortado no formato vertical 9:16.
    formato:  o tipo de conteúdo, em uma ou duas palavras. É o que a marca lê
              primeiro no card, então é ele que mostra o seu repertório.
    titulo:   o que o vídeo faz, em uma linha.
@@ -757,21 +756,21 @@ const ESPECIALIDADES = [
 const DESTAQUES = [
   {
     link: "https://youtube.com/shorts/XJ9iKnRe_lc?feature=share",
-    capa: "capa vertical 9:16",
+    capa: "destaques/bioage.webp",
     formato: "Storytelling",
     titulo: "O produto dentro da rotina",
     contexto: "Parte da cena, nunca intervalo comercial."
   },
   {
     link: "https://youtube.com/shorts/7XeWNnD0xCE?feature=share",
-    capa: "capa vertical 9:16",
+    capa: "destaques/show-imports.webp",
     formato: "Demonstração",
     titulo: "A função fora do óbvio",
     contexto: "Um cenário inesperado que prova o produto."
   },
   {
     link: "https://youtube.com/shorts/Bidkv15i5zY?feature=share",
-    capa: "capa vertical 9:16",
+    capa: "destaques/celimax.webp",
     formato: "Review",
     titulo: "A opinião de quem usou",
     contexto: "Testado na frente da câmera, sem script."
@@ -892,11 +891,9 @@ function montaDestaques(){
       '<a class="destaque" href="' + esc(d.link) + '" target="_blank" rel="noopener" ' +
          'data-indice="' + i + '" aria-label="Assistir o conteúdo em ' + esc(d.formato) + ': ' + esc(d.titulo) + '">' +
         '<div class="destaque-capa">' +
-          /* AQUI ENTRA A CAPA REAL: troque a linha abaixo por
-             <img src="capa-do-video.jpg" alt="Capa do vídeo" class="midia midia--916"> */
-          '<div class="midia midia--916"><span class="legenda">' + esc(d.capa) + '</span>' +
-            '<span class="assistir" aria-hidden="true"></span>' +
-          '</div>' +
+          '<img src="' + esc(d.capa) + '" alt="Capa do vídeo: ' + esc(d.titulo) + '" ' +
+            'class="midia midia--916" loading="lazy" decoding="async">' +
+          '<span class="assistir" aria-hidden="true"></span>' +
         '</div>' +
         '<div class="destaque-texto">' +
           '<p class="destaque-formato">' + esc(d.formato) + '</p>' +
