@@ -446,6 +446,11 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .rodape-redes a{font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.45);padding-bottom:3px}
 .rodape-redes a:hover{border-bottom-color:#fff}
 .rodape-ano{width:100%;padding:16px 0 34px;border-top:1px solid rgba(255,255,255,.28);font-size:.86rem;color:rgba(255,255,255,.75)}
+/* link discreto: mesma cor apagada do resto do texto do rodapé, só o
+   fio embaixo aparece com mais força quando alguém passa o mouse, pra
+   não chamar atenção igual as redes sociais chamam */
+.rodape-valores{color:inherit;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.35)}
+.rodape-valores:hover{border-bottom-color:#fff}
 
 /* ===== card de captura ===== */
 .captura{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:20px;background:rgba(22,35,59,.62)}
@@ -722,7 +727,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
         <a href="mailto:paalomazevedo@gmail.com">E-mail</a>
       </nav>
     </div>
-    <p class="rodape-ano">Paloma Ribeiro, criadora de conteúdo UGC em Praia Grande. <span id="ano"></span></p>
+    <p class="rodape-ano">Paloma Ribeiro, criadora de conteúdo UGC em Praia Grande. <span id="ano"></span> &middot; <a href="valores.html" class="rodape-valores">Tabela de valores</a></p>
   </div>
 </footer>
 
