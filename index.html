@@ -440,11 +440,18 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .visor-fechar{position:fixed;top:16px;right:16px;width:46px;height:46px;border:2px solid #fff;background:transparent;color:#fff;font-size:1.1rem;line-height:1;cursor:pointer}
 .visor-fechar:hover{background:#fff;color:var(--cobalto-texto)}
 
-/* ===== 5. SERVIÇOS ===== */
-.servicos-grade{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(18px,2.6vw,30px);margin-top:46px}
-.servico-numero{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:2.4rem;color:var(--azul-claro);line-height:1}
-.servico h3{font-size:1.22rem;margin-top:10px}
-.servico p{margin-top:10px;color:var(--tinta-media);font-size:.96rem}
+/* ===== 5. SERVIÇOS =====
+   cartão simples (fundo branco, sombra suave) com uma etiqueta do
+   tópico em cima, em vez do número grande de antes: dois por linha,
+   pensado pra ficar fácil de ler o tópico de cada um rapidinho */
+.servicos-grade{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(18px,2.6vw,28px);margin-top:46px}
+.servico{background:var(--louca-clara);border-radius:18px;box-shadow:0 10px 26px rgba(43,45,53,.09);padding:clamp(24px,3vw,32px)}
+.servico-rotulo{
+  display:inline-block;background:var(--cobalto);color:#fff;
+  font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;font-weight:600;
+  padding:.55em 1.1em;border-radius:999px;
+}
+.servico-texto{margin-top:16px;color:var(--tinta-media);font-size:.96rem}
 /* botão grande pra tabela de valores, piscando igual o link do
    rodapé (reaproveita o mesmo @keyframes pisca-valores) */
 .btn-valores{
@@ -509,7 +516,6 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 
 /* ===== responsivo ===== */
 @media (max-width:980px){
-  .servicos-grade{grid-template-columns:1fr 1fr}
   .sobre-grade,.contato-grade,.destaques-grade{grid-template-columns:1fr}
 }
 @media (max-width:900px){
@@ -714,7 +720,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   <section id="servicos" class="secao">
     <div class="env">
       <p class="rotulo revela">Como eu te ajudo</p>
-      <h2 class="titulo-secao revela">Seis formas de trabalhar comigo</h2>
+      <h2 class="titulo-secao revela">Quatro formas de trabalhar comigo</h2>
       <div class="servicos-grade" id="grelhaServicos"></div>
       <a href="valores.html" class="btn-valores revela">Acesse aqui a tabela de valores</a>
     </div>
@@ -926,14 +932,14 @@ const DESTAQUES = [
    publicar o site de novo. O carrossel de cada nicho só aparece se tiver
    pelo menos um vídeo visível daquele nicho. */
 
-/* --- 4) SERVIÇOS --- */
+/* --- 4) SERVIÇOS ---
+   rotulo: a etiqueta em cima do card, o "tópico" (curto, maiúsculo).
+   texto:  o que esse tópico entrega, em uma ou duas frases. */
 const SERVICOS = [
-  { numero: "01", titulo: "Vídeo UGC",              texto: "Vídeo vertical gravado por mim, com roteiro, fala natural e o produto na rotina de verdade." },
-  { numero: "02", titulo: "Corte para anúncio",     texto: "Versão curta e direta do vídeo, feita para rodar como anúncio pago sem perder o gancho." },
-  { numero: "03", titulo: "Fotos do produto",       texto: "Fotos com luz natural, prontas para o feed, para o site e para a página do produto." },
-  { numero: "04", titulo: "Unboxing",               texto: "A primeira reação ao abrir a embalagem, gravada do jeito que acontece de verdade." },
-  { numero: "05", titulo: "Publicação no meu perfil", texto: "O conteúdo vai ao ar no meu Instagram, com a marca marcada e o link combinado." },
-  { numero: "06", titulo: "Pacote mensal",          texto: "Um número fechado de entregas por mês, com calendário combinado e prioridade na agenda." }
+  { rotulo: "Criativos para anúncio", texto: "Cortes verticais pensados pra rodar como anúncio pago no Meta e no TikTok, com o gancho certo nos primeiros segundos." },
+  { rotulo: "UGC para o seu produto", texto: "Vídeo, unboxing e fotos com luz natural, prontos pro feed, pro site e pra página do produto, com a naturalidade de quem usa de verdade." },
+  { rotulo: "Publi no meu perfil", texto: "O conteúdo vai ao ar no meu Instagram, com a marca marcada, alcançando uma audiência que já confia em mim." },
+  { rotulo: "Pacote mensal", texto: "Um número fechado de entregas por mês, com calendário combinado e prioridade na agenda." }
 ];
 
 
@@ -1448,10 +1454,9 @@ function ligaVisor(){
 /* ----- serviços ----- */
 function montaServicos(){
   $("#grelhaServicos").innerHTML = SERVICOS.map(function(s){
-    return '<article class="bloco servico revela">' +
-             '<p class="servico-numero">' + esc(s.numero) + '</p>' +
-             '<h3>' + esc(s.titulo) + '</h3>' +
-             '<p>' + esc(s.texto) + '</p>' +
+    return '<article class="servico revela">' +
+             '<p class="servico-rotulo">' + esc(s.rotulo) + '</p>' +
+             '<p class="servico-texto">' + esc(s.texto) + '</p>' +
            '</article>';
   }).join("");
 }
