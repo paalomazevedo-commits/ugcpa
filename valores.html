@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Tabela de valores | Paloma Ribeiro</title>
 <meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#868ea6">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
@@ -25,8 +26,8 @@
 *,*::before,*::after{box-sizing:border-box}
 body{
   margin:0;font-family:"Jost",system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:300;
-  font-size:1.02rem;line-height:1.65;color:var(--tinta);background-color:var(--louca);
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='2' height='2' fill='%232b2d35' fill-opacity='.055'/%3E%3C/svg%3E");
+  font-size:1.02rem;line-height:1.65;color:#fff;background-color:var(--cobalto);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='2' height='2' fill='%23ffffff' fill-opacity='.07'/%3E%3C/svg%3E");
   background-size:4px 4px;-webkit-font-smoothing:antialiased;
 }
 h1,h2{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;line-height:1.12;letter-spacing:-.01em}
@@ -34,26 +35,26 @@ p{margin:0}
 a{color:inherit}
 .env{width:min(900px,100% - (2 * var(--gutter)));margin-inline:auto}
 .topo{padding:28px var(--gutter)}
-.voltar{font-size:.86rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:var(--cobalto-texto);border-bottom:1px solid var(--cobalto);padding-bottom:2px}
-.voltar:hover{color:var(--tinta)}
+.voltar{font-size:.86rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;color:#fff;border-bottom:1px solid rgba(255,255,255,.55);padding-bottom:2px}
+.voltar:hover{border-bottom-color:#fff}
 .cabecalho{padding:12px var(--gutter) 8px;text-align:center}
 .rotulo{
-  font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:1.02rem;color:var(--cobalto-texto);
-  display:inline-block;padding-bottom:6px;margin-bottom:18px;border-bottom:1px solid var(--cobalto);letter-spacing:.02em;
+  font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:1.02rem;color:#fff;
+  display:inline-block;padding-bottom:6px;margin-bottom:18px;border-bottom:1px solid rgba(255,255,255,.55);letter-spacing:.02em;
 }
-.titulo{font-size:clamp(2rem,4.6vw,3rem);max-width:22ch;margin-inline:auto}
-.intro{margin-top:16px;max-width:52ch;margin-inline:auto;color:var(--tinta-media)}
+.titulo{font-size:clamp(2rem,4.6vw,3rem);max-width:22ch;margin-inline:auto;color:#fff}
+.intro{margin-top:16px;max-width:52ch;margin-inline:auto;color:rgba(255,255,255,.85)}
 .pacotes{padding:44px var(--gutter) 60px}
 .pacotes-grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px}
 .pacote{
-  background:var(--louca-clara);border:2px solid var(--cobalto);border-radius:18px;
+  background:var(--louca-clara);border-radius:18px;box-shadow:0 18px 30px rgba(22,28,41,.22);
   padding:28px 22px;text-align:center;display:flex;flex-direction:column;gap:12px;
 }
 .pacote-nome{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--cobalto-texto)}
 .pacote-inclui{font-size:1.02rem;color:var(--tinta)}
 .pacote-preco{margin-top:auto;font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:1.5rem;color:var(--cobalto-texto);white-space:nowrap}
 .contato{padding:12px var(--gutter) 70px;text-align:center}
-.contato p{color:var(--tinta-media);margin-bottom:18px}
+.contato p{color:rgba(255,255,255,.9);margin-bottom:18px}
 .btn{
   display:inline-block;border:2px solid var(--ceu);background:var(--ceu);color:var(--tinta);
   padding:13px 26px;border-radius:999px;text-decoration:none;font-size:.92rem;letter-spacing:.03em;

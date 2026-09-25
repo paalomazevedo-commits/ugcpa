@@ -446,11 +446,17 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .rodape-redes a{font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.45);padding-bottom:3px}
 .rodape-redes a:hover{border-bottom-color:#fff}
 .rodape-ano{width:100%;padding:16px 0 34px;border-top:1px solid rgba(255,255,255,.28);font-size:.86rem;color:rgba(255,255,255,.75)}
-/* link discreto: mesma cor apagada do resto do texto do rodapé, só o
-   fio embaixo aparece com mais força quando alguém passa o mouse, pra
-   não chamar atenção igual as redes sociais chamam */
-.rodape-valores{color:inherit;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.35)}
-.rodape-valores:hover{border-bottom-color:#fff}
+/* link discreto (fica de fora do menu principal), mas com uma piscada
+   suave de opacidade pra chamar o olho de quem chega até o rodapé.
+   Pausa ao passar o mouse, pra não piscar bem na hora de ler ou
+   clicar. O media query de menos movimento no fim do arquivo já
+   desliga essa animação sozinho pra quem pediu isso no sistema. */
+.rodape-valores{
+  color:inherit;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.35);
+  animation:pisca-valores 1.8s ease-in-out infinite;
+}
+.rodape-valores:hover{border-bottom-color:#fff;animation-play-state:paused}
+@keyframes pisca-valores{0%,100%{opacity:1}50%{opacity:.4}}
 
 /* ===== card de captura ===== */
 .captura{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:20px;background:rgba(22,35,59,.62)}
