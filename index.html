@@ -418,6 +418,16 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .servico-numero{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:2.4rem;color:var(--azul-claro);line-height:1}
 .servico h3{font-size:1.22rem;margin-top:10px}
 .servico p{margin-top:10px;color:var(--tinta-media);font-size:.96rem}
+/* botão grande pra tabela de valores, piscando igual o link do
+   rodapé (reaproveita o mesmo @keyframes pisca-valores) */
+.btn-valores{
+  display:block;width:fit-content;margin:clamp(30px,4.5vw,44px) auto 0;
+  background:var(--ceu);color:var(--tinta);text-decoration:none;
+  padding:19px 44px;border-radius:999px;border:2px solid var(--ceu);
+  font-size:1.08rem;font-weight:500;letter-spacing:.02em;text-align:center;
+  animation:pisca-valores 1.8s ease-in-out infinite;
+}
+.btn-valores:hover{background:var(--ceu-escuro);border-color:var(--ceu-escuro);animation-play-state:paused}
 
 
 /* ===== 7. CONTATO ===== */
@@ -674,6 +684,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
       <p class="rotulo revela">Como eu te ajudo</p>
       <h2 class="titulo-secao revela">Seis formas de trabalhar comigo</h2>
       <div class="servicos-grade" id="grelhaServicos"></div>
+      <a href="valores.html" class="btn-valores revela">Acesse aqui a tabela de valores</a>
     </div>
   </section>
 
