@@ -31,6 +31,8 @@
   --fio:rgba(134,142,166,.22); /* fio fino usado em divisórias */
   --ceu:#c1dbe8;             /* azul claro "gentle sky", cor dos botões */
   --ceu-escuro:#85b8d2;      /* o mesmo tom mais escuro, pro hover */
+  --tarja-fundo:#354b8d;     /* azul mais forte e saturado que o cobalto, só pra tarja da contagem chamar mais atenção */
+  --tarja-fundo-escuro:#2a3b6f; /* o mesmo tom mais escuro, pro hover */
   --topo:76px;               /* altura do menu fixo */
   --tarja:40px;              /* altura da tarja da contagem regressiva */
   --gutter:clamp(16px,5vw,48px);
@@ -115,12 +117,23 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 }
 /* tarja da contagem regressiva, sentada em cima do menu. O texto nasce
    vazio e é preenchido pelo JS (monta a data certa toda vez que a
-   página carrega, sozinha, sem precisar editar nada aqui) */
+   página carrega, sozinha, sem precisar editar nada aqui). A tarja
+   inteira é um link pro Contato, por isso o cursor e o hover de botão. */
 .tarja-contagem{
   height:var(--tarja);display:flex;align-items:center;justify-content:center;
-  padding:0 var(--gutter);background:var(--cobalto);color:#fff;
+  padding:0 var(--gutter);background:var(--tarja-fundo);color:#fff;
   font-size:clamp(.66rem,2.6vw,.82rem);letter-spacing:.05em;text-transform:uppercase;
   font-weight:500;text-align:center;line-height:1.25;
+  text-decoration:none;cursor:pointer;transition:background .2s ease;
+}
+.tarja-contagem:hover{background:var(--tarja-fundo-escuro)}
+/* "Black Friday" ganha uma etiqueta branca (o fundo forte da tarja é
+   escuro, então branco é quem contrasta) piscando por cima, pra ser
+   a primeira coisa que o olho pega na frase */
+.tarja-contagem .pisca-bf{
+  display:inline-block;background:#fff;color:var(--tarja-fundo);
+  padding:.1em .4em;border-radius:4px;font-weight:700;
+  animation:pisca-valores 1.4s ease-in-out infinite;
 }
 .barra{height:var(--topo);display:flex;align-items:center;justify-content:space-between;gap:16px}
 .marca-topo{font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:1.22rem;text-decoration:none;letter-spacing:.01em}
@@ -526,7 +539,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 <a class="pular" href="#conteudo">Pular para o conteúdo</a>
 
 <header class="topo">
-  <p class="tarja-contagem" id="tarjaContagem"></p>
+  <a href="#contato" class="tarja-contagem" id="tarjaContagem"></a>
   <div class="env barra">
     <a class="marca-topo" href="#capa">Paloma Ribeiro</a>
     <button class="hamburguer" id="hamburguer" aria-expanded="false" aria-controls="menu" aria-label="Abrir o menu">
@@ -982,12 +995,17 @@ function montaTarjaContagem(){
   const umDiaEmMs = 24 * 60 * 60 * 1000;
   const dias = Math.round((blackFriday - hoje) / umDiaEmMs);
 
+  /* "Black Friday" vem dentro do span que pisca (veja .pisca-bf no
+     CSS), por isso aqui é innerHTML e não textContent. dias é sempre
+     um número calculado aqui mesmo, nunca texto de fora, então não
+     precisa passar pelo esc(). */
+  const marca = '<span class="pisca-bf">Black Friday</span>';
   let texto;
-  if (dias === 0) texto = "A Black Friday é hoje";
-  else if (dias === 1) texto = "Falta 1 dia para a Black Friday";
-  else texto = "Faltam " + dias + " dias para a Black Friday";
+  if (dias === 0) texto = "A " + marca + " é hoje";
+  else if (dias === 1) texto = "Falta 1 dia para a " + marca;
+  else texto = "Faltam " + dias + " dias para a " + marca;
 
-  el.textContent = texto;
+  el.innerHTML = texto;
 }
 
 /* ----- conteúdos de destaque -----
