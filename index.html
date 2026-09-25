@@ -349,6 +349,21 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   display:grid;place-items:center;
 }
 
+/* ===== 4.6 BASTIDOR =====
+   uma foto por vez, alternando sozinha (veja ligaBastidor): a de cima
+   fica visível, todas as outras ficam por baixo dela na mesma pilha,
+   prontas pra aparecer quando chegar a vez. */
+.bastidor{text-align:center}
+.bastidor .titulo-secao{margin-inline:auto}
+.bastidor-palco{display:flex;flex-direction:column;align-items:center;gap:18px;margin-top:clamp(24px,3.5vw,36px)}
+.bastidor-fotos{
+  position:relative;width:100%;max-width:320px;aspect-ratio:3/4;
+  border-radius:20px;overflow:hidden;box-shadow:0 24px 34px rgba(43,45,53,.22),0 6px 10px rgba(43,45,53,.14);
+}
+.bastidor-foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s ease}
+.bastidor-foto.visivel{opacity:1}
+.bastidor-legenda{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:1.3rem;color:var(--cobalto-texto);min-height:1.5em}
+
 /* ===== 4. TRABALHOS POR NICHO, EM CARROSSEL ===== */
 .filtros{display:flex;flex-wrap:wrap;gap:10px;margin-top:36px}
 .filtro{padding:10px 20px;border:2px solid var(--cobalto);background:transparent;color:var(--cobalto-texto);cursor:pointer;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;border-radius:999px;transition:background .2s ease,color .2s ease}
@@ -620,6 +635,24 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
         <iframe src="https://www.youtube.com/embed/jAowcJkJrJg?rel=0&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1"
           title="Exemplo de vídeo para YouTube Ads" loading="lazy"
           allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 4.6 BASTIDOR ============ -->
+  <section id="bastidor" class="secao bastidor">
+    <div class="env">
+      <p class="rotulo revela">Bastidor</p>
+      <h2 class="titulo-secao revela">Um produto por vez, sempre <mark class="marca-texto">de verdade</mark></h2>
+      <div class="bastidor-palco revela">
+        <div class="bastidor-fotos" id="bastidorFotos">
+          <img src="produtos/yara.webp" alt="Aplicando o perfume da Yara" class="bastidor-foto" data-marca="Yara">
+          <img src="produtos/pantene.webp" alt="Usando o óleo capilar da Pantene" class="bastidor-foto" data-marca="Pantene">
+          <img src="produtos/garnier.webp" alt="Com o sérum de vitamina C da Garnier" class="bastidor-foto" data-marca="Garnier">
+          <img src="produtos/aprilskin.webp" alt="Com o produto da April Skin" class="bastidor-foto" data-marca="April Skin">
+          <img src="produtos/bioage.webp" alt="Com a máscara facial da Bioage" class="bastidor-foto" data-marca="Bioage">
+        </div>
+        <p class="bastidor-legenda" id="bastidorLegenda" aria-live="polite"></p>
       </div>
     </div>
   </section>
@@ -1511,6 +1544,27 @@ function ligaAno(){
   $("#ano").textContent = new Date().getFullYear();
 }
 
+/* ----- bastidor: as fotos alternam sozinhas, uma de cada vez -----
+   quem pediu menos movimento no sistema (prefers-reduced-motion) só
+   vê a primeira foto, fixa, sem a troca automática. */
+function ligaBastidor(){
+  const fotos = document.querySelectorAll("#bastidorFotos .bastidor-foto");
+  const legenda = $("#bastidorLegenda");
+  if (!fotos.length) return;
+
+  let atual = 0;
+  fotos[0].classList.add("visivel");
+  legenda.textContent = fotos[0].dataset.marca;
+  if (reduzMovimento) return;
+
+  setInterval(function(){
+    fotos[atual].classList.remove("visivel");
+    atual = (atual + 1) % fotos.length;
+    fotos[atual].classList.add("visivel");
+    legenda.textContent = fotos[atual].dataset.marca;
+  }, 2600);
+}
+
 /* ----- liga tudo ----- */
 montaMarcas();
 montaEspecialidades();
@@ -1518,6 +1572,7 @@ montaTarjaContagem();
 montaDestaques();
 carregarEMontarVideos();
 montaServicos();
+ligaBastidor();
 ligaObservadores();
 ligaMenu();
 ligaFormulario();
