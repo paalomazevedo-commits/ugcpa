@@ -373,10 +373,13 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 /* o raio de dentro é o de fora menos o respiro da borda (22 - 5), pra
    curva interna acompanhar a externa em vez de brigar com ela */
 .video-quadro{position:relative;aspect-ratio:9/16;border:1px solid var(--cobalto);background:#0b1220;overflow:hidden;border-radius:17px}
+/* a capa real (a própria miniatura do vídeo) aparece na hora, sem
+   nenhuma tela de "carregando" por cima */
+.video-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:0}
 /* alguns navegadores não cortam o iframe pelo overflow do pai, então a
-   curva vai também no próprio iframe */
-.video-quadro iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;border-radius:16px}
-.video-carregando{position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;background:linear-gradient(145deg,var(--azul-fundo) 0%,var(--azul-claro) 48%,var(--cobalto) 100%)}
+   curva vai também no próprio iframe. Esse iframe só existe enquanto o
+   mouse (ou o dedo) está por cima: veja iniciaPreVisualizacao. */
+.video-quadro iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;border-radius:16px;z-index:1}
 .video-abrir{position:absolute;inset:0;z-index:2;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:pointer;display:flex;align-items:flex-end;justify-content:center}
 .selo-som{margin-bottom:14px;padding:8px 13px;background:var(--louca-clara);border:2px solid var(--cobalto);color:var(--cobalto-texto);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;border-radius:999px;transition:background .2s ease,color .2s ease}
 .video-abrir:hover .selo-som,.video-abrir:focus-visible .selo-som{background:var(--cobalto);color:#fff}
@@ -1017,25 +1020,18 @@ function montaDestaques(){
 }
 
 /* ----- endereço do vídeo no YouTube -----
-   sem som: só toca quando o mouse ou o dedo passa em cima do card
-   (veja tocaAoPassar), por isso nasce com autoplay=0.
-   com som: usado no visor que abre quando alguém clica, esse sim
+   sem som: o iframe só é criado no momento em que o mouse ou o dedo
+   passa em cima do card (veja iniciaPreVisualizacao), então já nasce
+   com autoplay=1, sem precisar de nenhum comando depois.
+   com som: usado no visor que abre quando alguém clica, esse também
    toca sozinho assim que abre. */
 function enderecoVideo(id, comSom){
   const codigo = encodeURIComponent(id);
   const comum = "playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1&loop=1&playlist=" + codigo;
   const extra = comSom
     ? "&autoplay=1&mute=0&controls=1"
-    : "&autoplay=0&mute=1&controls=0&disablekb=1&fs=0";
+    : "&autoplay=1&mute=1&controls=0&disablekb=1&fs=0";
   return "https://www.youtube.com/embed/" + codigo + "?" + comum + extra;
-}
-
-/* fala com o player do YouTube sem precisar carregar a biblioteca deles */
-function comandoVideo(frame, funcao){
-  if (!frame || !frame.getAttribute("src") || !frame.contentWindow) return;
-  try {
-    frame.contentWindow.postMessage('{"event":"command","func":"' + funcao + '","args":[]}', "*");
-  } catch (erro) { /* o player ainda não está pronto, não tem problema */ }
 }
 
 /* enquanto o visor estiver aberto, nenhum card de fundo toca ao passar o mouse */
@@ -1141,10 +1137,9 @@ function montaVideos(listaCompleta){
       return '' +
         '<article class="video-card">' +
           '<div class="video-quadro">' +
-            '<p class="video-carregando">carregando</p>' +
-            '<iframe data-src="' + esc(enderecoVideo(v.id, false)) + '" title="' + esc(nome) + '" ' +
-              'allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>' +
-            '<button type="button" class="video-abrir" data-id="' + esc(v.id) + '" ' +
+            '<img class="video-poster" src="https://img.youtube.com/vi/' + esc(v.id) + '/hqdefault.jpg" ' +
+              'alt="" loading="lazy" decoding="async">' +
+            '<button type="button" class="video-abrir" data-id="' + esc(v.id) + '" data-nome="' + esc(nome) + '" ' +
               'aria-label="Abrir o vídeo ' + esc(nome) + ' com som">' +
               '<span class="assistir assistir--video" aria-hidden="true"></span>' +
               '<span class="selo-som">sem som, clique para ouvir</span>' +
@@ -1201,55 +1196,46 @@ function montaVideos(listaCompleta){
   });
   window.addEventListener("resize", atualizaSetas);
 
-  /* o vídeo só carrega quando chega perto da tela (pra não baixar os
-     17 de uma vez), mas só COMEÇA A TOCAR quando o mouse ou o dedo
-     passa em cima dele (tocaAoPassar). Ele nasce carregado e parado,
-     igual a uma foto, até alguém passar o mouse. */
+  /* a capa (a miniatura real do vídeo, veja o <img class="video-poster">
+     no template do card) já aparece pronta, sem carregar nada. O iframe
+     só nasce quando o mouse ou o dedo passa por cima, pra dar esse
+     efeito de pré-visualização em movimento, e é destruído assim que o
+     mouse sai, pra não ficar tocando escondido atrás da capa. */
   const cards = document.querySelectorAll("#carrosseis .video-card");
-  function carrega(card){
-    const frame = card.querySelector("iframe");
-    if (frame.getAttribute("src")) return frame;
-    frame.addEventListener("load", function(){
-      const aviso = card.querySelector(".video-carregando");
-      if (aviso) aviso.remove();
-    });
-    frame.setAttribute("src", frame.dataset.src);
-    return frame;
+
+  function iniciaPreVisualizacao(card){
+    if (visorAberto) return;
+    const quadro = card.querySelector(".video-quadro");
+    if (quadro.querySelector("iframe")) return;
+    const botao = quadro.querySelector(".video-abrir");
+    const frame = document.createElement("iframe");
+    frame.title = botao.dataset.nome;
+    frame.setAttribute("allow", "autoplay; encrypted-media; picture-in-picture");
+    frame.setAttribute("loading", "lazy");
+    frame.setAttribute("src", enderecoVideo(botao.dataset.id, false));
+    quadro.insertBefore(frame, botao);
+  }
+  function paraPreVisualizacao(card){
+    const frame = card.querySelector(".video-quadro iframe");
+    if (frame) frame.remove();
   }
   retomaVideos = function(){};
 
-  /* passar o mouse ou o dedo em cima toca o vídeo (sem som); tirar o
-     mouse de cima pausa de novo, pra não ficar tudo tocando ao mesmo
-     tempo depois que a pessoa passa por vários cards */
-  function tocaAoPassar(){
-    if (visorAberto) return;
-    const frame = this.querySelector("iframe");
-    if (!frame.getAttribute("src")) carrega(this);
-    else comandoVideo(frame, "playVideo");
-  }
-  function pausaAoSair(){
-    const frame = this.querySelector("iframe");
-    if (frame.getAttribute("src")) comandoVideo(frame, "pauseVideo");
-  }
   cards.forEach(function(card){
-    card.addEventListener("mouseenter", tocaAoPassar);
-    card.addEventListener("mouseleave", pausaAoSair);
-    card.addEventListener("touchstart", tocaAoPassar, { passive: true });
+    card.addEventListener("mouseenter", function(){ iniciaPreVisualizacao(card); });
+    card.addEventListener("mouseleave", function(){ paraPreVisualizacao(card); });
+    card.addEventListener("touchstart", function(){ iniciaPreVisualizacao(card); }, { passive: true });
   });
 
+  /* no celular não existe "tirar o mouse de cima", então quando o card
+     tocado sai da tela de rolagem, essa pré-visualização é destruída */
   if ("IntersectionObserver" in window){
     const obs = new IntersectionObserver(function(entradas){
       entradas.forEach(function(e){
-        if (e.isIntersecting){
-          carrega(e.target);
-        } else {
-          comandoVideo(e.target.querySelector("iframe"), "pauseVideo");
-        }
+        if (!e.isIntersecting) paraPreVisualizacao(e.target);
       });
-    }, { threshold: 0.2 });
+    }, { threshold: 0 });
     cards.forEach(function(c){ obs.observe(c); });
-  } else {
-    cards.forEach(carrega);
   }
 
   /* filtro por categoria: mostra só os carrosséis escolhidos */
@@ -1266,7 +1252,7 @@ function montaVideos(listaCompleta){
           c.classList.add("visivel");
           total += c.querySelectorAll(".video-card").length;
         } else {
-          c.querySelectorAll("iframe").forEach(function(f){ comandoVideo(f, "pauseVideo"); });
+          c.querySelectorAll("iframe").forEach(function(f){ f.remove(); });
         }
       });
       $("#avisoFiltro").textContent = total + (total === 1 ? " vídeo encontrado." : " vídeos encontrados.");
@@ -1304,7 +1290,7 @@ function ligaVisor(){
     }
     focoAnterior = document.activeElement;
     visorAberto = true;
-    document.querySelectorAll("#carrosseis iframe").forEach(function(f){ comandoVideo(f, "pauseVideo"); });
+    document.querySelectorAll("#carrosseis iframe").forEach(function(f){ f.remove(); });
     quadro.innerHTML = '<iframe src="' + esc(enderecoVideo(id, true)) + '" ' +
       'title="' + esc(marca + ", " + titulo) + '" ' +
       'allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
