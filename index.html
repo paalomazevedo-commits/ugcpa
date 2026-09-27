@@ -328,6 +328,23 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .assistir--video::after{border-left-width:15px;border-top-width:10px;border-bottom-width:10px}
 .video-abrir:hover .assistir--video,.video-abrir:focus-visible .assistir--video{opacity:0}
 
+/* ===== 2.5 RESULTADO ===== */
+.resultados-grade{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(28px,5vw,64px);align-items:center}
+.resultados-cards{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:clamp(22px,3vw,36px)}
+/* "card flutuante": sombra forte pra dar a sensação de estar solto sobre
+   o fundo, com uma leve rotação na imagem do resultado pra parecer um
+   print colado meio torto, tipo mural */
+.resultado-card{
+  flex:1 1 220px;max-width:280px;border-radius:20px;overflow:hidden;
+  box-shadow:0 26px 46px rgba(43,45,53,.24);
+  transition:transform .3s ease,box-shadow .3s ease;
+}
+.resultado-card:hover{transform:translateY(-6px);box-shadow:0 32px 54px rgba(43,45,53,.3)}
+.resultado-imagem-flutuante{transform:rotate(-2.5deg);background:var(--louca-clara)}
+.resultado-imagem-flutuante:hover{transform:rotate(-2.5deg) translateY(-6px)}
+.resultado-imagem-flutuante img{display:block;width:100%;height:auto}
+.resultado-video .destaque-capa{border-radius:20px;height:100%}
+
 /* ===== 3. DESTAQUES ===== */
 .destaques-grade{display:grid;grid-template-columns:.92fr 1.08fr;gap:clamp(28px,5vw,64px);align-items:center}
 .destaques-gancho{margin-top:20px;font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:1.3rem;color:var(--cobalto-texto)}
@@ -540,7 +557,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 
 /* ===== responsivo ===== */
 @media (max-width:980px){
-  .sobre-grade,.contato-grade,.destaques-grade{grid-template-columns:1fr}
+  .sobre-grade,.contato-grade,.destaques-grade,.resultados-grade{grid-template-columns:1fr}
 }
 @media (max-width:900px){
   .hamburguer{display:grid}
@@ -676,6 +693,30 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
     </div>
     <div class="faixa-marcas">
       <ul class="trilho" id="trilhoMarcas"></ul>
+    </div>
+  </section>
+
+  <!-- ============ 2.5 RESULTADO ============ -->
+  <section id="resultados" class="secao">
+    <div class="env resultados-grade">
+      <div class="resultados-texto">
+        <p class="rotulo revela" data-i18n="resultadosRotulo">Resultado real</p>
+        <h2 class="titulo-secao revela" data-i18n="resultadosTitulo">Um vídeo, <mark class="marca-texto">295 leads</mark></h2>
+        <p class="intro-secao revela" data-i18n="resultadosIntro">Um criativo só, rodando como anúncio para a Byri, virou 295 conversas iniciadas a R$2,10 cada. Prova de que o conteúdo certo não só engaja, vende.</p>
+      </div>
+      <div class="resultados-cards">
+        <figure class="resultado-card resultado-imagem-flutuante revela">
+          <img src="resultados/byri.webp" alt="Gráfico de resultado do anúncio da Byri: 295 leads com 1 criativo, a R$2,10 por conversa, R$618,13 investidos" data-i18n-alt="resultadosImagemAlt" loading="lazy" decoding="async">
+        </figure>
+        <div class="resultado-card resultado-video revela">
+          <div class="destaque-capa">
+            <img src="resultados/byri-capa.webp" alt="Capa do vídeo: o mule zebra da Byri" data-i18n-alt="resultadosVideoAlt" class="midia midia--916" loading="lazy" decoding="async">
+            <button type="button" class="video-abrir" id="resultadoVideoAbrir" data-id="5HXMmzM6_lc" data-marca="Byri" data-titulo="O mule que virou anúncio" aria-label="Assistir o vídeo que gerou esse resultado" data-i18n-aria-label="resultadosVideoAria">
+              <span class="assistir" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -1049,6 +1090,14 @@ const TEXTOS = {
   sobrePilula3: { pt: "+ de 1 ano criando UGC", en: "+ 1 year creating UGC" },
   sobreMarcasTitulo: { pt: "Marcas que já criaram comigo", en: "Brands that already created with me" },
 
+  resultadosRotulo: { pt: "Resultado real", en: "Real result" },
+  resultadosTitulo: { pt: 'Um vídeo, <mark class="marca-texto">295 leads</mark>', en: 'One video, <mark class="marca-texto">295 leads</mark>' },
+  resultadosIntro: { pt: "Um criativo só, rodando como anúncio para a Byri, virou 295 conversas iniciadas a R$2,10 cada. Prova de que o conteúdo certo não só engaja, vende.", en: "Just one creative, running as a paid ad for Byri, turned into 295 conversations started at R$2,10 each. Proof that the right content doesn't just engage, it sells." },
+  resultadosImagemAlt: { pt: "Gráfico de resultado do anúncio da Byri: 295 leads com 1 criativo, a R$2,10 por conversa, R$618,13 investidos", en: "Byri ad results chart: 295 leads from 1 creative, R$2,10 per conversation, R$618,13 invested" },
+  resultadosVideoAlt: { pt: "Capa do vídeo: o mule zebra da Byri", en: "Video cover: the Byri zebra mule" },
+  resultadosVideoAria: { pt: "Assistir o vídeo que gerou esse resultado", en: "Watch the video that generated this result" },
+  resultadosVideoTitulo: { pt: "O mule que virou anúncio", en: "The mule that became an ad" },
+
   destaquesTitulo: { pt: 'Algum deles já passou no seu <mark class="marca-texto">feed</mark>?', en: 'Has one of these already been on your <mark class="marca-texto">feed</mark>?' },
   destaquesGancho: { pt: "Três produtos diferentes, três formatos diferentes, e os três funcionaram.", en: "Three different products, three different formats, and all three worked." },
   destaquesIntro: { pt: "Eu leio o produto antes de gravar e escolho o formato que conecta ele com o público. Com o seu não é diferente: existe um formato certo para ele, e achar esse formato é o meu trabalho.", en: "I study the product before filming and choose the format that connects it with the audience. Yours is no different: there's a right format for it, and finding that format is my job." },
@@ -1136,6 +1185,12 @@ function aplicaTextosEstaticos(){
   document.querySelectorAll(".idioma-botao").forEach(function(b){
     b.setAttribute("aria-pressed", b.dataset.idioma === idioma ? "true" : "false");
   });
+
+  /* o visor mostra o título de quem abriu ele pelo data-titulo do botão;
+     como este card não vem de nenhuma lista montada por JS, o valor do
+     atributo precisa ser atualizado aqui na mão a cada troca de idioma */
+  const btnResultadoVideo = document.getElementById("resultadoVideoAbrir");
+  if (btnResultadoVideo) btnResultadoVideo.dataset.titulo = TEXTOS.resultadosVideoTitulo[idioma];
 }
 
 function definirIdioma(novo){
