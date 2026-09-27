@@ -151,9 +151,23 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 }
 .barra{height:var(--topo);display:flex;align-items:center;justify-content:space-between;gap:16px}
 .marca-topo{font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:1.22rem;text-decoration:none;letter-spacing:.01em}
+/* agrupa o seletor de idioma, o hambúrguer e o menu do lado direito,
+   pra "space-between" continuar só entre a logo e esse grupo (senão,
+   com 4 filhos soltos, o space-between abriria um vão igual entre
+   todos, e a logo deixaria de ficar isolada à esquerda) */
+.barra-direita{display:flex;align-items:center;gap:16px}
 .menu{display:flex;align-items:center;gap:26px}
 .menu a{font-size:.94rem;letter-spacing:.04em;text-decoration:none;padding:6px 0;border-bottom:1px solid transparent;transition:color .2s ease,border-color .2s ease}
 .menu a:hover{color:var(--cobalto-texto);border-bottom-color:var(--cobalto)}
+/* seletor PT/EN: um pill com dois botões, o ativo preenchido */
+.idioma-seletor{display:flex;align-items:center;border:1.5px solid var(--cobalto);border-radius:999px;overflow:hidden;flex:0 0 auto}
+.idioma-botao{
+  border:0;background:transparent;color:var(--cobalto-texto);
+  font-size:.74rem;font-weight:600;letter-spacing:.04em;
+  padding:7px 13px;cursor:pointer;transition:background .2s ease,color .2s ease;
+}
+.idioma-botao[aria-pressed="true"]{background:var(--cobalto);color:#fff}
+.idioma-botao:not([aria-pressed="true"]):hover{background:var(--azul-fundo)}
 .hamburguer{display:none;width:46px;height:46px;border:2px solid var(--cobalto);background:transparent;cursor:pointer;padding:0;place-items:center}
 .hamburguer span{display:block;width:22px;height:2px;background:var(--cobalto);margin:4px auto;transition:transform .25s ease,opacity .25s ease}
 .hamburguer[aria-expanded="true"] span:nth-child(1){transform:translateY(6px) rotate(45deg)}
@@ -342,6 +356,16 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .destaques-trilho .destaque:hover,.destaques-trilho .destaque:focus-within{filter:none;opacity:1;transform:none}
 .destaque-capa{border:1px solid var(--cobalto);position:relative;border-radius:17px;overflow:hidden}
 .destaque-capa .legenda{position:absolute;left:14px;right:14px;bottom:14px}
+/* etiqueta da marca flutuando em cima do vídeo, tipo um cartão pequeno
+   pousado sobre a capa (sombra pra dar a sensação de estar solta, não
+   colada na imagem) */
+.destaque-marca-flutuante{
+  position:absolute;top:14px;left:14px;z-index:1;pointer-events:none;
+  background:var(--louca-clara);color:var(--cobalto-texto);
+  font-size:.7rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+  padding:.45em .85em;border-radius:999px;
+  box-shadow:0 8px 16px rgba(43,45,53,.2);
+}
 .destaque-texto{padding:16px 14px 12px}
 /* a etiqueta do formato é a primeira coisa que a marca lê no card */
 .destaque-formato{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--cobalto-texto);margin-bottom:6px}
@@ -566,17 +590,23 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   </a>
   <div class="env barra">
     <a class="marca-topo" href="#capa">Paloma Ribeiro</a>
-    <button class="hamburguer" id="hamburguer" aria-expanded="false" aria-controls="menu" aria-label="Abrir o menu">
-      <span></span><span></span><span></span>
-    </button>
-    <nav id="menu" class="menu" aria-label="Navegação principal">
-      <a href="#sobre">Sobre</a>
-      <a href="#destaques">Destaques</a>
-      <a href="#trabalhos">Trabalhos</a>
-      <a href="#servicos">Serviços</a>
-      <a href="valores.html">Valores</a>
-      <a href="#contato">Contato</a>
-    </nav>
+    <div class="barra-direita">
+      <div class="idioma-seletor" role="group" aria-label="Idioma do site / Site language">
+        <button type="button" class="idioma-botao" id="idiomaPt" data-idioma="pt" aria-pressed="true">PT</button>
+        <button type="button" class="idioma-botao" id="idiomaEn" data-idioma="en" aria-pressed="false">EN</button>
+      </div>
+      <button class="hamburguer" id="hamburguer" aria-expanded="false" aria-controls="menu" aria-label="Abrir o menu" data-i18n-aria-label="abrirMenu">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="menu" class="menu" aria-label="Navegação principal">
+        <a href="#sobre" data-i18n="navSobre">Sobre</a>
+        <a href="#destaques" data-i18n="navDestaques">Destaques</a>
+        <a href="#trabalhos" data-i18n="navTrabalhos">Trabalhos</a>
+        <a href="#servicos" data-i18n="navServicos">Serviços</a>
+        <a href="valores.html" data-i18n="navValores">Valores</a>
+        <a href="#contato" data-i18n="navContato">Contato</a>
+      </nav>
+    </div>
   </div>
 </header>
 
@@ -586,12 +616,12 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   <section id="capa" class="capa">
     <div class="env capa-grade">
       <div class="capa-texto">
-        <p class="rotulo revela">Paloma Ribeiro UGC</p>
-        <h1 class="capa-titulo revela">Conteúdo que parece <em>espontâneo</em>, pensado pra converter</h1>
-        <p class="capa-frase revela">Construído estrategicamente para gerar identificação e conversão.</p>
+        <p class="rotulo revela" data-i18n="capaRotulo">Paloma Ribeiro UGC</p>
+        <h1 class="capa-titulo revela" data-i18n="capaTitulo">Conteúdo que parece <em>espontâneo</em>, pensado pra converter</h1>
+        <p class="capa-frase revela" data-i18n="capaFrase">Construído estrategicamente para gerar identificação e conversão.</p>
         <div class="capa-botoes revela">
-          <a class="btn" href="#contato">Falar comigo</a>
-          <a class="btn btn--linha" href="#trabalhos">Ver os trabalhos</a>
+          <a class="btn" href="#contato" data-i18n="capaBtnFalar">Falar comigo</a>
+          <a class="btn btn--linha" href="#trabalhos" data-i18n="capaBtnTrabalhos">Ver os trabalhos</a>
         </div>
       </div>
       <div class="capa-visual revela">
@@ -619,30 +649,30 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
     <div class="env sobre-grade">
       <div class="revela">
         <div class="foto-moldurada">
-          <img src="foto-sobre.webp" alt="Paloma Ribeiro rindo atrás do notebook, com blusa marrom e acessórios dourados" class="foto-real" width="800" height="1203">
+          <img src="foto-sobre.webp" alt="Paloma Ribeiro rindo atrás do notebook, com blusa marrom e acessórios dourados" data-i18n-alt="sobreFotoAlt" class="foto-real" width="800" height="1203">
           <img src="moldura-sobre.png" alt="" class="moldura-decorativa" aria-hidden="true">
         </div>
       </div>
       <div class="revela">
-        <p class="rotulo">Sobre mim</p>
-        <h2 class="titulo-secao">Oiiii, eu sou a Paloma</h2>
+        <p class="rotulo" data-i18n="sobreRotulo">Sobre mim</p>
+        <h2 class="titulo-secao" data-i18n="sobreTitulo">Oiiii, eu sou a Paloma</h2>
         <dl class="sobre-dados">
-          <div><dt>Tenho 29 anos</dt><dd>Criadora de conteúdo UGC.</dd></div>
-          <div><dt>Localização</dt><dd>Praia Grande • SP</dd></div>
-          <div><dt>Mãe de dois meninos</dt><dd>Especialista em conteúdo lifestyle.</dd></div>
-          <div><dt>Especialidade</dt><dd>Skincare, beleza e rotina.</dd></div>
+          <div><dt data-i18n="sobreDt1">Tenho 29 anos</dt><dd data-i18n="sobreDd1">Criadora de conteúdo UGC.</dd></div>
+          <div><dt data-i18n="sobreDt2">Localização</dt><dd data-i18n="sobreDd2">Praia Grande • SP</dd></div>
+          <div><dt data-i18n="sobreDt3">Mãe de dois meninos</dt><dd data-i18n="sobreDd3">Especialista em conteúdo lifestyle.</dd></div>
+          <div><dt data-i18n="sobreDt4">Especialidade</dt><dd data-i18n="sobreDd4">Skincare, beleza e rotina.</dd></div>
         </dl>
-        <p class="intro-secao">Com mais de <b>1 ano de experiência</b>, já trabalhei com <b>marcas nacionais e internacionais</b>.</p>
-        <p class="intro-secao">Cada produto é estudado de forma <b>única e estratégica</b>, e é desse estudo que nasce um roteiro bem elaborado: um roteiro que transforma o produto em história, conecta com o público e gera <b>identificação e conversão</b>.</p>
+        <p class="intro-secao" data-i18n="sobreTexto1">Com mais de <b>1 ano de experiência</b>, já trabalhei com <b>marcas nacionais e internacionais</b>.</p>
+        <p class="intro-secao" data-i18n="sobreTexto2">Cada produto é estudado de forma <b>única e estratégica</b>, e é desse estudo que nasce um roteiro bem elaborado: um roteiro que transforma o produto em história, conecta com o público e gera <b>identificação e conversão</b>.</p>
         <ul class="pilulas">
-          <li>Marcas nacionais &amp; internacionais</li>
-          <li>+ 12 parcerias recorrentes</li>
-          <li>+ de 1 ano criando UGC</li>
+          <li data-i18n="sobrePilula1">Marcas nacionais &amp; internacionais</li>
+          <li data-i18n="sobrePilula2">+ 12 parcerias recorrentes</li>
+          <li data-i18n="sobrePilula3">+ de 1 ano criando UGC</li>
         </ul>
       </div>
     </div>
     <div class="env marcas-titulo revela">
-      <p class="rotulo"><mark class="marca-texto">Marcas que já criaram comigo</mark></p>
+      <p class="rotulo"><mark class="marca-texto" data-i18n="sobreMarcasTitulo">Marcas que já criaram comigo</mark></p>
     </div>
     <div class="faixa-marcas">
       <ul class="trilho" id="trilhoMarcas"></ul>
@@ -653,15 +683,15 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   <section id="destaques" class="secao">
     <div class="env destaques-grade">
       <div class="destaques-texto">
-        <h2 class="titulo-secao revela">Algum deles já passou no seu <mark class="marca-texto">feed</mark>?</h2>
-        <p class="destaques-gancho revela">Três produtos diferentes, três formatos diferentes, e os três funcionaram.</p>
-        <p class="intro-secao revela">Eu leio o produto antes de gravar e escolho o formato que conecta ele com o público. Com o seu não é diferente: existe um formato certo para ele, e achar esse formato é o meu trabalho.</p>
-        <p class="destaques-dica revela">Passe o mouse ou deslize.</p>
+        <h2 class="titulo-secao revela" data-i18n="destaquesTitulo">Algum deles já passou no seu <mark class="marca-texto">feed</mark>?</h2>
+        <p class="destaques-gancho revela" data-i18n="destaquesGancho">Três produtos diferentes, três formatos diferentes, e os três funcionaram.</p>
+        <p class="intro-secao revela" data-i18n="destaquesIntro">Eu leio o produto antes de gravar e escolho o formato que conecta ele com o público. Com o seu não é diferente: existe um formato certo para ele, e achar esse formato é o meu trabalho.</p>
+        <p class="destaques-dica revela" data-i18n="destaquesDica">Passe o mouse ou deslize.</p>
       </div>
       <div class="destaques-palco revela">
-        <button type="button" class="seta destaque-seta" data-passo="-1" aria-label="Ver o conteúdo anterior">&#10094;</button>
-        <div class="destaques-trilho" id="grelhaDestaques" tabindex="0" role="group" aria-label="Carrossel dos três conteúdos de destaque"></div>
-        <button type="button" class="seta destaque-seta" data-passo="1" aria-label="Ver o próximo conteúdo">&#10095;</button>
+        <button type="button" class="seta destaque-seta" data-passo="-1" aria-label="Ver o conteúdo anterior" data-i18n-aria-label="destaqueSetaAnterior">&#10094;</button>
+        <div class="destaques-trilho" id="grelhaDestaques" tabindex="0" role="group" aria-label="Carrossel dos três conteúdos de destaque" data-i18n-aria-label="destaquesCarrossel"></div>
+        <button type="button" class="seta destaque-seta" data-passo="1" aria-label="Ver o próximo conteúdo" data-i18n-aria-label="destaqueSetaProxima">&#10095;</button>
       </div>
     </div>
   </section>
@@ -669,10 +699,10 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   <!-- ============ 4. TRABALHOS POR NICHO ============ -->
   <section id="trabalhos" class="secao">
     <div class="env">
-      <p class="rotulo revela">Trabalhos por nicho</p>
-      <h2 class="titulo-secao revela">Qual <mark class="marca-texto">formato</mark> eu posso criar para a <span class="destaque-azul">sua marca</span>?</h2>
-      <p class="intro-secao revela">Os vídeos rodam aqui sem som. Clique em qualquer um para abrir com o áudio. Navegue por nicho e arraste para o lado para ver mais.</p>
-      <div class="filtros revela" id="filtros" role="group" aria-label="Filtrar vídeos por categoria"></div>
+      <p class="rotulo revela" data-i18n="trabalhosRotulo">Trabalhos por nicho</p>
+      <h2 class="titulo-secao revela" data-i18n="trabalhosTitulo">Qual <mark class="marca-texto">formato</mark> eu posso criar para a <span class="destaque-azul">sua marca</span>?</h2>
+      <p class="intro-secao revela" data-i18n="trabalhosIntro">Os vídeos rodam aqui sem som. Clique em qualquer um para abrir com o áudio. Navegue por nicho e arraste para o lado para ver mais.</p>
+      <div class="filtros revela" id="filtros" role="group" aria-label="Filtrar vídeos por categoria" data-i18n-aria-label="trabalhosFiltrosAria"></div>
       <p class="so-leitor" id="avisoFiltro" role="status" aria-live="polite"></p>
       <div id="carrosseis"></div>
     </div>
@@ -1074,6 +1104,7 @@ function montaDestaques(){
         '<div class="destaque-capa">' +
           '<img src="' + esc(d.capa) + '" alt="Capa do vídeo: ' + esc(d.titulo) + '" ' +
             'class="midia midia--916" loading="lazy" decoding="async">' +
+          '<span class="destaque-marca-flutuante">' + esc(d.marca) + '</span>' +
           '<button type="button" class="video-abrir" data-id="' + esc(idVideo || "") + '" ' +
              'data-marca="' + esc(d.marca) + '" data-titulo="' + esc(d.titulo) + '" ' +
              'aria-label="Assistir o conteúdo em ' + esc(d.formato) + ': ' + esc(d.titulo) + '">' +
