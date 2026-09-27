@@ -580,7 +580,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 </style>
 </head>
 <body>
-<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+<a class="pular" href="#conteudo" data-i18n="pular">Pular para o conteúdo</a>
 
 <header class="topo">
   <a href="#contato" class="tarja-contagem" id="tarjaContagem">
@@ -715,14 +715,14 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
         <img src="youtube-ads/logo-youtube.png" alt="Logo do YouTube" class="youtube-ads-logo">
         <p class="rotulo">YouTube Ads</p>
       </div>
-      <h2 class="titulo-secao revela">Mais <mark class="marca-texto">visibilidade</mark> para a sua <span class="destaque-azul">marca</span></h2>
-      <p class="youtube-ads-texto revela">
+      <h2 class="titulo-secao revela" data-i18n="youtubeAdsTitulo">Mais <mark class="marca-texto">visibilidade</mark> para a sua <span class="destaque-azul">marca</span></h2>
+      <p class="youtube-ads-texto revela" data-i18n="youtubeAdsTexto">
         <span class="check-marca" aria-hidden="true">&#10003;</span>
         Vídeos pensados estrategicamente para o formato do YouTube Ads, feitos para trazer mais visibilidade e mais alcance para a sua marca.
       </p>
       <div class="youtube-ads-video revela">
         <iframe src="https://www.youtube.com/embed/jAowcJkJrJg?rel=0&amp;modestbranding=1&amp;iv_load_policy=3&amp;playsinline=1"
-          title="Exemplo de vídeo para YouTube Ads" loading="lazy"
+          title="Exemplo de vídeo para YouTube Ads" data-i18n-title="youtubeAdsIframeTitle" loading="lazy"
           allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>
       </div>
     </div>
@@ -731,15 +731,15 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   <!-- ============ 4.6 BASTIDOR ============ -->
   <section id="bastidor" class="secao bastidor">
     <div class="env">
-      <p class="rotulo revela">Fotos</p>
-      <h2 class="titulo-secao revela">A próxima foto é do seu <mark class="marca-texto">produto</mark></h2>
+      <p class="rotulo revela" data-i18n="bastidorRotulo">Fotos</p>
+      <h2 class="titulo-secao revela" data-i18n="bastidorTitulo">A próxima foto é do seu <mark class="marca-texto">produto</mark></h2>
       <div class="bastidor-palco revela">
         <div class="bastidor-fotos" id="bastidorFotos">
-          <img src="produtos/yara.webp" alt="Aplicando o perfume da Yara" class="bastidor-foto" data-marca="Yara">
-          <img src="produtos/pantene.webp" alt="Usando o óleo capilar da Pantene" class="bastidor-foto" data-marca="Pantene">
-          <img src="produtos/garnier.webp" alt="Com o sérum de vitamina C da Garnier" class="bastidor-foto" data-marca="Garnier">
-          <img src="produtos/aprilskin.webp" alt="Com o produto da April Skin" class="bastidor-foto" data-marca="April Skin">
-          <img src="produtos/bioage.webp" alt="Com a máscara facial da Bioage" class="bastidor-foto" data-marca="Bioage">
+          <img src="produtos/yara.webp" alt="Aplicando o perfume da Yara" data-i18n-alt="bastidorAlt1" class="bastidor-foto" data-marca="Yara">
+          <img src="produtos/pantene.webp" alt="Usando o óleo capilar da Pantene" data-i18n-alt="bastidorAlt2" class="bastidor-foto" data-marca="Pantene">
+          <img src="produtos/garnier.webp" alt="Com o sérum de vitamina C da Garnier" data-i18n-alt="bastidorAlt3" class="bastidor-foto" data-marca="Garnier">
+          <img src="produtos/aprilskin.webp" alt="Com o produto da April Skin" data-i18n-alt="bastidorAlt4" class="bastidor-foto" data-marca="April Skin">
+          <img src="produtos/bioage.webp" alt="Com a máscara facial da Bioage" data-i18n-alt="bastidorAlt5" class="bastidor-foto" data-marca="Bioage">
         </div>
         <p class="bastidor-legenda" id="bastidorLegenda" aria-live="polite"></p>
       </div>
@@ -749,49 +749,49 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   <!-- ============ 5. COMO EU TE AJUDO ============ -->
   <section id="servicos" class="secao">
     <div class="env">
-      <p class="rotulo revela">Como eu te ajudo</p>
-      <h2 class="titulo-secao revela">Quatro formas de trabalhar comigo</h2>
+      <p class="rotulo revela" data-i18n="servicosRotulo">Como eu te ajudo</p>
+      <h2 class="titulo-secao revela" data-i18n="servicosTitulo">Quatro formas de trabalhar comigo</h2>
       <div class="servicos-grade" id="grelhaServicos"></div>
-      <a href="valores.html" class="btn-valores revela">Acesse aqui a tabela de valores</a>
+      <a href="valores.html" class="btn-valores revela" data-i18n="servicosBtnValores">Acesse aqui a tabela de valores</a>
     </div>
   </section>
 
   <!-- ============ 7. BORA CRIAR JUNTOS ============ -->
   <section id="contato" class="secao">
     <div class="env">
-      <p class="rotulo revela">Bora criar juntos</p>
-      <h2 class="titulo-secao revela">Me conta da sua marca</h2>
+      <p class="rotulo revela" data-i18n="contatoRotulo">Bora criar juntos</p>
+      <h2 class="titulo-secao revela" data-i18n="contatoTitulo">Me conta da sua marca</h2>
       <div class="contato-grade">
         <div class="bloco revela">
           <!-- Este formulário não envia e-mail sozinho: ele mostra a confirmação na tela.
                Para receber as mensagens de verdade, conecte a um serviço de formulário depois. -->
           <form id="formContato" novalidate>
             <label class="campo">
-              <span>Seu nome</span>
+              <span data-i18n="formNome">Seu nome</span>
               <input type="text" name="nome" id="campoNome" autocomplete="name" required>
             </label>
             <label class="campo">
-              <span>Seu e-mail</span>
+              <span data-i18n="formEmail">Seu e-mail</span>
               <input type="email" name="email" id="campoEmail" autocomplete="email" required>
             </label>
             <label class="campo">
-              <span>Sua mensagem</span>
+              <span data-i18n="formMensagem">Sua mensagem</span>
               <textarea name="mensagem" id="campoMensagem" required></textarea>
             </label>
-            <button class="btn" type="submit">Enviar mensagem</button>
+            <button class="btn" type="submit" data-i18n="formEnviar">Enviar mensagem</button>
           </form>
           <p class="aviso-form" id="avisoContato" role="status" aria-live="polite" hidden></p>
         </div>
         <div class="revela">
           <div class="bloco">
-            <p class="dado-contato"><b>Cidade</b><span>Praia Grande</span></p>
+            <p class="dado-contato"><b data-i18n="contatoCidadeLabel">Cidade</b><span>Praia Grande</span></p>
             <p class="dado-contato"><b>WhatsApp</b><span>(13) 99777-8507</span></p>
-            <p class="dado-contato"><b>E-mail</b><span>paalomazevedo@gmail.com</span></p>
+            <p class="dado-contato"><b data-i18n="contatoEmailLabel">E-mail</b><span>paalomazevedo@gmail.com</span></p>
             <p class="dado-contato"><b>Instagram</b><span>@paalomaribeiro</span></p>
             <div class="canais">
-              <a class="btn" href="https://wa.me/5513997778507" target="_blank" rel="noopener">Chamar no WhatsApp</a>
-              <a class="btn btn--linha" href="mailto:paalomazevedo@gmail.com">Mandar um e-mail</a>
-              <a class="btn btn--linha" href="https://www.instagram.com/paalomaribeiro/" target="_blank" rel="noopener">Ver o Instagram</a>
+              <a class="btn" href="https://wa.me/5513997778507" target="_blank" rel="noopener" data-i18n="contatoBtnWhats">Chamar no WhatsApp</a>
+              <a class="btn btn--linha" href="mailto:paalomazevedo@gmail.com" data-i18n="contatoBtnEmail">Mandar um e-mail</a>
+              <a class="btn btn--linha" href="https://www.instagram.com/paalomaribeiro/" target="_blank" rel="noopener" data-i18n="contatoBtnInsta">Ver o Instagram</a>
             </div>
           </div>
         </div>
@@ -809,17 +809,17 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
       <nav class="rodape-redes" aria-label="Redes e contato">
         <a href="https://www.instagram.com/paalomaribeiro/" target="_blank" rel="noopener">Instagram</a>
         <a href="https://wa.me/5513997778507" target="_blank" rel="noopener">WhatsApp</a>
-        <a href="mailto:paalomazevedo@gmail.com">E-mail</a>
+        <a href="mailto:paalomazevedo@gmail.com" data-i18n="rodapeEmail">E-mail</a>
       </nav>
     </div>
-    <p class="rodape-ano">Paloma Ribeiro, criadora de conteúdo UGC em Praia Grande. <span id="ano"></span> &middot; <a href="valores.html" class="rodape-valores">Tabela de valores</a></p>
+    <p class="rodape-ano"><span data-i18n="rodapeAno">Paloma Ribeiro, criadora de conteúdo UGC em Praia Grande.</span> <span id="ano"></span> &middot; <a href="valores.html" class="rodape-valores" data-i18n="rodapeValoresLink">Tabela de valores</a></p>
   </div>
 </footer>
 
 <!-- ============ VISOR DE VÍDEO COM SOM ============ -->
 <div class="visor" id="visor" hidden>
   <div class="visor-caixa" role="dialog" aria-modal="true" aria-labelledby="visorTitulo">
-    <button class="visor-fechar" id="visorFechar" aria-label="Fechar o vídeo">&#10005;</button>
+    <button class="visor-fechar" id="visorFechar" aria-label="Fechar o vídeo" data-i18n-aria-label="fecharVideo">&#10005;</button>
     <div class="visor-quadro" id="visorQuadro"></div>
     <div class="visor-legenda">
       <p class="video-marca" id="visorMarca"></p>
@@ -831,19 +831,19 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 <!-- ============ CARD DE CAPTURA ============ -->
 <div class="captura" id="captura" hidden>
   <div class="captura-card" role="dialog" aria-modal="true" aria-labelledby="tituloCaptura">
-    <button class="captura-fechar" id="fecharCaptura" aria-label="Fechar">&#10005;</button>
-    <h2 id="tituloCaptura">Quer meu mídia kit completo?</h2>
-    <p>Eu te mando por e-mail os formatos, os prazos e a tabela de valores atualizada.</p>
+    <button class="captura-fechar" id="fecharCaptura" aria-label="Fechar" data-i18n-aria-label="fechar">&#10005;</button>
+    <h2 id="tituloCaptura" data-i18n="capturaTitulo">Quer meu mídia kit completo?</h2>
+    <p data-i18n="capturaTexto">Eu te mando por e-mail os formatos, os prazos e a tabela de valores atualizada.</p>
     <form id="formCaptura" novalidate>
       <label class="campo">
-        <span>Seu nome</span>
+        <span data-i18n="formNome">Seu nome</span>
         <input type="text" name="nome" id="capturaNome" autocomplete="name" required>
       </label>
       <label class="campo">
-        <span>Seu e-mail</span>
+        <span data-i18n="formEmail">Seu e-mail</span>
         <input type="email" name="email" id="capturaEmail" autocomplete="email" required>
       </label>
-      <button class="btn" type="submit">Quero receber</button>
+      <button class="btn" type="submit" data-i18n="capturaBtn">Quero receber</button>
     </form>
     <p class="aviso-form" id="avisoCaptura" role="status" aria-live="polite" hidden></p>
   </div>
@@ -899,21 +899,21 @@ const MARCAS = [
    sozinha. Termos curtos funcionam melhor, porque eles passam
    deslizando e precisam ser lidos de relance. */
 const ESPECIALIDADES = [
-  "UGC",
-  "Storytelling",
-  "Conteúdo para ADS",
-  "Roteiros estratégicos",
-  "Fotos lifestyle",
-  "Conteúdo para marketplace",
-  "Publipost",
-  "Unboxing",
-  "Demonstração de produto",
-  "Review honesto",
-  "Gancho nos 3 primeiros segundos",
-  "Corte para anúncio",
-  "Vídeo vertical 9:16",
-  "Foto para página de produto",
-  "Direção de cena"
+  { pt: "UGC", en: "UGC" },
+  { pt: "Storytelling", en: "Storytelling" },
+  { pt: "Conteúdo para ADS", en: "Content for ads" },
+  { pt: "Roteiros estratégicos", en: "Strategic scripts" },
+  { pt: "Fotos lifestyle", en: "Lifestyle photos" },
+  { pt: "Conteúdo para marketplace", en: "Content for marketplace" },
+  { pt: "Publipost", en: "Sponsored post" },
+  { pt: "Unboxing", en: "Unboxing" },
+  { pt: "Demonstração de produto", en: "Product demo" },
+  { pt: "Review honesto", en: "Honest review" },
+  { pt: "Gancho nos 3 primeiros segundos", en: "Hook in the first 3 seconds" },
+  { pt: "Corte para anúncio", en: "Ad cutdown" },
+  { pt: "Vídeo vertical 9:16", en: "Vertical video 9:16" },
+  { pt: "Foto para página de produto", en: "Product page photo" },
+  { pt: "Direção de cena", en: "Scene direction" }
 ];
 
 /* --- 3) CONTEÚDOS DE DESTAQUE (os três vídeos grandes) ---
@@ -933,25 +933,25 @@ const DESTAQUES = [
     link: "https://youtube.com/shorts/XJ9iKnRe_lc?feature=share",
     capa: "destaques/bioage.webp",
     marca: "Bioage",
-    formato: "Storytelling",
-    titulo: "O produto dentro da rotina",
-    contexto: "Parte da cena, nunca intervalo comercial."
+    formato: { pt: "Storytelling", en: "Storytelling" },
+    titulo: { pt: "O produto dentro da rotina", en: "The product inside the routine" },
+    contexto: { pt: "Parte da cena, nunca intervalo comercial.", en: "Part of the scene, never a commercial break." }
   },
   {
     link: "https://youtube.com/shorts/7XeWNnD0xCE?feature=share",
     capa: "destaques/show-imports.webp",
     marca: "Show Imports",
-    formato: "Demonstração",
-    titulo: "A função fora do óbvio",
-    contexto: "Um cenário inesperado que prova o produto."
+    formato: { pt: "Demonstração", en: "Demo" },
+    titulo: { pt: "A função fora do óbvio", en: "The feature beyond the obvious" },
+    contexto: { pt: "Um cenário inesperado que prova o produto.", en: "An unexpected scenario that proves the product." }
   },
   {
     link: "https://youtube.com/shorts/Bidkv15i5zY?feature=share",
     capa: "destaques/celimax.webp",
     marca: "Celimax",
-    formato: "Review",
-    titulo: "A opinião de quem usou",
-    contexto: "Testado na frente da câmera, sem script."
+    formato: { pt: "Review", en: "Review" },
+    titulo: { pt: "A opinião de quem usou", en: "The opinion of someone who used it" },
+    contexto: { pt: "Testado na frente da câmera, sem script.", en: "Tested on camera, no script." }
   }
 ];
 
@@ -966,10 +966,22 @@ const DESTAQUES = [
    rotulo: a etiqueta em cima do card, o "tópico" (curto, maiúsculo).
    texto:  o que esse tópico entrega, em uma ou duas frases. */
 const SERVICOS = [
-  { rotulo: "Criativos para anúncio", texto: "Cortes verticais pensados pra rodar como anúncio pago no Meta e no TikTok, com o gancho certo nos primeiros segundos." },
-  { rotulo: "UGC para o seu produto", texto: "Vídeo, unboxing e fotos com luz natural, prontos pro feed, pro site e pra página do produto, com a naturalidade de quem usa de verdade." },
-  { rotulo: "Publi no meu perfil", texto: "O conteúdo vai ao ar no meu Instagram, com a marca marcada, alcançando uma audiência que já confia em mim." },
-  { rotulo: "Pacote mensal", texto: "Um número fechado de entregas por mês, com calendário combinado e prioridade na agenda." }
+  {
+    rotulo: { pt: "Criativos para anúncio", en: "Creatives for ads" },
+    texto: { pt: "Cortes verticais pensados pra rodar como anúncio pago no Meta e no TikTok, com o gancho certo nos primeiros segundos.", en: "Vertical cuts made to run as paid ads on Meta and TikTok, with the right hook in the first few seconds." }
+  },
+  {
+    rotulo: { pt: "UGC para o seu produto", en: "UGC for your product" },
+    texto: { pt: "Vídeo, unboxing e fotos com luz natural, prontos pro feed, pro site e pra página do produto, com a naturalidade de quem usa de verdade.", en: "Video, unboxing and natural-light photos, ready for the feed, your site and the product page, with the authenticity of someone who really uses it." }
+  },
+  {
+    rotulo: { pt: "Publi no meu perfil", en: "Sponsored post on my profile" },
+    texto: { pt: "O conteúdo vai ao ar no meu Instagram, com a marca marcada, alcançando uma audiência que já confia em mim.", en: "The content goes live on my Instagram, with your brand tagged, reaching an audience that already trusts me." }
+  },
+  {
+    rotulo: { pt: "Pacote mensal", en: "Monthly package" },
+    texto: { pt: "Um número fechado de entregas por mês, com calendário combinado e prioridade na agenda.", en: "A fixed number of deliverables per month, with a shared calendar and priority on the schedule." }
+  }
 ];
 
 
@@ -986,6 +998,171 @@ function esc(t){
   });
 }
 
+/* =========================================================
+   IDIOMA (PT/EN)
+   idioma é lido uma vez no carregamento (localStorage, senão pt) e
+   guardado de novo toda vez que alguém troca no seletor do cabeçalho.
+   TEXTOS cobre todo o texto fixo do site (marcado com data-i18n no
+   HTML); o texto que vem de listas (SERVICOS, DESTAQUES,
+   ESPECIALIDADES) já tem os dois idiomas junto no próprio item, e
+   quem lê isso são as funções monta* de cada seção.
+   Os valores viram innerHTML (não textContent) porque vários têm
+   marcação dentro (mark, b, em, span): é texto que eu mesma escrevi
+   nos dois idiomas, não entrada de visitante, então não precisa
+   passar por esc(). */
+let idioma = (function(){
+  try { return localStorage.getItem("idioma") === "en" ? "en" : "pt"; }
+  catch (erro) { return "pt"; }
+})();
+
+const TEXTOS = {
+  pular: { pt: "Pular para o conteúdo", en: "Skip to content" },
+  navSobre: { pt: "Sobre", en: "About" },
+  navDestaques: { pt: "Destaques", en: "Highlights" },
+  navTrabalhos: { pt: "Trabalhos", en: "Work" },
+  navServicos: { pt: "Serviços", en: "Services" },
+  navValores: { pt: "Valores", en: "Pricing" },
+  navContato: { pt: "Contato", en: "Contact" },
+  abrirMenu: { pt: "Abrir o menu", en: "Open the menu" },
+
+  capaRotulo: { pt: "Paloma Ribeiro UGC", en: "Paloma Ribeiro UGC" },
+  capaTitulo: { pt: "Conteúdo que parece <em>espontâneo</em>, pensado pra converter", en: "Content that feels <em>spontaneous</em>, made to convert" },
+  capaFrase: { pt: "Construído estrategicamente para gerar identificação e conversão.", en: "Strategically built to generate identification and conversion." },
+  capaBtnFalar: { pt: "Falar comigo", en: "Talk to me" },
+  capaBtnTrabalhos: { pt: "Ver os trabalhos", en: "See the work" },
+
+  sobreFotoAlt: { pt: "Paloma Ribeiro rindo atrás do notebook, com blusa marrom e acessórios dourados", en: "Paloma Ribeiro laughing behind her laptop, wearing a brown blouse and gold accessories" },
+  sobreRotulo: { pt: "Sobre mim", en: "About me" },
+  sobreTitulo: { pt: "Oiiii, eu sou a Paloma", en: "Hiii, I'm Paloma" },
+  sobreDt1: { pt: "Tenho 29 anos", en: "I'm 29 years old" },
+  sobreDd1: { pt: "Criadora de conteúdo UGC.", en: "UGC content creator." },
+  sobreDt2: { pt: "Localização", en: "Location" },
+  sobreDd2: { pt: "Praia Grande • SP", en: "Praia Grande • SP" },
+  sobreDt3: { pt: "Mãe de dois meninos", en: "Mother of two boys" },
+  sobreDd3: { pt: "Especialista em conteúdo lifestyle.", en: "Lifestyle content specialist." },
+  sobreDt4: { pt: "Especialidade", en: "Specialty" },
+  sobreDd4: { pt: "Skincare, beleza e rotina.", en: "Skincare, beauty and routine." },
+  sobreTexto1: { pt: "Com mais de <b>1 ano de experiência</b>, já trabalhei com <b>marcas nacionais e internacionais</b>.", en: "With more than <b>1 year of experience</b>, I've worked with <b>national and international brands</b>." },
+  sobreTexto2: { pt: "Cada produto é estudado de forma <b>única e estratégica</b>, e é desse estudo que nasce um roteiro bem elaborado: um roteiro que transforma o produto em história, conecta com o público e gera <b>identificação e conversão</b>.", en: "Every product is studied in a <b>unique, strategic</b> way, and that study is what gives birth to a well-crafted script: a script that turns the product into a story, connects with the audience and generates <b>identification and conversion</b>." },
+  sobrePilula1: { pt: "Marcas nacionais &amp; internacionais", en: "National &amp; international brands" },
+  sobrePilula2: { pt: "+ 12 parcerias recorrentes", en: "+ 12 recurring partnerships" },
+  sobrePilula3: { pt: "+ de 1 ano criando UGC", en: "+ 1 year creating UGC" },
+  sobreMarcasTitulo: { pt: "Marcas que já criaram comigo", en: "Brands that already created with me" },
+
+  destaquesTitulo: { pt: 'Algum deles já passou no seu <mark class="marca-texto">feed</mark>?', en: 'Has one of these already been on your <mark class="marca-texto">feed</mark>?' },
+  destaquesGancho: { pt: "Três produtos diferentes, três formatos diferentes, e os três funcionaram.", en: "Three different products, three different formats, and all three worked." },
+  destaquesIntro: { pt: "Eu leio o produto antes de gravar e escolho o formato que conecta ele com o público. Com o seu não é diferente: existe um formato certo para ele, e achar esse formato é o meu trabalho.", en: "I study the product before filming and choose the format that connects it with the audience. Yours is no different: there's a right format for it, and finding that format is my job." },
+  destaquesDica: { pt: "Passe o mouse ou deslize.", en: "Hover or swipe." },
+  destaqueSetaAnterior: { pt: "Ver o conteúdo anterior", en: "See the previous content" },
+  destaquesCarrossel: { pt: "Carrossel dos três conteúdos de destaque", en: "Carousel of the three featured pieces of content" },
+  destaqueSetaProxima: { pt: "Ver o próximo conteúdo", en: "See the next content" },
+
+  trabalhosRotulo: { pt: "Trabalhos por nicho", en: "Work by niche" },
+  trabalhosTitulo: { pt: 'Qual <mark class="marca-texto">formato</mark> eu posso criar para a <span class="destaque-azul">sua marca</span>?', en: 'Which <mark class="marca-texto">format</mark> can I create for <span class="destaque-azul">your brand</span>?' },
+  trabalhosIntro: { pt: "Os vídeos rodam aqui sem som. Clique em qualquer um para abrir com o áudio. Navegue por nicho e arraste para o lado para ver mais.", en: "The videos play here without sound. Click any of them to open with audio. Browse by niche and drag sideways to see more." },
+  trabalhosFiltrosAria: { pt: "Filtrar vídeos por categoria", en: "Filter videos by category" },
+
+  youtubeAdsTitulo: { pt: 'Mais <mark class="marca-texto">visibilidade</mark> para a sua <span class="destaque-azul">marca</span>', en: 'More <mark class="marca-texto">visibility</mark> for your <span class="destaque-azul">brand</span>' },
+  youtubeAdsTexto: { pt: '<span class="check-marca" aria-hidden="true">&#10003;</span> Vídeos pensados estrategicamente para o formato do YouTube Ads, feitos para trazer mais visibilidade e mais alcance para a sua marca.', en: '<span class="check-marca" aria-hidden="true">&#10003;</span> Videos strategically designed for the YouTube Ads format, built to bring more visibility and more reach to your brand.' },
+  youtubeAdsIframeTitle: { pt: "Exemplo de vídeo para YouTube Ads", en: "Example video for YouTube Ads" },
+
+  bastidorRotulo: { pt: "Fotos", en: "Photos" },
+  bastidorTitulo: { pt: 'A próxima foto é do seu <mark class="marca-texto">produto</mark>', en: 'The next photo is of your <mark class="marca-texto">product</mark>' },
+  bastidorAlt1: { pt: "Aplicando o perfume da Yara", en: "Applying Yara perfume" },
+  bastidorAlt2: { pt: "Usando o óleo capilar da Pantene", en: "Using Pantene hair oil" },
+  bastidorAlt3: { pt: "Com o sérum de vitamina C da Garnier", en: "With Garnier vitamin C serum" },
+  bastidorAlt4: { pt: "Com o produto da April Skin", en: "With the April Skin product" },
+  bastidorAlt5: { pt: "Com a máscara facial da Bioage", en: "With the Bioage face mask" },
+
+  servicosRotulo: { pt: "Como eu te ajudo", en: "How I can help you" },
+  servicosTitulo: { pt: "Quatro formas de trabalhar comigo", en: "Four ways to work with me" },
+  servicosBtnValores: { pt: "Acesse aqui a tabela de valores", en: "Access the pricing table here" },
+
+  contatoRotulo: { pt: "Bora criar juntos", en: "Let's create together" },
+  contatoTitulo: { pt: "Me conta da sua marca", en: "Tell me about your brand" },
+  formNome: { pt: "Seu nome", en: "Your name" },
+  formEmail: { pt: "Seu e-mail", en: "Your email" },
+  formMensagem: { pt: "Sua mensagem", en: "Your message" },
+  formEnviar: { pt: "Enviar mensagem", en: "Send message" },
+  contatoCidadeLabel: { pt: "Cidade", en: "City" },
+  contatoEmailLabel: { pt: "E-mail", en: "Email" },
+  contatoBtnWhats: { pt: "Chamar no WhatsApp", en: "Message on WhatsApp" },
+  contatoBtnEmail: { pt: "Mandar um e-mail", en: "Send an email" },
+  contatoBtnInsta: { pt: "Ver o Instagram", en: "See Instagram" },
+
+  rodapeEmail: { pt: "E-mail", en: "Email" },
+  rodapeAno: { pt: "Paloma Ribeiro, criadora de conteúdo UGC em Praia Grande.", en: "Paloma Ribeiro, UGC content creator in Praia Grande." },
+  rodapeValoresLink: { pt: "Tabela de valores", en: "Pricing table" },
+
+  fecharVideo: { pt: "Fechar o vídeo", en: "Close the video" },
+  fechar: { pt: "Fechar", en: "Close" },
+
+  capturaTitulo: { pt: "Quer meu mídia kit completo?", en: "Want my complete media kit?" },
+  capturaTexto: { pt: "Eu te mando por e-mail os formatos, os prazos e a tabela de valores atualizada.", en: "I'll email you the formats, timelines and the updated pricing table." },
+  capturaBtn: { pt: "Quero receber", en: "I want it" }
+};
+
+/* aplica o idioma atual nos elementos estáticos marcados no HTML, mais
+   o título da aba e o estado visual do botão PT/EN. É seguro chamar
+   tanto na carga inicial quanto em toda troca de idioma. */
+function aplicaTextosEstaticos(){
+  document.documentElement.lang = idioma === "en" ? "en" : "pt-BR";
+
+  document.querySelectorAll("[data-i18n]").forEach(function(el){
+    const chave = el.dataset.i18n;
+    if (TEXTOS[chave]) el.innerHTML = TEXTOS[chave][idioma];
+  });
+  document.querySelectorAll("[data-i18n-alt]").forEach(function(el){
+    const chave = el.dataset.i18nAlt;
+    if (TEXTOS[chave]) el.setAttribute("alt", TEXTOS[chave][idioma]);
+  });
+  document.querySelectorAll("[data-i18n-aria-label]").forEach(function(el){
+    const chave = el.dataset.i18nAriaLabel;
+    if (TEXTOS[chave]) el.setAttribute("aria-label", TEXTOS[chave][idioma]);
+  });
+  document.querySelectorAll("[data-i18n-title]").forEach(function(el){
+    const chave = el.dataset.i18nTitle;
+    if (TEXTOS[chave]) el.setAttribute("title", TEXTOS[chave][idioma]);
+  });
+
+  document.title = idioma === "en"
+    ? "Paloma Ribeiro | UGC Portfolio"
+    : "Paloma Ribeiro | Portfólio UGC";
+  const meta = document.querySelector('meta[name="description"]');
+  if (meta) meta.setAttribute("content", idioma === "en"
+    ? "Paloma Ribeiro's UGC portfolio: content that feels spontaneous, made to convert, for beauty, skincare, fashion and tech brands."
+    : "Portfólio UGC de Paloma Ribeiro: conteúdo que parece espontâneo, pensado pra converter, para marcas de beleza, skincare, moda e tech.");
+
+  document.querySelectorAll(".idioma-botao").forEach(function(b){
+    b.setAttribute("aria-pressed", b.dataset.idioma === idioma ? "true" : "false");
+  });
+}
+
+function definirIdioma(novo){
+  idioma = novo === "en" ? "en" : "pt";
+  try { localStorage.setItem("idioma", idioma); } catch (erro) { /* sem localStorage, só não persiste */ }
+
+  aplicaTextosEstaticos();
+
+  /* repinta as seções que vêm de listas (não usam data-i18n, porque o
+     texto delas já carrega os dois idiomas dentro do próprio item) */
+  montaEspecialidades();
+  montaMarcas();
+  montaTarjaContagem();
+  const elRot = $("#tarjaRotativo");
+  if (elRot) elRot.textContent = FRASES_TARJA[indiceFraseTarja][idioma];
+  montaDestaques();
+  montaServicos();
+  if (typeof videosAtuais !== "undefined" && videosAtuais.length) montaVideos(videosAtuais);
+}
+
+function ligaIdioma(){
+  aplicaTextosEstaticos();
+  document.querySelectorAll(".idioma-botao").forEach(function(botao){
+    botao.addEventListener("click", function(){ definirIdioma(botao.dataset.idioma); });
+  });
+}
+
 /* ----- faixa de marcas -----
    A lista é escrita duas vezes seguidas: a primeira é a de verdade e a
    segunda é um eco só visual. Quando a animação termina de arrastar a
@@ -998,7 +1175,7 @@ function montaMarcas(){
     return '<li class="marca-logo' + (eco ? ' eco' : '') + '"' + (eco ? ' aria-hidden="true"' : '') + '>' +
              '<img src="marcas/' + esc(m.arquivo) + '.webp" width="300" height="300" ' +
                   'loading="lazy" decoding="async" ' +
-                  'alt="' + (eco ? '' : 'Logo da marca ' + esc(m.nome)) + '" ' +
+                  'alt="' + (eco ? '' : (idioma === "en" ? "Logo of the brand " : "Logo da marca ") + esc(m.nome)) + '" ' +
                   'title="' + esc(m.nome) + '">' +
            '</li>';
   };
@@ -1012,7 +1189,7 @@ function montaMarcas(){
 function montaEspecialidades(){
   const item = function(t, eco){
     return '<li class="especialidade' + (eco ? ' eco' : '') + '"' + (eco ? ' aria-hidden="true"' : '') + '>' +
-             esc(t) + '</li>';
+             esc(t[idioma]) + '</li>';
   };
   $("#trilhoEspecialidades").innerHTML =
     ESPECIALIDADES.map(function(t){ return item(t, false); }).join("") +
@@ -1056,9 +1233,15 @@ function montaTarjaContagem(){
      precisa passar pelo esc(). */
   const marca = '<span class="pisca-bf">Black Friday</span>';
   let texto;
-  if (dias === 0) texto = "A " + marca + " é hoje";
-  else if (dias === 1) texto = "Falta 1 dia para a " + marca;
-  else texto = "Faltam " + dias + " dias para a " + marca;
+  if (idioma === "en"){
+    if (dias === 0) texto = marca + " is today";
+    else if (dias === 1) texto = "1 day left until " + marca;
+    else texto = dias + " days left until " + marca;
+  } else {
+    if (dias === 0) texto = "A " + marca + " é hoje";
+    else if (dias === 1) texto = "Falta 1 dia para a " + marca;
+    else texto = "Faltam " + dias + " dias para a " + marca;
+  }
 
   el.innerHTML = texto;
 }
@@ -1067,25 +1250,29 @@ function montaTarjaContagem(){
    some no celular por CSS (veja .tarja-rotativo), então nem entra em
    ação lá: a troca em si só roda em telas largas o bastante. */
 const FRASES_TARJA = [
-  "Poucas vagas para novembro",
-  "Roteiros pensados estrategicamente para essa data",
-  "Vídeos para anúncio e e-commerce"
+  { pt: "Poucas vagas para novembro", en: "Few spots left for November" },
+  { pt: "Roteiros pensados estrategicamente para essa data", en: "Scripts strategically planned for this date" },
+  { pt: "Vídeos para anúncio e e-commerce", en: "Videos for ads and e-commerce" }
 ];
+
+/* fica fora da função pra aplicaIdioma() poder repintar a frase atual
+   na hora, sem esperar o próximo ciclo do intervalo, quando o idioma
+   muda */
+let indiceFraseTarja = 0;
 
 function ligaTarjaRotativa(){
   const el = $("#tarjaRotativo");
   if (!el) return;
 
-  el.textContent = FRASES_TARJA[0];
+  el.textContent = FRASES_TARJA[0][idioma];
   requestAnimationFrame(function(){ el.classList.add("visivel"); });
   if (reduzMovimento || FRASES_TARJA.length < 2) return;
 
-  let atual = 0;
   setInterval(function(){
     el.classList.remove("visivel");
     setTimeout(function(){
-      atual = (atual + 1) % FRASES_TARJA.length;
-      el.textContent = FRASES_TARJA[atual];
+      indiceFraseTarja = (indiceFraseTarja + 1) % FRASES_TARJA.length;
+      el.textContent = FRASES_TARJA[indiceFraseTarja][idioma];
       el.classList.add("visivel");
     }, 400);
   }, 3200);
@@ -1097,24 +1284,27 @@ function ligaTarjaRotativa(){
    de qualquer um deixa ele nítido e desfoca os outros (isso é só CSS). */
 function montaDestaques(){
   const trilho = $("#grelhaDestaques");
+  const rotuloCapa = idioma === "en" ? "Video cover: " : "Capa do vídeo: ";
+  const rotuloAssistir = idioma === "en" ? "Watch the content in " : "Assistir o conteúdo em ";
   trilho.innerHTML = DESTAQUES.map(function(d, i){
     const idVideo = idDoYoutube(d.link);
+    const titulo = d.titulo[idioma], formato = d.formato[idioma], contexto = d.contexto[idioma];
     return '' +
       '<article class="destaque" data-indice="' + i + '">' +
         '<div class="destaque-capa">' +
-          '<img src="' + esc(d.capa) + '" alt="Capa do vídeo: ' + esc(d.titulo) + '" ' +
+          '<img src="' + esc(d.capa) + '" alt="' + esc(rotuloCapa + titulo) + '" ' +
             'class="midia midia--916" loading="lazy" decoding="async">' +
           '<span class="destaque-marca-flutuante">' + esc(d.marca) + '</span>' +
           '<button type="button" class="video-abrir" data-id="' + esc(idVideo || "") + '" ' +
-             'data-marca="' + esc(d.marca) + '" data-titulo="' + esc(d.titulo) + '" ' +
-             'aria-label="Assistir o conteúdo em ' + esc(d.formato) + ': ' + esc(d.titulo) + '">' +
+             'data-marca="' + esc(d.marca) + '" data-titulo="' + esc(titulo) + '" ' +
+             'aria-label="' + esc(rotuloAssistir + formato + ": " + titulo) + '">' +
             '<span class="assistir" aria-hidden="true"></span>' +
           '</button>' +
         '</div>' +
         '<div class="destaque-texto">' +
-          '<p class="destaque-formato">' + esc(d.formato) + '</p>' +
-          '<h3 class="destaque-titulo">' + esc(d.titulo) + '</h3>' +
-          '<p class="destaque-contexto">' + esc(d.contexto) + '</p>' +
+          '<p class="destaque-formato">' + esc(formato) + '</p>' +
+          '<h3 class="destaque-titulo">' + esc(titulo) + '</h3>' +
+          '<p class="destaque-contexto">' + esc(contexto) + '</p>' +
         '</div>' +
       '</article>';
   }).join("");
@@ -1241,6 +1431,17 @@ let videosAtuais = [];
    "Experiência" e "Experiências" caírem no mesmo lugar da lista,
    não importa como o nicho foi escrito lá no painel. */
 const ORDEM_NICHOS = ["beleza", "experiencia", "moda", "tech", "marketplace"];
+/* nichos que n\u00e3o est\u00e3o nessa lista (algo novo escrito no painel) ficam
+   sem tradu\u00e7\u00e3o em ingl\u00eas, mostram o texto de sempre mesmo trocando de
+   idioma: n\u00e3o tem como adivinhar a tradu\u00e7\u00e3o de um texto que ainda n\u00e3o
+   existe aqui. */
+const NICHOS_EN = {
+  beleza: "Beauty",
+  experiencia: "Experience",
+  moda: "Fashion",
+  tech: "Tech",
+  marketplace: "Marketplace"
+};
 function tiraAcento(t){
   return String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim().replace(/s$/, "");
 }
@@ -1259,7 +1460,8 @@ function montaVideos(listaCompleta){
   if (!lista.length){
     $("#filtros").innerHTML = "";
     $("#avisoFiltro").textContent = "";
-    $("#carrosseis").innerHTML = '<p class="intro-secao">Em breve, mais vídeos por aqui.</p>';
+    $("#carrosseis").innerHTML = '<p class="intro-secao">' +
+      (idioma === "en" ? "More videos coming soon." : "Em breve, mais vídeos por aqui.") + '</p>';
     return;
   }
 
@@ -1268,7 +1470,9 @@ function montaVideos(listaCompleta){
   lista.forEach(function(v){
     if (vistos[v.categoria]) return;
     vistos[v.categoria] = true;
-    comVideo.push({ id: v.categoria, nome: capitalizaPalavra(v.categoria) });
+    const nomePt = capitalizaPalavra(v.categoria);
+    const nome = idioma === "en" ? (NICHOS_EN[tiraAcento(v.categoria)] || nomePt) : nomePt;
+    comVideo.push({ id: v.categoria, nome: nome });
   });
 
   /* nichos fora da lista fixa (se algum dia aparecer um novo) ficam no
@@ -1280,7 +1484,8 @@ function montaVideos(listaCompleta){
   });
 
   $("#filtros").innerHTML =
-    '<button type="button" class="filtro" data-categoria="todos" aria-pressed="true">Todos</button>' +
+    '<button type="button" class="filtro" data-categoria="todos" aria-pressed="true">' +
+      (idioma === "en" ? "All" : "Todos") + '</button>' +
     comVideo.map(function(c){
       return '<button type="button" class="filtro" data-categoria="' + esc(c.id) + '" aria-pressed="false">' + esc(c.nome) + '</button>';
     }).join("");
@@ -1295,9 +1500,9 @@ function montaVideos(listaCompleta){
             '<img class="video-poster" src="https://img.youtube.com/vi/' + esc(v.id) + '/hqdefault.jpg" ' +
               'alt="" loading="lazy" decoding="async">' +
             '<button type="button" class="video-abrir" data-id="' + esc(v.id) + '" data-nome="' + esc(nome) + '" ' +
-              'aria-label="Abrir o vídeo ' + esc(nome) + ' com som">' +
+              'aria-label="' + esc((idioma === "en" ? "Open the video " : "Abrir o vídeo ") + nome + (idioma === "en" ? " with sound" : " com som")) + '">' +
               '<span class="assistir assistir--video" aria-hidden="true"></span>' +
-              '<span class="selo-som">sem som, clique para ouvir</span>' +
+              '<span class="selo-som">' + (idioma === "en" ? "no sound, click to listen" : "sem som, clique para ouvir") + '</span>' +
             '</button>' +
           '</div>' +
           '<div class="video-texto">' +
@@ -1313,12 +1518,12 @@ function montaVideos(listaCompleta){
         '<div class="carrossel-topo">' +
           '<h3 class="carrossel-nome">' + esc(c.nome) + ' <span class="carrossel-contagem">' + String(itensDoNicho.length).padStart(2, "0") + '</span></h3>' +
           '<div class="carrossel-setas">' +
-            '<button type="button" class="seta" data-passo="-1" aria-label="Ver os vídeos anteriores de ' + esc(c.nome) + '">&#10094;</button>' +
-            '<button type="button" class="seta" data-passo="1" aria-label="Ver os próximos vídeos de ' + esc(c.nome) + '">&#10095;</button>' +
+            '<button type="button" class="seta" data-passo="-1" aria-label="' + esc(idioma === "en" ? "See the previous " + c.nome + " videos" : "Ver os vídeos anteriores de " + c.nome) + '">&#10094;</button>' +
+            '<button type="button" class="seta" data-passo="1" aria-label="' + esc(idioma === "en" ? "See the next " + c.nome + " videos" : "Ver os próximos vídeos de " + c.nome) + '">&#10095;</button>' +
           '</div>' +
         '</div>' +
         '<div class="trilho-videos" tabindex="0" role="group" ' +
-          'aria-label="Carrossel de ' + esc(c.nome) + '. Role para o lado para ver mais vídeos.">' +
+          'aria-label="' + esc(idioma === "en" ? c.nome + " carousel. Scroll sideways to see more videos." : "Carrossel de " + c.nome + ". Role para o lado para ver mais vídeos.") + '">' +
           cards +
         '</div>' +
       '</section>';
@@ -1410,7 +1615,9 @@ function montaVideos(listaCompleta){
           c.querySelectorAll("iframe").forEach(function(f){ f.remove(); });
         }
       });
-      $("#avisoFiltro").textContent = total + (total === 1 ? " vídeo encontrado." : " vídeos encontrados.");
+      $("#avisoFiltro").textContent = idioma === "en"
+        ? total + (total === 1 ? " video found." : " videos found.")
+        : total + (total === 1 ? " vídeo encontrado." : " vídeos encontrados.");
       atualizaSetas();
     });
   });
@@ -1486,8 +1693,8 @@ function ligaVisor(){
 function montaServicos(){
   $("#grelhaServicos").innerHTML = SERVICOS.map(function(s){
     return '<article class="servico revela">' +
-             '<p class="servico-rotulo">' + esc(s.rotulo) + '</p>' +
-             '<p class="servico-texto">' + esc(s.texto) + '</p>' +
+             '<p class="servico-rotulo">' + esc(s.rotulo[idioma]) + '</p>' +
+             '<p class="servico-texto">' + esc(s.texto[idioma]) + '</p>' +
            '</article>';
   }).join("");
 }
@@ -1551,7 +1758,9 @@ function ligaFormulario(){
     e.preventDefault();
     if (!form.checkValidity()){
       aviso.hidden = false;
-      aviso.textContent = "Confira os campos: preciso do seu nome, de um e-mail válido e da mensagem.";
+      aviso.textContent = idioma === "en"
+        ? "Check the fields: I need your name, a valid email and the message."
+        : "Confira os campos: preciso do seu nome, de um e-mail válido e da mensagem.";
       form.reportValidity();
       return;
     }
@@ -1563,7 +1772,9 @@ function ligaFormulario(){
     /* a mensagem vira um "lead" na sua base de marcas, lá no painel */
     if (!window.banco){
       aviso.hidden = false;
-      aviso.textContent = "Não consegui enviar agora. Tenta de novo em instantes ou me chama direto no WhatsApp.";
+      aviso.textContent = idioma === "en"
+        ? "I couldn't send it right now. Try again in a bit or message me directly on WhatsApp."
+        : "Não consegui enviar agora. Tenta de novo em instantes ou me chama direto no WhatsApp.";
       return;
     }
 
@@ -1581,13 +1792,17 @@ function ligaFormulario(){
       botao.disabled = false;
       if (resp.error) throw resp.error;
       aviso.hidden = false;
-      aviso.textContent = "Obrigada, " + primeiroNome + ". Recebi sua mensagem e respondo em até um dia útil.";
+      aviso.textContent = idioma === "en"
+        ? "Thank you, " + primeiroNome + ". I've got your message and I'll reply within one business day."
+        : "Obrigada, " + primeiroNome + ". Recebi sua mensagem e respondo em até um dia útil.";
       form.reset();
     }).catch(function(erro){
       botao.disabled = false;
       console.error("Não consegui enviar a mensagem de contato:", erro);
       aviso.hidden = false;
-      aviso.textContent = "Não consegui enviar agora. Tenta de novo em instantes ou me chama direto no WhatsApp.";
+      aviso.textContent = idioma === "en"
+        ? "I couldn't send it right now. Try again in a bit or message me directly on WhatsApp."
+        : "Não consegui enviar agora. Tenta de novo em instantes ou me chama direto no WhatsApp.";
     });
   });
 }
@@ -1654,7 +1869,9 @@ function ligaCaptura(){
     if (!form.checkValidity()){ form.reportValidity(); return; }
     const nome = $("#capturaNome").value.trim().split(" ")[0];
     aviso.hidden = false;
-    aviso.textContent = "Prontinho, " + nome + ". O mídia kit está a caminho do seu e-mail.";
+    aviso.textContent = idioma === "en"
+      ? "All set, " + nome + ". The media kit is on its way to your email."
+      : "Prontinho, " + nome + ". O mídia kit está a caminho do seu e-mail.";
     form.reset();
     setTimeout(fecha, 2200);
   });
@@ -1689,6 +1906,7 @@ function ligaBastidor(){
 }
 
 /* ----- liga tudo ----- */
+ligaIdioma();
 montaMarcas();
 montaEspecialidades();
 montaTarjaContagem();

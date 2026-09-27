@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tabela de valores | Paloma Ribeiro</title>
+<title data-i18n="tituloAba">Tabela de valores | Paloma Ribeiro</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="theme-color" content="#868ea6">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -60,49 +60,104 @@ a{color:inherit}
   padding:13px 26px;border-radius:999px;text-decoration:none;font-size:.92rem;letter-spacing:.03em;
 }
 .btn:hover{background:var(--ceu-escuro);border-color:var(--ceu-escuro)}
+.topo{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.idioma-seletor{display:flex;align-items:center;border:1.5px solid #fff;border-radius:999px;overflow:hidden;flex:0 0 auto}
+.idioma-botao{border:0;background:transparent;color:#fff;font-size:.74rem;font-weight:600;letter-spacing:.04em;padding:7px 13px;cursor:pointer;transition:background .2s ease,color .2s ease}
+.idioma-botao[aria-pressed="true"]{background:#fff;color:var(--cobalto-texto)}
+.idioma-botao:not([aria-pressed="true"]):hover{background:rgba(255,255,255,.18)}
 </style>
 </head>
 <body>
 
 <div class="topo env">
-  <a href="index.html" class="voltar">&#8592; Voltar para o site</a>
+  <a href="index.html" class="voltar" data-i18n="voltar">&#8592; Voltar para o site</a>
+  <div class="idioma-seletor" role="group" aria-label="Idioma da página / Page language">
+    <button type="button" class="idioma-botao" id="idiomaPt" data-idioma="pt" aria-pressed="true">PT</button>
+    <button type="button" class="idioma-botao" id="idiomaEn" data-idioma="en" aria-pressed="false">EN</button>
+  </div>
 </div>
 
 <header class="cabecalho env">
-  <p class="rotulo">Tabela de valores</p>
-  <h1 class="titulo">Pacotes de conteúdo UGC</h1>
-  <p class="intro">Vídeos e fotos combinados num único pacote, pensados pra dar volume real de conteúdo pra sua marca.</p>
+  <p class="rotulo" data-i18n="rotulo">Tabela de valores</p>
+  <h1 class="titulo" data-i18n="titulo">Pacotes de conteúdo UGC</h1>
+  <p class="intro" data-i18n="intro">Vídeos e fotos combinados num único pacote, pensados pra dar volume real de conteúdo pra sua marca.</p>
 </header>
 
 <section class="pacotes env">
   <div class="pacotes-grade">
     <article class="pacote">
-      <p class="pacote-nome">Pacote 1</p>
-      <p class="pacote-inclui">1 vídeo<br>+2 fotos</p>
+      <p class="pacote-nome" data-i18n="pacote1Nome">Pacote 1</p>
+      <p class="pacote-inclui" data-i18n="pacote1Inclui">1 vídeo<br>+2 fotos</p>
       <p class="pacote-preco">R$ 400,00</p>
     </article>
     <article class="pacote">
-      <p class="pacote-nome">Pacote 2</p>
-      <p class="pacote-inclui">2 vídeos<br>+3 fotos</p>
+      <p class="pacote-nome" data-i18n="pacote2Nome">Pacote 2</p>
+      <p class="pacote-inclui" data-i18n="pacote2Inclui">2 vídeos<br>+3 fotos</p>
       <p class="pacote-preco">R$ 700,00</p>
     </article>
     <article class="pacote">
-      <p class="pacote-nome">Pacote 3</p>
-      <p class="pacote-inclui">3 vídeos<br>+5 fotos</p>
+      <p class="pacote-nome" data-i18n="pacote3Nome">Pacote 3</p>
+      <p class="pacote-inclui" data-i18n="pacote3Inclui">3 vídeos<br>+5 fotos</p>
       <p class="pacote-preco">R$ 1.250,00</p>
     </article>
     <article class="pacote">
-      <p class="pacote-nome">Pacote 4</p>
-      <p class="pacote-inclui">4 vídeos<br>+5 fotos</p>
+      <p class="pacote-nome" data-i18n="pacote4Nome">Pacote 4</p>
+      <p class="pacote-inclui" data-i18n="pacote4Inclui">4 vídeos<br>+5 fotos</p>
       <p class="pacote-preco">R$ 1.800,00</p>
     </article>
   </div>
 </section>
 
 <section class="contato env">
-  <p>Quer fechar um pacote ou tirar uma dúvida antes?</p>
-  <a class="btn" href="https://wa.me/5513997778507" target="_blank" rel="noopener">Chamar no WhatsApp</a>
+  <p data-i18n="contatoTexto">Quer fechar um pacote ou tirar uma dúvida antes?</p>
+  <a class="btn" href="https://wa.me/5513997778507" target="_blank" rel="noopener" data-i18n="contatoBtn">Chamar no WhatsApp</a>
 </section>
+
+<script>
+(function(){
+  let idioma = "pt";
+  try { idioma = localStorage.getItem("idioma") === "en" ? "en" : "pt"; } catch (erro) {}
+
+  const TEXTOS = {
+    tituloAba: { pt: "Tabela de valores | Paloma Ribeiro", en: "Pricing table | Paloma Ribeiro" },
+    voltar: { pt: "&#8592; Voltar para o site", en: "&#8592; Back to the site" },
+    rotulo: { pt: "Tabela de valores", en: "Pricing table" },
+    titulo: { pt: "Pacotes de conteúdo UGC", en: "UGC content packages" },
+    intro: { pt: "Vídeos e fotos combinados num único pacote, pensados pra dar volume real de conteúdo pra sua marca.", en: "Videos and photos combined in a single package, made to give your brand real volume of content." },
+    pacote1Nome: { pt: "Pacote 1", en: "Package 1" },
+    pacote1Inclui: { pt: "1 vídeo<br>+2 fotos", en: "1 video<br>+2 photos" },
+    pacote2Nome: { pt: "Pacote 2", en: "Package 2" },
+    pacote2Inclui: { pt: "2 vídeos<br>+3 fotos", en: "2 videos<br>+3 photos" },
+    pacote3Nome: { pt: "Pacote 3", en: "Package 3" },
+    pacote3Inclui: { pt: "3 vídeos<br>+5 fotos", en: "3 videos<br>+5 photos" },
+    pacote4Nome: { pt: "Pacote 4", en: "Package 4" },
+    pacote4Inclui: { pt: "4 vídeos<br>+5 fotos", en: "4 videos<br>+5 photos" },
+    contatoTexto: { pt: "Quer fechar um pacote ou tirar uma dúvida antes?", en: "Want to book a package or ask something first?" },
+    contatoBtn: { pt: "Chamar no WhatsApp", en: "Message on WhatsApp" }
+  };
+
+  function aplica(){
+    document.documentElement.lang = idioma === "en" ? "en" : "pt-BR";
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      const chave = el.dataset.i18n;
+      if (TEXTOS[chave]) el.innerHTML = TEXTOS[chave][idioma];
+    });
+    document.querySelectorAll(".idioma-botao").forEach(function(b){
+      b.setAttribute("aria-pressed", b.dataset.idioma === idioma ? "true" : "false");
+    });
+  }
+
+  document.querySelectorAll(".idioma-botao").forEach(function(botao){
+    botao.addEventListener("click", function(){
+      idioma = botao.dataset.idioma === "en" ? "en" : "pt";
+      try { localStorage.setItem("idioma", idioma); } catch (erro) {}
+      aplica();
+    });
+  });
+
+  aplica();
+})();
+</script>
 
 </body>
 </html>
