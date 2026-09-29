@@ -31,8 +31,8 @@
   --fio:rgba(134,142,166,.22); /* fio fino usado em divisórias */
   --ceu:#c1dbe8;             /* azul claro "gentle sky", cor dos botões */
   --ceu-escuro:#85b8d2;      /* o mesmo tom mais escuro, pro hover */
-  --tarja-fundo:#354b8d;     /* azul mais forte e saturado que o cobalto, só pra tarja da contagem chamar mais atenção */
-  --tarja-fundo-escuro:#2a3b6f; /* o mesmo tom mais escuro, pro hover */
+  --tarja-fundo:#f4c434;     /* amarelo dourado, complementar do azul do site, pra tarja da contagem chamar atenção */
+  --tarja-fundo-escuro:#dfaa0c; /* o mesmo tom mais escuro, pro hover */
   --topo:76px;               /* altura do menu fixo */
   --tarja:40px;              /* altura da tarja da contagem regressiva */
   --gutter:clamp(16px,5vw,48px);
@@ -121,17 +121,17 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
    inteira é um link pro Contato, por isso o cursor e o hover de botão. */
 .tarja-contagem{
   height:var(--tarja);display:flex;align-items:center;justify-content:center;
-  padding:0 var(--gutter);background:var(--tarja-fundo);color:#fff;
+  padding:0 var(--gutter);background:var(--tarja-fundo);color:#000;
   font-size:clamp(.66rem,2.6vw,.82rem);letter-spacing:.05em;text-transform:uppercase;
   font-weight:500;text-align:center;line-height:1.25;
   text-decoration:none;cursor:pointer;transition:background .2s ease;
 }
 .tarja-contagem:hover{background:var(--tarja-fundo-escuro)}
-/* "Black Friday" ganha uma etiqueta branca (o fundo forte da tarja é
-   escuro, então branco é quem contrasta) piscando por cima, pra ser
+/* "Black Friday" ganha uma etiqueta preta (o nome do próprio evento)
+   piscando por cima, com o texto no mesmo dourado da tarja, pra ser
    a primeira coisa que o olho pega na frase */
 .tarja-contagem .pisca-bf{
-  display:inline-block;background:#fff;color:var(--tarja-fundo);
+  display:inline-block;background:#000;color:var(--tarja-fundo);
   padding:.1em .4em;border-radius:4px;font-weight:700;
   animation:pisca-valores 1.4s ease-in-out infinite;
 }
