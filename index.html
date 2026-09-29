@@ -1608,8 +1608,19 @@ function montaVideos(listaCompleta){
      no template do card) já aparece pronta, sem carregar nada. O iframe
      só nasce quando o mouse ou o dedo passa por cima, pra dar esse
      efeito de pré-visualização em movimento, e é destruído assim que o
-     mouse sai, pra não ficar tocando escondido atrás da capa. */
+     mouse sai, pra não ficar tocando escondido atrás da capa.
+
+     Exceção: o primeiro vídeo de cada nicho (video-card--auto) toca
+     sozinho, sem precisar de mouse, assim que aparece na tela, pra
+     sempre ter pelo menos um vídeo rodando mudo em cada categoria. */
   const cards = document.querySelectorAll("#carrosseis .video-card");
+
+  carrosseis.forEach(function(c){
+    const primeiro = c.querySelector(".trilho-videos .video-card");
+    if (primeiro) primeiro.classList.add("video-card--auto");
+  });
+
+  function ehAuto(card){ return card.classList.contains("video-card--auto"); }
 
   function iniciaPreVisualizacao(card){
     if (visorAberto) return;
@@ -1631,16 +1642,23 @@ function montaVideos(listaCompleta){
 
   cards.forEach(function(card){
     card.addEventListener("mouseenter", function(){ iniciaPreVisualizacao(card); });
-    card.addEventListener("mouseleave", function(){ paraPreVisualizacao(card); });
+    /* o card automático não para ao tirar o mouse, só quando sai da tela */
+    card.addEventListener("mouseleave", function(){ if (!ehAuto(card)) paraPreVisualizacao(card); });
     card.addEventListener("touchstart", function(){ iniciaPreVisualizacao(card); }, { passive: true });
   });
 
   /* no celular não existe "tirar o mouse de cima", então quando o card
-     tocado sai da tela de rolagem, essa pré-visualização é destruída */
+     tocado sai da tela de rolagem, essa pré-visualização é destruída.
+     Pros cards automáticos, essa mesma observação faz o papel do
+     mouseenter: liga sozinho assim que entra na tela. */
   if ("IntersectionObserver" in window){
     const obs = new IntersectionObserver(function(entradas){
       entradas.forEach(function(e){
-        if (!e.isIntersecting) paraPreVisualizacao(e.target);
+        if (e.isIntersecting){
+          if (ehAuto(e.target)) iniciaPreVisualizacao(e.target);
+        } else {
+          paraPreVisualizacao(e.target);
+        }
       });
     }, { threshold: 0 });
     cards.forEach(function(c){ obs.observe(c); });
