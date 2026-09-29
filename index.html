@@ -1655,6 +1655,20 @@ function montaVideos(listaCompleta){
     card.addEventListener("touchstart", function(){ iniciaPreVisualizacao(card); }, { passive: true });
   });
 
+  /* passar o mouse em qualquer parte da faixa de vídeos de um nicho liga
+     todos os vídeos daquele nicho juntos (não só o card debaixo do
+     cursor); tirar o mouse da faixa para todos, menos o automático. */
+  carrosseis.forEach(function(c){
+    const trilho = c.querySelector(".trilho-videos");
+    const cardsDoNicho = c.querySelectorAll(".video-card");
+    trilho.addEventListener("mouseenter", function(){
+      cardsDoNicho.forEach(function(card){ iniciaPreVisualizacao(card); });
+    });
+    trilho.addEventListener("mouseleave", function(){
+      cardsDoNicho.forEach(function(card){ if (!ehAuto(card)) paraPreVisualizacao(card); });
+    });
+  });
+
   /* no celular não existe "tirar o mouse de cima", então quando o card
      tocado sai da tela de rolagem, essa pré-visualização é destruída.
      Pros cards automáticos, essa mesma observação faz o papel do
