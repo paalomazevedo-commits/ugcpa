@@ -474,8 +474,19 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
 .video-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:0}
 /* alguns navegadores não cortam o iframe pelo overflow do pai, então a
    curva vai também no próprio iframe. Esse iframe só existe enquanto o
-   mouse (ou o dedo) está por cima: veja iniciaPreVisualizacao. */
-.video-quadro iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;border-radius:16px;z-index:1}
+   mouse (ou o dedo) está por cima: veja iniciaPreVisualizacao.
+
+   Um vídeo do YouTube Shorts sempre carrega com a própria interface
+   dele por cima (mudo, curtir, compartilhar, nome do canal), mesmo
+   pedindo pra esconder os controles: isso é do player de Shorts do
+   YouTube, não tem parâmetro de link que desligue. O jeito de disfarçar
+   é aumentar o vídeo pra além do quadro visível e cortar a sobra pelo
+   overflow:hidden do .video-quadro, empurrando essa interface (que o
+   YouTube sempre cola na borda) pra fora da área que o visitante vê. */
+.video-quadro iframe{
+  position:absolute;top:50%;left:50%;width:150%;height:150%;
+  transform:translate(-50%,-50%);border:0;display:block;border-radius:16px;z-index:1;
+}
 .video-abrir{position:absolute;inset:0;z-index:2;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:pointer;display:flex;align-items:flex-end;justify-content:center}
 .selo-som{margin-bottom:14px;padding:8px 13px;background:var(--louca-clara);border:2px solid var(--cobalto);color:var(--cobalto-texto);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;border-radius:999px;transition:background .2s ease,color .2s ease}
 .video-abrir:hover .selo-som,.video-abrir:focus-visible .selo-som{background:var(--cobalto);color:#fff}
