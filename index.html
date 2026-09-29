@@ -33,7 +33,7 @@
   --ceu-escuro:#85b8d2;      /* o mesmo tom mais escuro, pro hover */
   --tarja-fundo:#f4c434;     /* amarelo dourado, complementar do azul do site, pra tarja da contagem chamar atenção */
   --tarja-fundo-escuro:#dfaa0c; /* o mesmo tom mais escuro, pro hover */
-  --marcas-linha:#dce9e9;    /* verde-água claro, tirado do preenchimento das pílulas da referência, só pro fio da faixa de marcas */
+  --marcas-linha:rgba(220,233,233,.45); /* mesmo verde-água das pílulas da referência, bem mais transparente pra ficar quase imperceptível */
   --topo:76px;               /* altura do menu fixo */
   --tarja:40px;              /* altura da tarja da contagem regressiva */
   --gutter:clamp(16px,5vw,48px);
@@ -274,7 +274,7 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
    itálico, na cor azul original do site (a mesma da referência que a
    Paloma mandou) */
 .destaque-azul{font-weight:700;font-style:italic;color:var(--cobalto)}
-.faixa-marcas{overflow:hidden;border-top:3px solid var(--marcas-linha);border-bottom:3px solid var(--marcas-linha)}
+.faixa-marcas{overflow:hidden;border-top:1px solid var(--marcas-linha);border-bottom:1px solid var(--marcas-linha)}
 .trilho{display:flex;width:max-content;animation:desliza 42s linear infinite}
 /* o hover pausa a faixa, pra dar tempo de ler ou de olhar um logo */
 .faixa-marcas:hover .trilho,.faixa-marcas:focus-within .trilho,
