@@ -329,33 +329,33 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .video-abrir:hover .assistir--video,.video-abrir:focus-visible .assistir--video{opacity:0}
 
 /* ===== 2.5 RESULTADO ===== */
-/* "palco": o print real do painel de anúncios fica grande, de fundo
-   (a prova em si, os números de verdade), e o vídeo flutua encostado
-   na parte de cima dele, com um brilho pulsando pra chamar atenção.
-   A margem negativa no vídeo é o que puxa ele pra baixo, pousando
-   sobre o topo do print (só a faixa de título/controles do painel,
-   nunca os números), em vez de tampar o que importa. */
-.resultados-palco{
-  display:flex;flex-direction:column;align-items:center;
-  max-width:560px;margin:48px auto 0;
-}
-.resultado-video-central{position:relative;z-index:2;width:min(52vw,210px);margin-bottom:-46px}
-.resultado-video-central .destaque-capa{
-  border-radius:20px;box-shadow:0 28px 50px rgba(43,45,53,.32);
+/* fundo azul claro (o mesmo dos botões), pedido pela Paloma pra essa
+   seção se destacar das outras, que são todas no fundo claro normal.
+   Como o marca-texto por padrão já usa esse mesmo azul de fundo, aqui
+   dentro ele vira o inverso (fundo branco, texto escuro) pra continuar
+   destacando ao invés de desaparecer dentro da própria seção. */
+.resultados-secao{background:var(--ceu)}
+.resultados-secao .marca-texto{background-color:var(--louca-clara);color:var(--cobalto-texto)}
+.resultados-grade{display:grid;grid-template-columns:.62fr 1fr;gap:clamp(32px,5vw,64px);align-items:center}
+.resultado-video-lado{display:flex;justify-content:center}
+.resultado-video-lado .destaque-capa{
+  width:min(70%,230px);border-radius:20px;box-shadow:0 28px 50px rgba(43,45,53,.28);
   animation:resultado-brilho 2.8s ease-in-out infinite;
 }
 @keyframes resultado-brilho{
-  0%,100%{box-shadow:0 0 0 0 rgba(134,142,166,.6),0 28px 50px rgba(43,45,53,.32)}
-  50%{box-shadow:0 0 0 18px rgba(134,142,166,0),0 28px 50px rgba(43,45,53,.32)}
+  0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.65),0 28px 50px rgba(43,45,53,.28)}
+  50%{box-shadow:0 0 0 18px rgba(255,255,255,0),0 28px 50px rgba(43,45,53,.28)}
 }
-.resultado-fundo-dados{position:relative;z-index:1;width:100%}
-.resultado-fundo-dados img{
-  display:block;width:100%;height:auto;border-radius:16px;
-  box-shadow:0 20px 44px rgba(43,45,53,.18);
+.resultado-print{margin-top:28px}
+.resultado-print img{
+  display:block;width:100%;height:auto;border-radius:14px;
+  box-shadow:0 18px 38px rgba(43,45,53,.22);
 }
 
-@media (max-width:640px){
-  .resultado-video-central{width:min(58vw,200px);margin-bottom:-34px}
+@media (max-width:860px){
+  .resultados-grade{grid-template-columns:1fr}
+  .resultado-video-lado .destaque-capa{width:min(60vw,230px)}
+  .resultado-video-lado{margin-bottom:8px}
 }
 
 /* ===== 3. DESTAQUES ===== */
@@ -710,22 +710,21 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   </section>
 
   <!-- ============ 2.5 RESULTADO ============ -->
-  <section id="resultados" class="secao">
-    <div class="env">
-      <p class="rotulo revela" data-i18n="resultadosRotulo">Resultado real</p>
-      <h2 class="titulo-secao revela" data-i18n="resultadosTitulo">Um vídeo, <mark class="marca-texto">295 leads</mark></h2>
-      <p class="intro-secao revela" data-i18n="resultadosIntro">Um criativo só, rodando como anúncio para a Byri, virou 295 conversas iniciadas a R$2,10 cada. Prova de que o conteúdo certo não só engaja, vende.</p>
-
-      <div class="resultados-palco revela">
-        <div class="resultado-video-central">
-          <div class="destaque-capa">
-            <img src="resultados/byri-capa.webp" alt="Capa do vídeo: o mule zebra da Byri" data-i18n-alt="resultadosVideoAlt" class="midia midia--916" loading="lazy" decoding="async">
-            <button type="button" class="video-abrir" id="resultadoVideoAbrir" data-id="S9WeMQ3JC-8" data-marca="Byri" data-titulo="O mule que virou anúncio" aria-label="Assistir o vídeo que gerou esse resultado" data-i18n-aria-label="resultadosVideoAria">
-              <span class="assistir" aria-hidden="true"></span>
-            </button>
-          </div>
+  <section id="resultados" class="secao resultados-secao">
+    <div class="env resultados-grade">
+      <div class="resultado-video-lado revela">
+        <div class="destaque-capa">
+          <img src="resultados/byri-capa.webp" alt="Capa do vídeo: o mule zebra da Byri" data-i18n-alt="resultadosVideoAlt" class="midia midia--916" loading="lazy" decoding="async">
+          <button type="button" class="video-abrir" id="resultadoVideoAbrir" data-id="S9WeMQ3JC-8" data-marca="Byri" data-titulo="O mule que virou anúncio" aria-label="Assistir o vídeo que gerou esse resultado" data-i18n-aria-label="resultadosVideoAria">
+            <span class="assistir" aria-hidden="true"></span>
+          </button>
         </div>
-        <div class="resultado-fundo-dados">
+      </div>
+      <div class="resultado-texto-lado">
+        <p class="rotulo revela" data-i18n="resultadosRotulo">Resultado real</p>
+        <h2 class="titulo-secao revela" data-i18n="resultadosTitulo">Um vídeo, <mark class="marca-texto">295 leads</mark></h2>
+        <p class="intro-secao revela" data-i18n="resultadosIntro">Um criativo só, rodando como anúncio para a Byri, virou 295 conversas iniciadas a R$2,10 cada. Prova de que o conteúdo certo não só engaja, vende.</p>
+        <div class="resultado-print revela">
           <img src="resultados/byri-dashboard.webp" alt="Print do painel de anúncios da Byri: 295 conversas por mensagem iniciadas, R$2,10 por conversa, R$618,13 de valor gasto" data-i18n-alt="resultadosFundoAlt" loading="lazy" decoding="async">
         </div>
       </div>
