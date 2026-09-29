@@ -8,7 +8,7 @@
 <meta name="theme-color" content="#868ea6">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fraunces:ital,wght@0,400;0,600;0,700;0,900;1,400;1,600&display=swap" rel="stylesheet">
 <style>
 /* =========================================================
    AZULEJO PORTUGUÊS
@@ -42,7 +42,7 @@ html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
 body{
   margin:0;
   padding-top:calc(var(--tarja) + var(--topo));
-  font-family:"Jost",system-ui,-apple-system,"Segoe UI",sans-serif;
+  font-family:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
   font-weight:300;
   font-size:1.02rem;
   line-height:1.65;
@@ -58,7 +58,7 @@ ul{list-style:none;margin:0;padding:0}
 a{color:inherit}
 button,input,textarea{font:inherit;color:inherit}
 p{margin:0}
-h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;line-height:1.12;letter-spacing:-.01em}
+h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-height:1.12;letter-spacing:-.01em}
 :focus-visible{outline:3px solid var(--cobalto);outline-offset:3px}
 .rodape :focus-visible{outline-color:#fff}
 .so-leitor{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -80,16 +80,16 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 
 /* ===== rótulo em itálico com fio embaixo ===== */
 .rotulo{
-  font-family:"Playfair Display",Georgia,serif;
+  font-family:"Fraunces",Georgia,serif;
   font-style:italic;font-size:1.02rem;color:var(--cobalto-texto);
   display:inline-block;padding-bottom:6px;margin-bottom:20px;
   border-bottom:1px solid var(--cobalto);letter-spacing:.02em;
 }
 .titulo-secao{font-size:clamp(2rem,4.6vw,3.2rem);max-width:20ch}
 .intro-secao{margin-top:18px;max-width:58ch;color:var(--tinta-media)}
-/* a Jost só carrega até o peso 600 (veja o <link> no <head>); "bolder"
-   sem número, a partir do peso 300 do parágrafo, o navegador só sobe pra
-   400, que não parece negrito nenhum. Por isso o peso vem explícito */
+/* "bolder" sem número, a partir do peso 300 do parágrafo, o navegador
+   só sobe pra 400, que não parece negrito nenhum. Por isso o peso
+   vem explícito */
 .intro-secao b{font-weight:600}
 
 /* ===== botões ===== */
@@ -150,7 +150,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
   .tarja-separador,.tarja-rotativo{display:none}
 }
 .barra{height:var(--topo);display:flex;align-items:center;justify-content:space-between;gap:16px}
-.marca-topo{font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:1.22rem;text-decoration:none;letter-spacing:.01em}
+.marca-topo{font-family:"Fraunces",Georgia,serif;font-weight:700;font-size:1.22rem;text-decoration:none;letter-spacing:.01em}
 /* agrupa o seletor de idioma, o hambúrguer e o menu do lado direito,
    pra "space-between" continuar só entre a logo e esse grupo (senão,
    com 4 filhos soltos, o space-between abriria um vão igual entre
@@ -291,7 +291,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
    outra e o texto passa rápido demais pra ler */
 .faixa-especialidades .trilho{animation-direction:reverse;animation-duration:93s}
 .especialidade{flex:0 0 auto;display:flex;align-items:center;gap:26px;padding:13px 26px;white-space:nowrap;
-  font-family:"Playfair Display",Georgia,serif;font-size:.98rem;letter-spacing:.14em;text-transform:uppercase}
+  font-family:"Fraunces",Georgia,serif;font-size:.98rem;letter-spacing:.14em;text-transform:uppercase}
 .especialidade::after{content:"";width:6px;height:6px;background:var(--azul-claro);display:block}
 @keyframes desliza{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
@@ -360,7 +360,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 
 /* ===== 3. DESTAQUES ===== */
 .destaques-grade{display:grid;grid-template-columns:.92fr 1.08fr;gap:clamp(28px,5vw,64px);align-items:center}
-.destaques-gancho{margin-top:20px;font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:1.3rem;color:var(--cobalto-texto)}
+.destaques-gancho{margin-top:20px;font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:1.3rem;color:var(--cobalto-texto)}
 .destaques-dica{margin-top:16px;font-size:.88rem;color:var(--tinta-media)}
 .destaques-palco{position:relative;display:flex;align-items:center;gap:clamp(6px,1vw,12px);min-width:0}
 .destaque-seta{flex:0 0 auto}
@@ -443,7 +443,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 }
 .bastidor-foto{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 1s ease}
 .bastidor-foto.visivel{opacity:1}
-.bastidor-legenda{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-size:1.3rem;color:var(--cobalto-texto);min-height:1.5em}
+.bastidor-legenda{font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:1.3rem;color:var(--cobalto-texto);min-height:1.5em}
 
 /* ===== 4. TRABALHOS POR NICHO, EM CARROSSEL ===== */
 .filtros{display:flex;flex-wrap:wrap;gap:10px;margin-top:36px}
@@ -452,8 +452,8 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .carrossel{margin-top:46px}
 .carrossel[hidden]{display:none}
 .carrossel-topo{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px}
-.carrossel-nome{font-family:"Playfair Display",Georgia,serif;font-style:italic;font-weight:600;font-size:1.4rem;color:var(--cobalto-texto);padding-bottom:8px;border-bottom:1px solid var(--cobalto)}
-.carrossel-contagem{font-family:"Jost",sans-serif;font-style:normal;font-weight:400;font-size:.8rem;color:var(--tinta-media);vertical-align:super}
+.carrossel-nome{font-family:"Fraunces",Georgia,serif;font-style:italic;font-weight:600;font-size:1.4rem;color:var(--cobalto-texto);padding-bottom:8px;border-bottom:1px solid var(--cobalto)}
+.carrossel-contagem{font-family:"Inter",sans-serif;font-style:normal;font-weight:400;font-size:.8rem;color:var(--tinta-media);vertical-align:super}
 .carrossel-setas{display:flex;gap:10px}
 .carrossel-setas[hidden]{display:none}
 .seta{width:48px;height:48px;border:2px solid var(--cobalto);background:transparent;color:var(--cobalto-texto);cursor:pointer;display:grid;place-items:center;font-size:1rem;line-height:1;border-radius:50%;transition:background .2s ease,color .2s ease}
@@ -539,7 +539,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 /* ===== 8. RODAPÉ ===== */
 .rodape{background:var(--cobalto);color:#fff;border-top:3px solid var(--cobalto);margin-top:20px}
 .rodape-grade{display:flex;flex-wrap:wrap;gap:24px;justify-content:space-between;align-items:center;padding:44px 0}
-.rodape-nome{font-family:"Playfair Display",Georgia,serif;font-size:1.6rem}
+.rodape-nome{font-family:"Fraunces",Georgia,serif;font-size:1.6rem}
 .rodape-redes{display:flex;flex-wrap:wrap;gap:22px}
 .rodape-redes a{font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.45);padding-bottom:3px}
 .rodape-redes a:hover{border-bottom-color:#fff}
