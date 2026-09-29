@@ -1203,6 +1203,13 @@ function definirIdioma(novo){
   montaDestaques();
   montaServicos();
   if (typeof videosAtuais !== "undefined" && videosAtuais.length) montaVideos(videosAtuais);
+
+  /* monta* acima troca o innerHTML de várias seções, o que cria elementos
+     .revela novos que o observador de rolagem (ligaObservadores, ligado só
+     uma vez no carregamento da página) nunca chegou a observar. Sem isso,
+     esses cards nasciam com opacity:0 pra sempre e não apareciam mais depois
+     de trocar de idioma (foi o que a Paloma viu acontecer em Serviços). */
+  observaRevela(document.querySelectorAll(".revela:not(.visivel)"));
 }
 
 function ligaIdioma(){
