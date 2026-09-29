@@ -331,11 +331,11 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
 /* ===== 2.5 RESULTADO ===== */
 /* fundo azul claro (o mesmo dos botões), pedido pela Paloma pra essa
    seção se destacar das outras, que são todas no fundo claro normal.
-   Como o marca-texto por padrão usa uma caixa azul de fundo, que
-   sumiria em cima desse mesmo azul, aqui dentro ele vira só texto
-   preto, negrito e itálico, sem caixa nenhuma. */
+   Como o marca-texto por padrão já usa esse mesmo azul de fundo, aqui
+   dentro ele vira o inverso (fundo branco, texto escuro) pra continuar
+   destacando ao invés de desaparecer dentro da própria seção. */
 .resultados-secao{background:var(--ceu)}
-.resultados-secao .marca-texto{background:none;color:#000;font-weight:700;padding:0}
+.resultados-secao .marca-texto{background-color:var(--louca-clara);color:var(--cobalto-texto)}
 .resultados-grade{display:grid;grid-template-columns:.62fr 1fr;gap:clamp(32px,5vw,64px);align-items:center}
 .resultado-video-lado{display:flex;justify-content:center}
 .resultado-video-lado .destaque-capa{
@@ -721,8 +721,9 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
         </div>
       </div>
       <div class="resultado-texto-lado">
+        <p class="rotulo revela" data-i18n="resultadosRotulo">Resultado real</p>
         <h2 class="titulo-secao revela" data-i18n="resultadosTitulo">Um vídeo, <mark class="marca-texto">295 leads</mark></h2>
-        <p class="intro-secao revela" data-i18n="resultadosIntro">Um criativo só, rodando como anúncio para a Byri, virou 295 conversas iniciadas a R$2,10 cada. Prova de que o conteúdo certo não só engaja, vende.</p>
+        <p class="intro-secao revela" data-i18n="resultadosIntro">Um criativo só, rodando como anúncio para a Byri, virou <b>295</b> conversas iniciadas a <b>R$2,10</b> cada. Prova de que o conteúdo certo não só engaja, vende.</p>
         <div class="resultado-print revela">
           <img src="resultados/byri-dashboard.webp" alt="Print do painel de anúncios da Byri: 295 conversas por mensagem iniciadas, R$2,10 por conversa, R$618,13 de valor gasto" data-i18n-alt="resultadosFundoAlt" loading="lazy" decoding="async">
         </div>
@@ -1100,8 +1101,9 @@ const TEXTOS = {
   sobrePilula3: { pt: "+ de 1 ano criando UGC", en: "+ 1 year creating UGC" },
   sobreMarcasTitulo: { pt: "Marcas que já criaram comigo", en: "Brands that already created with me" },
 
+  resultadosRotulo: { pt: "Resultado real", en: "Real result" },
   resultadosTitulo: { pt: 'Um vídeo, <mark class="marca-texto">295 leads</mark>', en: 'One video, <mark class="marca-texto">295 leads</mark>' },
-  resultadosIntro: { pt: "Um criativo só, rodando como anúncio para a Byri, virou 295 conversas iniciadas a R$2,10 cada. Prova de que o conteúdo certo não só engaja, vende.", en: "Just one creative, running as a paid ad for Byri, turned into 295 conversations started at R$2,10 each. Proof that the right content doesn't just engage, it sells." },
+  resultadosIntro: { pt: "Um criativo só, rodando como anúncio para a Byri, virou <b>295</b> conversas iniciadas a <b>R$2,10</b> cada. Prova de que o conteúdo certo não só engaja, vende.", en: "Just one creative, running as a paid ad for Byri, turned into <b>295</b> conversations started at <b>R$2,10</b> each. Proof that the right content doesn't just engage, it sells." },
   resultadosFundoAlt: { pt: "Print do painel de anúncios da Byri: 295 conversas por mensagem iniciadas, R$2,10 por conversa, R$618,13 de valor gasto", en: "Byri ad dashboard screenshot: 295 conversations started, R$2,10 per conversation, R$618,13 spent" },
   resultadosVideoAlt: { pt: "Capa do vídeo: o mule zebra da Byri", en: "Video cover: the Byri zebra mule" },
   resultadosVideoAria: { pt: "Assistir o vídeo que gerou esse resultado", en: "Watch the video that generated this result" },
