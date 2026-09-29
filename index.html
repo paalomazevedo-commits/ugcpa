@@ -329,21 +329,49 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 .video-abrir:hover .assistir--video,.video-abrir:focus-visible .assistir--video{opacity:0}
 
 /* ===== 2.5 RESULTADO ===== */
-.resultados-grade{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(28px,5vw,64px);align-items:center}
-.resultados-cards{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:clamp(22px,3vw,36px)}
-/* "card flutuante": sombra forte pra dar a sensação de estar solto sobre
-   o fundo, com uma leve rotação na imagem do resultado pra parecer um
-   print colado meio torto, tipo mural */
-.resultado-card{
-  flex:1 1 220px;max-width:280px;border-radius:20px;overflow:hidden;
-  box-shadow:0 26px 46px rgba(43,45,53,.24);
-  transition:transform .3s ease,box-shadow .3s ease;
+/* "palco": o vídeo fica fixo no centro (com um brilho pulsando pra
+   chamar atenção, tipo referência que a Paloma mandou) e os números
+   reais do anúncio flutuam ao redor dele, cada um num cartão solto
+   com sombra. Em telas largas os cartões saem da posição normal do
+   documento (position:absolute) pra poder cercar o vídeo; no celular
+   isso vira uma bagunça, então a media query lá embaixo desmonta tudo
+   pra uma pilha simples: vídeo em cima, números embaixo em linha. */
+.resultados-palco{
+  position:relative;max-width:760px;margin:48px auto 0;
+  padding:60px clamp(72px,15vw,140px) 60px;
 }
-.resultado-card:hover{transform:translateY(-6px);box-shadow:0 32px 54px rgba(43,45,53,.3)}
-.resultado-imagem-flutuante{transform:rotate(-2.5deg);background:var(--louca-clara)}
-.resultado-imagem-flutuante:hover{transform:rotate(-2.5deg) translateY(-6px)}
-.resultado-imagem-flutuante img{display:block;width:100%;height:auto}
-.resultado-video .destaque-capa{border-radius:20px;height:100%}
+.resultado-video-central{position:relative;z-index:2;width:min(70vw,240px);margin-inline:auto}
+.resultado-video-central .destaque-capa{
+  border-radius:22px;box-shadow:0 28px 50px rgba(43,45,53,.26);
+  animation:resultado-brilho 2.8s ease-in-out infinite;
+}
+@keyframes resultado-brilho{
+  0%,100%{box-shadow:0 0 0 0 rgba(134,142,166,.55),0 28px 50px rgba(43,45,53,.26)}
+  50%{box-shadow:0 0 0 18px rgba(134,142,166,0),0 28px 50px rgba(43,45,53,.26)}
+}
+.resultado-flutuante{
+  position:absolute;z-index:3;min-width:118px;
+  background:var(--louca-clara);border-radius:16px;padding:14px 16px;text-align:center;
+  box-shadow:0 18px 32px rgba(43,45,53,.2);
+}
+.resultado-numero{font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:1.55rem;color:var(--cobalto-texto);white-space:nowrap}
+.resultado-legenda{margin-top:2px;font-size:.7rem;letter-spacing:.02em;color:var(--tinta-media)}
+.resultado-flutuante--1{top:6px;left:0}
+.resultado-flutuante--2{top:64px;right:0}
+.resultado-flutuante--3{bottom:6px;left:14px}
+
+/* no celular não tem espaço em volta pra flutuar nada: desmonta o
+   palco pra uma pilha simples, com o vídeo primeiro (por isso o
+   order:-1, já que no HTML ele vem depois dos números) e os três
+   cartões numa linha embaixo */
+@media (max-width:640px){
+  .resultados-palco{
+    position:static;padding:0;max-width:340px;margin-top:32px;
+    display:flex;flex-wrap:wrap;justify-content:center;gap:14px;
+  }
+  .resultado-video-central{width:min(70vw,230px);order:-1;flex:0 0 100%;margin-bottom:6px}
+  .resultado-flutuante{position:static;flex:0 0 auto;min-width:100px}
+}
 
 /* ===== 3. DESTAQUES ===== */
 .destaques-grade{display:grid;grid-template-columns:.92fr 1.08fr;gap:clamp(28px,5vw,64px);align-items:center}
@@ -557,7 +585,7 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 
 /* ===== responsivo ===== */
 @media (max-width:980px){
-  .sobre-grade,.contato-grade,.destaques-grade,.resultados-grade{grid-template-columns:1fr}
+  .sobre-grade,.contato-grade,.destaques-grade{grid-template-columns:1fr}
 }
 @media (max-width:900px){
   .hamburguer{display:grid}
@@ -698,17 +726,25 @@ h1,h2,h3{margin:0;font-family:"Playfair Display",Georgia,serif;font-weight:700;l
 
   <!-- ============ 2.5 RESULTADO ============ -->
   <section id="resultados" class="secao">
-    <div class="env resultados-grade">
-      <div class="resultados-texto">
-        <p class="rotulo revela" data-i18n="resultadosRotulo">Resultado real</p>
-        <h2 class="titulo-secao revela" data-i18n="resultadosTitulo">Um vídeo, <mark class="marca-texto">295 leads</mark></h2>
-        <p class="intro-secao revela" data-i18n="resultadosIntro">Um criativo só, rodando como anúncio para a Byri, virou 295 conversas iniciadas a R$2,10 cada. Prova de que o conteúdo certo não só engaja, vende.</p>
-      </div>
-      <div class="resultados-cards">
-        <figure class="resultado-card resultado-imagem-flutuante revela">
-          <img src="resultados/byri.webp" alt="Gráfico de resultado do anúncio da Byri: 295 leads com 1 criativo, a R$2,10 por conversa, R$618,13 investidos" data-i18n-alt="resultadosImagemAlt" loading="lazy" decoding="async">
-        </figure>
-        <div class="resultado-card resultado-video revela">
+    <div class="env">
+      <p class="rotulo revela" data-i18n="resultadosRotulo">Resultado real</p>
+      <h2 class="titulo-secao revela" data-i18n="resultadosTitulo">Um vídeo, <mark class="marca-texto">295 leads</mark></h2>
+      <p class="intro-secao revela" data-i18n="resultadosIntro">Um criativo só, rodando como anúncio para a Byri, virou 295 conversas iniciadas a R$2,10 cada. Prova de que o conteúdo certo não só engaja, vende.</p>
+
+      <div class="resultados-palco revela">
+        <div class="resultado-flutuante resultado-flutuante--1">
+          <p class="resultado-numero">295</p>
+          <p class="resultado-legenda" data-i18n="resultadosStat1Legenda">conversas iniciadas</p>
+        </div>
+        <div class="resultado-flutuante resultado-flutuante--2">
+          <p class="resultado-numero">R$2,10</p>
+          <p class="resultado-legenda" data-i18n="resultadosStat2Legenda">por conversa</p>
+        </div>
+        <div class="resultado-flutuante resultado-flutuante--3">
+          <p class="resultado-numero">R$618,13</p>
+          <p class="resultado-legenda" data-i18n="resultadosStat3Legenda">investidos em anúncio</p>
+        </div>
+        <div class="resultado-video-central">
           <div class="destaque-capa">
             <img src="resultados/byri-capa.webp" alt="Capa do vídeo: o mule zebra da Byri" data-i18n-alt="resultadosVideoAlt" class="midia midia--916" loading="lazy" decoding="async">
             <button type="button" class="video-abrir" id="resultadoVideoAbrir" data-id="S9WeMQ3JC-8" data-marca="Byri" data-titulo="O mule que virou anúncio" aria-label="Assistir o vídeo que gerou esse resultado" data-i18n-aria-label="resultadosVideoAria">
@@ -1093,7 +1129,9 @@ const TEXTOS = {
   resultadosRotulo: { pt: "Resultado real", en: "Real result" },
   resultadosTitulo: { pt: 'Um vídeo, <mark class="marca-texto">295 leads</mark>', en: 'One video, <mark class="marca-texto">295 leads</mark>' },
   resultadosIntro: { pt: "Um criativo só, rodando como anúncio para a Byri, virou 295 conversas iniciadas a R$2,10 cada. Prova de que o conteúdo certo não só engaja, vende.", en: "Just one creative, running as a paid ad for Byri, turned into 295 conversations started at R$2,10 each. Proof that the right content doesn't just engage, it sells." },
-  resultadosImagemAlt: { pt: "Gráfico de resultado do anúncio da Byri: 295 leads com 1 criativo, a R$2,10 por conversa, R$618,13 investidos", en: "Byri ad results chart: 295 leads from 1 creative, R$2,10 per conversation, R$618,13 invested" },
+  resultadosStat1Legenda: { pt: "conversas iniciadas", en: "conversations started" },
+  resultadosStat2Legenda: { pt: "por conversa", en: "per conversation" },
+  resultadosStat3Legenda: { pt: "investidos em anúncio", en: "invested in ads" },
   resultadosVideoAlt: { pt: "Capa do vídeo: o mule zebra da Byri", en: "Video cover: the Byri zebra mule" },
   resultadosVideoAria: { pt: "Assistir o vídeo que gerou esse resultado", en: "Watch the video that generated this result" },
   resultadosVideoTitulo: { pt: "O mule que virou anúncio", en: "The mule that became an ad" },
