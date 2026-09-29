@@ -1613,23 +1613,17 @@ function montaVideos(listaCompleta){
   window.addEventListener("resize", atualizaSetas);
 
   /* a capa (a miniatura real do vídeo, veja o <img class="video-poster">
-     no template do card) já aparece pronta, sem carregar nada. O iframe
-     só nasce quando o mouse ou o dedo passa por cima, pra dar esse
-     efeito de pré-visualização em movimento, e é destruído assim que o
-     mouse sai, pra não ficar tocando escondido atrás da capa.
+     no template do card) já aparece pronta, sem carregar nada. Todo
+     vídeo que estiver de verdade visível toca sozinho, mudo, sem
+     precisar de mouse nem clique; o som só entra se a pessoa clicar (o
+     que abre o visor grande). Sai de visível (rolou pra fora, trocou de
+     filtro), o vídeo pausa e volta pra capa.
 
-     Exceção: o primeiro vídeo de cada nicho (video-card--auto) toca
-     sozinho, sem precisar de mouse, assim que aparece na tela, pra
-     sempre ter pelo menos um vídeo rodando mudo em cada categoria. */
-  const cards = document.querySelectorAll("#carrosseis .video-card");
-
-  carrosseis.forEach(function(c){
-    const primeiro = c.querySelector(".trilho-videos .video-card");
-    if (primeiro) primeiro.classList.add("video-card--auto");
-  });
-
-  function ehAuto(card){ return card.classList.contains("video-card--auto"); }
-
+     O observador de cada nicho usa a própria faixa (.trilho-videos)
+     como "tela" de referência (root), não a janela do navegador. Sem
+     isso, um vídeo rolado pra fora da faixa (mas ainda dentro da
+     página, só escondido pelo overflow da faixa) contava como visível
+     e tocava escondido, disputando rede e deixando tudo mais lento. */
   function iniciaPreVisualizacao(card){
     if (visorAberto) return;
     const quadro = card.querySelector(".video-quadro");
@@ -1639,8 +1633,8 @@ function montaVideos(listaCompleta){
     frame.title = botao.dataset.nome;
     frame.setAttribute("allow", "autoplay; encrypted-media; picture-in-picture");
     /* sem loading="lazy" aqui: o card só ganha esse iframe quando já está
-       visível (por hover ou por entrar na tela), então esperar o navegador
-       reconfirmar a visibilidade só atrasava o vídeo começar a tocar */
+       de fato visível, então esperar o navegador reconfirmar isso só
+       atrasava o vídeo começar a tocar */
     frame.setAttribute("src", enderecoVideo(botao.dataset.id, false));
     quadro.insertBefore(frame, botao);
   }
@@ -1650,43 +1644,21 @@ function montaVideos(listaCompleta){
   }
   retomaVideos = function(){};
 
-  cards.forEach(function(card){
-    card.addEventListener("mouseenter", function(){ iniciaPreVisualizacao(card); });
-    /* o card automático não para ao tirar o mouse, só quando sai da tela */
-    card.addEventListener("mouseleave", function(){ if (!ehAuto(card)) paraPreVisualizacao(card); });
-    card.addEventListener("touchstart", function(){ iniciaPreVisualizacao(card); }, { passive: true });
-  });
-
-  /* passar o mouse em qualquer parte da faixa de vídeos de um nicho liga
-     todos os vídeos daquele nicho juntos (não só o card debaixo do
-     cursor); tirar o mouse da faixa para todos, menos o automático. */
   carrosseis.forEach(function(c){
     const trilho = c.querySelector(".trilho-videos");
     const cardsDoNicho = c.querySelectorAll(".video-card");
-    trilho.addEventListener("mouseenter", function(){
+    if (!("IntersectionObserver" in window)){
       cardsDoNicho.forEach(function(card){ iniciaPreVisualizacao(card); });
-    });
-    trilho.addEventListener("mouseleave", function(){
-      cardsDoNicho.forEach(function(card){ if (!ehAuto(card)) paraPreVisualizacao(card); });
-    });
-  });
-
-  /* no celular não existe "tirar o mouse de cima", então quando o card
-     tocado sai da tela de rolagem, essa pré-visualização é destruída.
-     Pros cards automáticos, essa mesma observação faz o papel do
-     mouseenter: liga sozinho assim que entra na tela. */
-  if ("IntersectionObserver" in window){
-    const obs = new IntersectionObserver(function(entradas){
+      return;
+    }
+    const obsNicho = new IntersectionObserver(function(entradas){
       entradas.forEach(function(e){
-        if (e.isIntersecting){
-          if (ehAuto(e.target)) iniciaPreVisualizacao(e.target);
-        } else {
-          paraPreVisualizacao(e.target);
-        }
+        if (e.isIntersecting) iniciaPreVisualizacao(e.target);
+        else paraPreVisualizacao(e.target);
       });
-    }, { threshold: 0 });
-    cards.forEach(function(c){ obs.observe(c); });
-  }
+    }, { root: trilho, threshold: .5 });
+    cardsDoNicho.forEach(function(card){ obsNicho.observe(card); });
+  });
 
   /* filtro por categoria: mostra só os carrosséis escolhidos */
   const botoes = document.querySelectorAll("#filtros .filtro");
