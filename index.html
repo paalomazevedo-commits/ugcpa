@@ -285,11 +285,13 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
    pro outro lado. Como as duas voltas da lista são idênticas, o laço
    fecha sem emenda igual */
 .faixa-especialidades{overflow:hidden;background:var(--cobalto);color:#fff}
-/* a faixa azul é bem mais comprida que a dos logos (são 16 termos), então
+/* a faixa azul é mais comprida que a dos logos (são 11 termos), então
    ela precisa de mais tempo pra andar no MESMO ritmo: as duas ficam em
    cerca de 48 pixels por segundo, senão uma parece disparada ao lado da
-   outra e o texto passa rápido demais pra ler */
-.faixa-especialidades .trilho{animation-direction:reverse;animation-duration:93s}
+   outra e o texto passa rápido demais pra ler. Sem animation-direction
+   aqui, ela segue o sentido padrão do @keyframes desliza (direita pra
+   esquerda), igual a faixa dos logos das marcas */
+.faixa-especialidades .trilho{animation-duration:62s}
 .especialidade{flex:0 0 auto;display:flex;align-items:center;gap:26px;padding:13px 26px;white-space:nowrap;
   font-family:"Fraunces",Georgia,serif;font-size:.98rem;letter-spacing:.14em;text-transform:uppercase}
 .especialidade::after{content:"";width:6px;height:6px;background:var(--azul-claro);display:block}
@@ -940,11 +942,7 @@ const ESPECIALIDADES = [
   { pt: "Unboxing", en: "Unboxing" },
   { pt: "Demonstração de produto", en: "Product demo" },
   { pt: "Review honesto", en: "Honest review" },
-  { pt: "Gancho nos 3 primeiros segundos", en: "Hook in the first 3 seconds" },
-  { pt: "Corte para anúncio", en: "Ad cutdown" },
-  { pt: "Vídeo vertical 9:16", en: "Vertical video 9:16" },
-  { pt: "Foto para página de produto", en: "Product page photo" },
-  { pt: "Direção de cena", en: "Scene direction" }
+  { pt: "Foto para página de produto", en: "Product page photo" }
 ];
 
 /* --- 3) CONTEÚDOS DE DESTAQUE (os três vídeos grandes) ---
