@@ -347,6 +347,18 @@ tr.linha-favorita{box-shadow:inset 3px 0 0 var(--ambar)}
 .link-contato:hover{text-decoration:underline}
 .acoes-contato{display:flex;gap:6px}
 
+/* ---------- seleção de marcas (pra mandar prospecção depois) ---------- */
+.selecao-resumo{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:14px;
+  padding:9px 12px;background:var(--cobalto-fundo);border:1px solid var(--azul-claro);
+  border-radius:var(--raio);font-size:.83rem;color:var(--cobalto-escuro);font-weight:500;
+}
+.selecao-resumo-espaco{flex:1}
+.botao--mini{padding:5px 11px;font-size:.76rem}
+.marcas-check-cel{width:30px;text-align:center}
+.mc-checkbox{width:15px;height:15px;cursor:pointer}
+.mc-checkbox:disabled{cursor:default;opacity:.35}
+
 /* ============================================================
    CALENDÁRIO
    ============================================================ */
@@ -476,6 +488,101 @@ tr.linha-favorita{box-shadow:inset 3px 0 0 var(--ambar)}
 .revisao-blocos{display:grid;gap:12px}
 
 /* ============================================================
+   PROSPECÇÃO
+   ============================================================ */
+
+/* ---------- capa ---------- */
+.prosp-capa{
+  background:linear-gradient(135deg,var(--cobalto),var(--cobalto-escuro));
+  color:#fff;border-radius:8px;padding:22px 24px;margin-bottom:18px;
+}
+.prosp-capa-topo{display:flex;align-items:center;gap:16px}
+.prosp-capa-icone{
+  flex:0 0 auto;width:44px;height:44px;border-radius:8px;background:rgba(255,255,255,.18);
+  display:grid;place-items:center;color:#fff;
+}
+.prosp-capa-icone svg{width:22px;height:22px}
+.prosp-capa-texto{flex:1;min-width:0}
+.prosp-capa-texto h2{font-size:1.18rem;font-weight:600;margin-bottom:3px}
+.prosp-capa-texto p{font-size:.84rem;color:rgba(255,255,255,.82);line-height:1.5}
+.prosp-capa-numero{flex:0 0 auto;text-align:right}
+.prosp-capa-numero-valor{display:block;font-size:1.9rem;font-weight:600;line-height:1}
+.prosp-capa-numero-legenda{display:block;margin-top:4px;font-size:.72rem;color:rgba(255,255,255,.75);white-space:nowrap}
+.prosp-capa-etiquetas{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.prosp-etiqueta{
+  padding:5px 12px;border-radius:99px;background:rgba(255,255,255,.16);
+  font-size:.74rem;color:#fff;white-space:nowrap;
+}
+
+/* ---------- cartões coloridos ---------- */
+.prosp-cartoes{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:22px}
+.prosp-cartao{
+  background:var(--louca-clara);border:1px solid var(--fio-forte);border-radius:var(--raio);
+  padding:14px 16px;border-left:4px solid var(--fio-forte);
+}
+.prosp-cartao-valor{display:block;font-size:1.5rem;font-weight:600;line-height:1}
+.prosp-cartao-rotulo{display:block;margin-top:5px;font-size:.78rem;color:var(--tinta-media)}
+.prosp-cartao-contexto{display:block;margin-top:2px;font-size:.7rem;color:var(--tinta-fraca)}
+.prosp-cartao--principal{border-left-color:var(--cobalto)}
+.prosp-cartao--principal .prosp-cartao-valor{color:var(--cobalto)}
+.prosp-cartao--azul{border-left-color:var(--azul-claro)}
+.prosp-cartao--azul .prosp-cartao-valor{color:#1f6fb3}
+.prosp-cartao--verde{border-left-color:var(--verde)}
+.prosp-cartao--verde .prosp-cartao-valor{color:var(--verde)}
+.prosp-cartao--ambar{border-left-color:var(--ambar)}
+.prosp-cartao--ambar .prosp-cartao-valor{color:var(--ambar)}
+.prosp-cartao--vermelho{border-left-color:var(--vermelho)}
+.prosp-cartao--vermelho .prosp-cartao-valor{color:var(--vermelho)}
+
+/* ---------- modo de envio (automático / rascunho) ---------- */
+.prosp-modo-envio{margin-bottom:18px}
+.prosp-modo-envio-rotulo{display:block;font-size:.74rem;letter-spacing:.05em;text-transform:uppercase;color:var(--tinta-media);margin-bottom:8px}
+
+/* ---------- grade formulário + prévia ---------- */
+.prosp-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.prosp-form-col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.prosp-bloco{min-width:0}
+.prosp-preview-col{position:sticky;top:16px;min-width:0}
+.prosp-contagem .aviso{margin:10px 0}
+
+/* ---------- prévia: palco + janela de e-mail flutuante ---------- */
+.prosp-palco{
+  background:#ecebe0;border:1px solid var(--fio-forte);border-radius:8px;
+  box-shadow:inset 0 1px 4px rgba(22,35,59,.06);
+  padding:20px;
+}
+.prosp-janela-email{
+  background:#fff;border-radius:6px;box-shadow:0 6px 24px rgba(22,35,59,.12);
+  overflow:hidden;max-height:70vh;overflow-y:auto;
+}
+.prosp-janela-cabecalho{display:flex;gap:12px;align-items:flex-start;padding:16px 18px;border-bottom:1px solid var(--fio)}
+.prosp-janela-avatar{
+  flex:0 0 auto;width:36px;height:36px;border-radius:50%;background:var(--cobalto);color:#fff;
+  display:grid;place-items:center;font-weight:600;font-size:.95rem;
+}
+.prosp-janela-assunto{font-size:1rem;font-weight:600;color:var(--tinta)}
+.prosp-janela-de{margin-top:2px;font-size:.78rem;color:var(--tinta-media)}
+.prosp-janela-corpo{background:#f7f7f2}
+
+/* ---------- progresso do disparo ---------- */
+.prosp-progresso{margin-top:16px}
+.prosp-progresso-barra{height:9px;background:var(--fio);border-radius:99px;overflow:hidden}
+.prosp-progresso-corpo{height:100%;background:var(--cobalto);border-radius:99px;transition:width .3s ease}
+
+/* ---------- fila de rascunhos ---------- */
+.prosp-fila-item{border:1px solid var(--fio-forte);border-radius:var(--raio);padding:16px;background:var(--louca)}
+.prosp-fila-item-topo{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.prosp-fila-item-topo strong{font-size:.95rem}
+.prosp-fila-item-topo span{font-size:.8rem;color:var(--tinta-media)}
+.prosp-fila-item-assunto{font-weight:600;font-size:.88rem;margin-bottom:8px}
+.prosp-fila-item-corpo{
+  white-space:pre-wrap;font-family:inherit;font-size:.84rem;line-height:1.6;color:var(--tinta);
+  background:var(--louca-clara);border:1px solid var(--fio);border-radius:var(--raio);padding:12px;
+  max-height:260px;overflow-y:auto;margin:0 0 12px;
+}
+.prosp-fila-item-acoes{display:flex;gap:8px;flex-wrap:wrap}
+
+/* ============================================================
    RESPONSIVO
    ============================================================ */
 @media (max-width:900px){
@@ -490,4 +597,8 @@ tr.linha-favorita{box-shadow:inset 3px 0 0 var(--ambar)}
   .campo-linha{grid-template-columns:1fr}
   .calendario-mes-nome{min-width:0}
   .dia-mes{min-height:74px}
+  .prosp-grid{grid-template-columns:1fr}
+  .prosp-preview-col{position:static}
+  .prosp-capa-topo{flex-wrap:wrap}
+  .prosp-capa-numero{text-align:left}
 }

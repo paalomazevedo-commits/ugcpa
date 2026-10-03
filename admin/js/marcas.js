@@ -41,9 +41,15 @@
         '<div class="chips-filtro" id="mcChipsNicho"></div>' +
         '<button type="button" class="chip-filtro chip-filtro--estrela" id="mcSoFavoritas" aria-pressed="false">' + A.icone("estrela") + "Só favoritas</button>" +
       "</div>" +
+      '<div class="selecao-resumo">' +
+        '<span id="mcResumoTexto">0 marcas selecionadas</span>' +
+        '<div class="selecao-resumo-espaco"></div>' +
+        '<button type="button" class="botao botao--linha botao--mini" id="mcSelecionarVisiveis">Selecionar as que aparecem</button>' +
+        '<button type="button" class="botao botao--fantasma botao--mini" id="mcLimparSelecao">Limpar seleção</button>' +
+      "</div>" +
       '<div class="tabela-scroll"><table class="tabela"><thead><tr>' +
-        '<th></th><th>Marca</th><th>Instagram</th><th>E-mail</th><th>Telefone</th><th>Nicho</th><th>Situação</th><th>Observação</th><th>Último contato</th>' +
-      '</tr></thead><tbody id="mcTabela"><tr class="tabela-vazia"><td colspan="9">Carregando…</td></tr></tbody></table></div>';
+        '<th></th><th></th><th>Marca</th><th>Instagram</th><th>E-mail</th><th>Telefone</th><th>Nicho</th><th>Situação</th><th>Observação</th><th>Último contato</th>' +
+      '</tr></thead><tbody id="mcTabela"><tr class="tabela-vazia"><td colspan="10">Carregando…</td></tr></tbody></table></div>';
 
     var chips = ['<button type="button" class="chip-filtro" data-situacao="todas" aria-pressed="true">Todas</button>'];
     ORDEM_SITUACOES.forEach(function (s) {
@@ -73,7 +79,44 @@
     document.getElementById("mcBaixar").addEventListener("click", baixarCSV);
     document.getElementById("mcImportar").addEventListener("click", abrirImportador);
 
+    document.getElementById("mcSelecionarVisiveis").addEventListener("click", function () {
+      var alvo = filtradas().filter(function (m) { return m.email && !m.selecionada; });
+      if (!alvo.length) return;
+      Promise.all(alvo.map(function (m) {
+        return A.gravar("marcas", "update", { id: m.id, valores: { selecionada: true } });
+      })).then(function (resultados) {
+        var falhou = false;
+        resultados.forEach(function (r, i) { if (r.ok) alvo[i].selecionada = true; else falhou = true; });
+        if (falhou) A.toast("Selecionei a maioria, mas algumas não salvaram. Tenta de novo.", "erro");
+        renderTabela();
+      });
+    });
+
+    document.getElementById("mcLimparSelecao").addEventListener("click", function () {
+      var alvo = todas.filter(function (m) { return m.selecionada; });
+      if (!alvo.length) return;
+      Promise.all(alvo.map(function (m) {
+        return A.gravar("marcas", "update", { id: m.id, valores: { selecionada: false } });
+      })).then(function (resultados) {
+        var falhou = false;
+        resultados.forEach(function (r, i) { if (r.ok) alvo[i].selecionada = false; else falhou = true; });
+        if (falhou) A.toast("Limpei a maioria, mas algumas não salvaram. Tenta de novo.", "erro");
+        renderTabela();
+      });
+    });
+
     carregar();
+  }
+
+  function atualizarResumoSelecao() {
+    var selecionadas = todas.filter(function (m) { return m.selecionada; });
+    var visiveisComEmail = filtradas().filter(function (m) { return m.email; });
+    var textoEl = document.getElementById("mcResumoTexto");
+    if (textoEl) textoEl.textContent = selecionadas.length + (selecionadas.length === 1 ? " marca selecionada" : " marcas selecionadas");
+    var botaoLimpar = document.getElementById("mcLimparSelecao");
+    if (botaoLimpar) botaoLimpar.disabled = !selecionadas.length;
+    var botaoVisiveis = document.getElementById("mcSelecionarVisiveis");
+    if (botaoVisiveis) botaoVisiveis.disabled = !visiveisComEmail.length;
   }
 
   function carregar() {
@@ -152,9 +195,10 @@
     var corpo = document.getElementById("mcTabela");
     var lista = filtradas();
     if (!lista.length) {
-      corpo.innerHTML = '<tr class="tabela-vazia"><td colspan="9">' +
+      corpo.innerHTML = '<tr class="tabela-vazia"><td colspan="10">' +
         (todas.length ? "Nenhuma marca encontrada com esse filtro." : 'Nenhuma marca cadastrada ainda. Clique em "Adicionar marca" pra começar.') +
         "</td></tr>";
+      atualizarResumoSelecao();
       return;
     }
     corpo.innerHTML = lista.map(function (m) {
@@ -162,6 +206,7 @@
       var linkInsta = linkInstagram(m.instagram);
       var linkZap = linkWhatsapp(m.telefone);
       return '<tr class="linha-clicavel' + (m.favorita ? " linha-favorita" : "") + (m.exemplo ? " linha-exemplo" : "") + '" data-id="' + A.esc(m.id) + '">' +
+        '<td class="marcas-check-cel"><input type="checkbox" class="mc-checkbox" data-selecionar="' + A.esc(m.id) + '"' + (m.selecionada ? " checked" : "") + (m.email ? "" : " disabled") + ' aria-label="Selecionar ' + A.esc(m.nome) + '" data-parar></td>' +
         '<td class="campanha-estrela-cel"><button type="button" class="botao-estrela" data-estrela="' + A.esc(m.id) + '" data-marcada="' + (m.favorita ? "true" : "false") + '" aria-label="Favoritar marca" data-parar>' + A.icone("estrela") + "</button></td>" +
         "<td>" + A.esc(m.nome) + (m.exemplo ? '<span class="etiqueta-exemplo">exemplo</span>' : "") + "</td>" +
         "<td>" + (linkInsta ? '<a class="link-contato" href="' + A.esc(linkInsta) + '" target="_blank" rel="noopener" data-parar>' + A.icone("instagram") + A.esc(m.instagram) + "</a>" : "-") + "</td>" +
@@ -194,6 +239,20 @@
         });
       });
     });
+    corpo.querySelectorAll("[data-selecionar]").forEach(function (cb) {
+      cb.addEventListener("change", function (e) {
+        e.stopPropagation();
+        var novo = cb.checked;
+        A.gravar("marcas", "update", { id: cb.dataset.selecionar, valores: { selecionada: novo } }).then(function (r) {
+          if (!r.ok) { A.toast("Não consegui salvar a seleção. Tenta de novo.", "erro"); cb.checked = !novo; return; }
+          var m = todas.filter(function (x) { return x.id === cb.dataset.selecionar; })[0];
+          if (m) m.selecionada = novo;
+          atualizarResumoSelecao();
+        });
+      });
+    });
+
+    atualizarResumoSelecao();
   }
 
   function baixarCSV() {

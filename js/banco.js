@@ -33,4 +33,9 @@
   }
 
   window.banco = window.supabase.createClient(URL_PROJETO, CHAVE_PUBLICA);
+
+  // O endereço do projeto, exposto pra quem precisar montar a URL de uma
+  // Edge Function (como a aba Prospecção). Continua sendo só este arquivo
+  // que sabe o endereço: o resto do site lê daqui, nunca copia o texto.
+  window.URL_PROJETO_SUPABASE = URL_PROJETO;
 })();
