@@ -494,6 +494,29 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
 .video-marca{font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cobalto-texto)}
 .video-titulo{font-size:1.05rem;margin-top:5px}
 
+/* ===== DICA DE CURSOR (a setinha animada ao passar o mouse) =====
+   Um "fantasma" do cursor, só decorativo, que aparece e se move
+   sozinho quando o mouse passa em cima da capa/vídeo, sugerindo que
+   dá pra interagir ali. pointer-events:none pra nunca atrapalhar o
+   clique de verdade, que continua sendo o botão por baixo. */
+.dica-cursor{
+  position:absolute;top:50%;left:50%;z-index:3;
+  width:30px;height:30px;pointer-events:none;
+  opacity:0;transition:opacity .25s ease;
+  transform:translate(-50%,-50%);
+  filter:drop-shadow(0 3px 8px rgba(11,18,32,.35));
+}
+.dica-cursor svg{display:block;width:100%;height:100%}
+.destaque-capa:hover .dica-cursor,
+.video-quadro:hover .dica-cursor{
+  opacity:1;
+  animation:dicaCursorMove 1.7s ease-in-out infinite;
+}
+@keyframes dicaCursorMove{
+  0%,100%{transform:translate(-50%,-50%)}
+  50%{transform:translate(calc(-50% + 16px),calc(-50% + 16px))}
+}
+
 /* ===== visor que abre o vídeo com som ===== */
 .visor{position:fixed;inset:0;z-index:130;display:grid;place-items:center;padding:18px;background:rgba(11,18,32,.9)}
 .visor[hidden]{display:none}
@@ -1364,6 +1387,7 @@ function montaDestaques(){
           '<img src="' + esc(d.capa) + '" alt="' + esc(rotuloCapa + titulo) + '" ' +
             'class="midia midia--916" loading="lazy" decoding="async">' +
           '<span class="destaque-marca-flutuante">' + esc(d.marca) + '</span>' +
+          '<span class="dica-cursor" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3l14.5 6.2-6.1 2.1-2.1 6.1L5 3z" fill="var(--louca-clara)" stroke="var(--cobalto-texto)" stroke-width="1.4" stroke-linejoin="round"/></svg></span>' +
           '<button type="button" class="video-abrir" data-id="' + esc(idVideo || "") + '" ' +
              'data-marca="' + esc(d.marca) + '" data-titulo="' + esc(titulo) + '" ' +
              'aria-label="' + esc(rotuloAssistir + formato + ": " + titulo) + '">' +
@@ -1568,6 +1592,7 @@ function montaVideos(listaCompleta){
           '<div class="video-quadro">' +
             '<img class="video-poster" src="https://img.youtube.com/vi/' + esc(v.id) + '/hqdefault.jpg" ' +
               'alt="" loading="lazy" decoding="async">' +
+            '<span class="dica-cursor" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3l14.5 6.2-6.1 2.1-2.1 6.1L5 3z" fill="var(--louca-clara)" stroke="var(--cobalto-texto)" stroke-width="1.4" stroke-linejoin="round"/></svg></span>' +
             '<button type="button" class="video-abrir" data-id="' + esc(v.id) + '" data-nome="' + esc(nome) + '" ' +
               'aria-label="' + esc((idioma === "en" ? "Open the video " : "Abrir o vídeo ") + nome + (idioma === "en" ? " with sound" : " com som")) + '">' +
               '<span class="assistir assistir--video" aria-hidden="true"></span>' +
