@@ -182,45 +182,31 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='2' height='2' fill='%232b2d35' fill-opacity='.055'/%3E%3C/svg%3E");
   background-size:4px 4px;
 }
-/* a capa segue a referência: texto alinhado à esquerda numa coluna e a
-   foto na outra, com o padrão azul por trás dela */
-.capa-grade{display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(24px,4vw,56px);align-items:center;padding-bottom:clamp(48px,7vw,80px)}
+/* a capa agora é uma faixa com 3 fotos lado a lado no topo, e o texto
+   centralizado embaixo dela (referência: Anne Gabrielle) */
+.capa-faixa-fotos{
+  display:flex;gap:0;border-radius:clamp(18px,2.2vw,28px);overflow:hidden;
+  aspect-ratio:21/10;margin-bottom:clamp(32px,4.5vw,48px);background:var(--cobalto);
+}
+.capa-faixa-foto{flex:1 1 0;min-width:0;width:100%;height:100%;object-fit:cover;display:block}
+.capa-texto{text-align:center;padding-bottom:clamp(48px,7vw,80px)}
 .foto{display:block;width:100%;height:auto;background:var(--azul-fundo)}
 /* ===== a frase grande da capa =====
    a palavra "espontâneo" sai no azul da marca, que é o mesmo destaque que
    a referência faz nela, só que na paleta do site em vez do marrom */
 .capa-titulo{
-  margin-top:clamp(14px,1.8vw,22px);
+  margin:clamp(14px,1.8vw,22px) auto 0;
   /* 19ch é onde a frase quebra nas mesmas três linhas da referência,
      em "parece / pensado pra / converter". Com 17ch ela virava quatro */
   font-size:clamp(2rem,4.3vw,3.5rem);line-height:1.14;max-width:19ch;color:var(--tinta);
 }
 .capa-titulo em{font-style:normal;color:var(--cobalto)}
 .capa-frase{
-  margin-top:clamp(16px,2vw,24px);
+  margin:clamp(16px,2vw,24px) auto 0;
   font-size:.88rem;letter-spacing:.09em;text-transform:uppercase;max-width:38ch;
   color:var(--cobalto-texto);font-weight:500;line-height:1.6;
 }
-/* ===== a foto com o padrão atrás =====
-   o padrão é um painel arredondado que fica um pouco mais baixo e mais
-   estreito que a foto, então ela sai por cima dele em cima e desce um
-   pouco por baixo, que é o efeito da referência */
-.capa-visual{position:relative;display:flex;justify-content:center;align-items:flex-end;min-width:0}
-/* cor lisa, a mesma do botão "Falar comigo" (var(--cobalto)), no lugar
-   da imagem do padrão estampado */
-.capa-padrao{
-  position:absolute;z-index:0;left:50%;transform:translateX(-50%);bottom:11%;
-  width:min(92%,410px);aspect-ratio:1/1.12;border-radius:clamp(22px,2.6vw,38px);
-  background:var(--cobalto);
-}
-.capa-foto{
-  position:relative;z-index:1;display:block;width:min(100%,470px);height:auto;
-  /* o corte reto embaixo da foto vira um desvanecido, pra ela se apoiar
-     no fundo em vez de parecer recortada com tesoura */
-  -webkit-mask-image:linear-gradient(to bottom,#000 88%,transparent 100%);
-  mask-image:linear-gradient(to bottom,#000 88%,transparent 100%);
-}
-.capa-botoes{display:flex;flex-wrap:wrap;gap:14px;margin-top:clamp(24px,3vw,34px)}
+.capa-botoes{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:clamp(24px,3vw,34px)}
 
 /* faixa fina com os nomes das marcas */
 /* a faixa não tem fundo próprio: ela deixa passar a textura da capa,
@@ -595,12 +581,10 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
   .menu.aberto{display:flex}
   .menu a{padding:14px 0;border-bottom:1px solid var(--fio)}
 }
-@media (max-width:900px){
-  /* empilhado, o texto centralizado equilibra melhor com a foto embaixo */
-  .capa-grade{grid-template-columns:1fr;gap:clamp(20px,4vw,34px)}
-  .capa-texto{text-align:center}
-  .capa-titulo,.capa-frase{margin-left:auto;margin-right:auto}
-  .capa-botoes{justify-content:center}
+@media (max-width:600px){
+  /* no celular a faixa fica mais alta (menos larga em relação à altura),
+     pra cada uma das 3 fotos ainda mostrar o rosto direito */
+  .capa-faixa-fotos{aspect-ratio:3/2.6}
 }
 @media (max-width:720px){
   .secao{padding:66px 0}
@@ -660,7 +644,15 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
 
   <!-- ============ 1. CAPA ============ -->
   <section id="capa" class="capa">
-    <div class="env capa-grade">
+    <div class="env">
+      <!-- COMO TROCAR AS FOTOS DA FAIXA: troque foto-capa-1.webp,
+           foto-capa-2.webp e foto-capa-3.webp por outras fotos suas, de
+           preferência com proporção parecida (retrato, tipo 3:4). -->
+      <div class="capa-faixa-fotos revela">
+        <img src="foto-capa-1.webp" alt="Paloma Ribeiro" class="capa-faixa-foto" fetchpriority="high">
+        <img src="foto-capa-2.webp" alt="Paloma Ribeiro" class="capa-faixa-foto">
+        <img src="foto-capa-3.webp" alt="Paloma Ribeiro" class="capa-faixa-foto">
+      </div>
       <div class="capa-texto">
         <p class="rotulo revela" data-i18n="capaRotulo">Paloma Ribeiro UGC</p>
         <h1 class="capa-titulo revela" data-i18n="capaTitulo">Conteúdo que parece <em>espontâneo</em>, pensado pra converter</h1>
@@ -669,20 +661,6 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
           <a class="btn" href="#contato" data-i18n="capaBtnFalar">Quero criar com a Paloma</a>
           <a class="btn btn--linha" href="#trabalhos" data-i18n="capaBtnTrabalhos">Ver os trabalhos</a>
         </div>
-      </div>
-      <div class="capa-visual revela">
-        <!-- COMO TROCAR O ELEMENTO DE TRÁS: troque padrao-capa.webp por outra
-             imagem de padrão. Ele é só decoração, por isso fica num <span>
-             vazio com aria-hidden: leitor de tela ignora. -->
-        <span class="capa-padrao" aria-hidden="true"></span>
-        <!-- COMO TROCAR A FOTO DA CAPA: troque foto-capa-recorte.png por uma
-             foto sua já sem fundo (em PNG, com transparência). Se ela tiver
-             outra proporção, troque também os números de width e height
-             aqui embaixo pelos da foto nova, para a página não dar um pulo
-             enquanto carrega. -->
-        <img src="foto-capa-recorte.png" width="700" height="887" fetchpriority="high"
-             alt="Paloma Ribeiro sorrindo, de blazer bege sobre camiseta branca"
-             class="capa-foto">
       </div>
     </div>
     <div class="faixa-especialidades">
