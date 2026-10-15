@@ -31,6 +31,10 @@
   --fio:rgba(134,142,166,.22); /* fio fino usado em divisórias */
   --ceu:#c1dbe8;             /* azul claro "gentle sky", cor dos botões */
   --ceu-escuro:#85b8d2;      /* o mesmo tom mais escuro, pro hover */
+  --ceu-pastel:#e3eef4;      /* o mesmo azul, bem mais claro: fundo da capa
+                                inteira. Diferente do --ceu (que é o fundo do
+                                botão) de propósito, senão o botão sumiria
+                                dentro do fundo da seção */
   --tarja-fundo:#f4c434;     /* amarelo dourado, complementar do azul do site, pra tarja da contagem chamar atenção */
   --tarja-fundo-escuro:#dfaa0c; /* o mesmo tom mais escuro, pro hover */
   --marcas-linha:rgba(220,233,233,.45); /* mesmo verde-água das pílulas da referência, bem mais transparente pra ficar quase imperceptível */
@@ -175,24 +179,29 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
 .hamburguer[aria-expanded="true"] span:nth-child(2){opacity:0}
 .hamburguer[aria-expanded="true"] span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
 
-/* ===== 1. CAPA ===== */
+/* ===== 1. CAPA =====
+   fundo azul claro ocupando a seção inteira (referência: Anne Gabrielle,
+   só que lá era marrom), não só atrás das fotos */
 .capa{
   padding:clamp(40px,7vw,78px) 0 0;scroll-margin-top:calc(var(--tarja) + var(--topo));
-  background-color:var(--louca);
+  background-color:var(--ceu-pastel);
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='2' height='2' fill='%232b2d35' fill-opacity='.055'/%3E%3C/svg%3E");
   background-size:4px 4px;
 }
-/* a capa agora é uma faixa com 3 fotos lado a lado no topo, e o texto
-   centralizado embaixo dela (referência: Anne Gabrielle) */
+/* as 3 fotos não ficam mais coladas: a do meio vem maior e mais pra
+   frente (z-index mais alto, sombra mais forte), as duas dos lados ficam
+   menores e descem um pouco, como se estivessem um passo atrás */
 .capa-faixa-fotos{
-  display:flex;gap:clamp(8px,1.2vw,14px);padding:clamp(8px,1.2vw,14px);
-  border-radius:clamp(18px,2.2vw,28px);
-  aspect-ratio:21/10;margin-bottom:clamp(32px,4.5vw,48px);background:var(--cobalto);
+  display:flex;align-items:flex-end;justify-content:center;
+  gap:clamp(10px,1.8vw,22px);margin-bottom:clamp(32px,4.5vw,48px);
 }
 .capa-faixa-foto{
-  flex:1 1 0;min-width:0;width:100%;height:100%;object-fit:cover;display:block;
-  border-radius:clamp(10px,1.6vw,18px);
+  flex:none;width:clamp(130px,18vw,220px);aspect-ratio:3/4;object-fit:cover;display:block;
+  border-radius:clamp(16px,2vw,26px);box-shadow:0 18px 36px rgba(43,45,53,.16);
 }
+.capa-faixa-foto:nth-child(1){transform:translateY(20px) rotate(-2deg)}
+.capa-faixa-foto:nth-child(2){width:clamp(150px,20.5vw,250px);z-index:2;box-shadow:0 24px 48px rgba(43,45,53,.22)}
+.capa-faixa-foto:nth-child(3){transform:translateY(20px) rotate(2deg)}
 .capa-texto{text-align:center;padding-bottom:clamp(48px,7vw,80px)}
 .foto{display:block;width:100%;height:auto;background:var(--azul-fundo)}
 /* ===== a frase grande da capa =====
@@ -586,9 +595,10 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
   .menu a{padding:14px 0;border-bottom:1px solid var(--fio)}
 }
 @media (max-width:600px){
-  /* no celular a faixa fica mais alta (menos larga em relação à altura),
-     pra cada uma das 3 fotos ainda mostrar o rosto direito */
-  .capa-faixa-fotos{aspect-ratio:3/2.6}
+  /* no celular as 3 fotos encolhem mais, pra não estourar a largura */
+  .capa-faixa-fotos{gap:8px}
+  .capa-faixa-foto{width:84px}
+  .capa-faixa-foto:nth-child(2){width:98px}
 }
 @media (max-width:720px){
   .secao{padding:66px 0}
