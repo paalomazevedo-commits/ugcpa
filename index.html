@@ -2034,6 +2034,22 @@ function ligaObservadores(){
    Chamada tanto no precarregamento (antes de qualquer mouse chegar
    perto) quanto na hora do hover, pra cobrir o caso de alguém passar
    o mouse antes do precarregamento terminar. */
+/* escuta as mensagens que o player do YouTube manda pra janela (o link
+   já tem enablejsapi=1) e revela o iframe só quando o vídeo realmente
+   está tocando - não quando o iframe "carregou", que só quer dizer
+   que o player abriu, não que o vídeo já passou da tela preta de
+   carregamento dele. É a diferença entre "o player existe" e "o
+   vídeo está rodando", que o 'load' sozinho não contava direito. */
+window.addEventListener("message", function(e){
+  let dados;
+  try { dados = JSON.parse(e.data); } catch(err){ return; }
+  const tocando = dados.event === "infoDelivery" && dados.info && dados.info.playerState === 1;
+  if (!tocando) return;
+  document.querySelectorAll(".video-quadro iframe, .destaque-capa iframe").forEach(function(frame){
+    if (frame.contentWindow === e.source) frame.classList.add("pronto");
+  });
+});
+
 function carregaPreVisualizacao(quadro){
   if (!PODE_PRE_VISUALIZAR) return;
   if (visorAberto) return;
@@ -2047,16 +2063,18 @@ function carregaPreVisualizacao(quadro){
   frame.setAttribute("allow", "autoplay; encrypted-media; picture-in-picture");
   frame.setAttribute("src", enderecoVideo(botao.dataset.id, false));
   /* a capa continua visível por baixo (opacity:0 no iframe, ver CSS)
-     até aqui: sem isso, aparecia um flash de tela preta enquanto o
-     player do YouTube carregava por dentro do iframe. Como todo
-     carrossel já pré-carrega assim que a página abre (bem antes de
-     qualquer hover de verdade), esse carregamento já aconteceu
-     inteiro de sobra; os 80ms aqui são só uma folga mínima de
-     segurança pro "load" assentar antes de revelar, não uma espera
-     que a pessoa chegue a perceber. */
+     até o vídeo avisar (por mensagem, ver acima) que já está tocando
+     de verdade. "listening" é o aperto de mão que o player do
+     YouTube espera antes de começar a mandar esses avisos sozinho -
+     sem isso ele fica calado e a mensagem de "tocando" nunca chega.
+     O setTimeout de 4s é só uma rede de segurança: se por algum
+     motivo a mensagem não chegar (rede lenta demais, navegador
+     bloqueando), revela de qualquer jeito, pra nunca ficar preso
+     mostrando só a capa pra sempre. */
   frame.addEventListener("load", function(){
-    setTimeout(function(){ frame.classList.add("pronto"); }, 80);
+    frame.contentWindow.postMessage('{"event":"listening","id":"' + botao.dataset.id + '"}', "*");
   });
+  setTimeout(function(){ frame.classList.add("pronto"); }, 4000);
   quadro.insertBefore(frame, botao);
 }
 /* mostra a prévia na hora: se já estiver carregada (precarregada), é
