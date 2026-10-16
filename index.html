@@ -344,9 +344,8 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
 .midia .legenda{font-size:.76rem;letter-spacing:.16em;text-transform:uppercase;font-weight:500;text-shadow:0 1px 6px rgba(22,35,59,.5)}
 .assistir{position:absolute;inset:0;margin:auto;width:70px;height:70px;background:var(--louca-clara);border:3px solid var(--cobalto);border-radius:50%;display:grid;place-items:center}
 .assistir::after{content:"";width:0;height:0;margin-left:6px;border-left:20px solid var(--cobalto);border-top:13px solid transparent;border-bottom:13px solid transparent}
-.assistir--video{width:52px;height:52px;border-radius:50%;transition:opacity .2s ease}
+.assistir--video{width:52px;height:52px;border-radius:50%}
 .assistir--video::after{border-left-width:15px;border-top-width:10px;border-bottom-width:10px}
-.video-abrir:hover .assistir--video,.video-abrir:focus-visible .assistir--video{opacity:0}
 
 /* ===== 2.5 RESULTADO ===== */
 /* fundo azul claro (o mesmo dos botões), pedido pela Paloma pra essa
@@ -515,27 +514,28 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
 .video-marca{font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cobalto-texto)}
 .video-titulo{font-size:1.05rem;margin-top:5px}
 
-/* ===== DICA DE CURSOR (a setinha animada ao passar o mouse) =====
-   Um "fantasma" do cursor, só decorativo, que aparece e se move
-   sozinho quando o mouse passa em cima da capa/vídeo, sugerindo que
-   dá pra interagir ali. pointer-events:none pra nunca atrapalhar o
-   clique de verdade, que continua sendo o botão por baixo. */
-.dica-cursor{
-  position:absolute;top:50%;left:50%;z-index:3;
-  width:30px;height:30px;pointer-events:none;
-  opacity:0;transition:opacity .25s ease;
-  transform:translate(-50%,-50%);
-  filter:drop-shadow(0 3px 8px rgba(11,18,32,.35));
+/* ===== CURSOR QUE SEGUE O MOUSE (pedido pela Paloma, baseado numa
+   referência que ela mandou) =====
+   Um único elemento (criado por JS, veja ligaCursorSeguidor) fica
+   "perseguindo" a posição real do mouse enquanto ele estiver em cima
+   de uma capa/vídeo, com uma suavização (lerp) que dá a sensação de
+   arrastar atrás do ponteiro, em vez de grudar nele. O cursor
+   do sistema some nessas áreas (cursor:none) pra esse círculo
+   parecer o próprio mouse. */
+.video-quadro,.destaque-capa{cursor:none}
+.cursor-seguidor{
+  position:fixed;top:0;left:0;z-index:999;pointer-events:none;
+  width:56px;height:56px;border-radius:50%;
+  background:var(--cobalto);display:grid;place-items:center;
+  opacity:0;transition:opacity .2s ease;
+  transform:translate3d(-100px,-100px,0) translate(-50%,-50%);
+  box-shadow:0 10px 20px rgba(11,18,32,.3);
+  will-change:transform;
 }
-.dica-cursor svg{display:block;width:100%;height:100%}
-.destaque-capa:hover .dica-cursor,
-.video-quadro:hover .dica-cursor{
-  opacity:1;
-  animation:dicaCursorMove 1.7s ease-in-out infinite;
-}
-@keyframes dicaCursorMove{
-  0%,100%{transform:translate(-50%,-50%)}
-  50%{transform:translate(calc(-50% + 16px),calc(-50% + 16px))}
+.cursor-seguidor.visivel{opacity:1}
+.cursor-seguidor::after{
+  content:"";width:0;height:0;margin-left:4px;
+  border-left:15px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent;
 }
 
 /* ===== visor que abre o vídeo com som ===== */
@@ -1580,7 +1580,6 @@ function montaDestaques(){
           '<span class="destaque-marca-flutuante">' +
             '<img src="' + esc(d.logo) + '" alt="' + esc(d.marca) + '" loading="lazy" decoding="async">' +
           '</span>' +
-          '<span class="dica-cursor" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3l14.5 6.2-6.1 2.1-2.1 6.1L5 3z" fill="var(--louca-clara)" stroke="var(--cobalto-texto)" stroke-width="1.4" stroke-linejoin="round"/></svg></span>' +
           '<button type="button" class="video-abrir" data-id="' + esc(idVideo || "") + '" ' +
              'data-marca="' + esc(d.marca) + '" data-titulo="' + esc(titulo) + '" ' +
              'aria-label="' + esc(rotuloAssistir + formato + ": " + titulo) + '">' +
@@ -1780,7 +1779,6 @@ function montaVideos(listaCompleta){
           '<div class="video-quadro">' +
             '<img class="video-poster" src="https://img.youtube.com/vi/' + esc(v.id) + '/hqdefault.jpg" ' +
               'alt="" loading="lazy" decoding="async">' +
-            '<span class="dica-cursor" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3l14.5 6.2-6.1 2.1-2.1 6.1L5 3z" fill="var(--louca-clara)" stroke="var(--cobalto-texto)" stroke-width="1.4" stroke-linejoin="round"/></svg></span>' +
             '<button type="button" class="video-abrir" data-id="' + esc(v.id) + '" data-nome="' + esc(nome) + '" ' +
               'aria-label="' + esc((idioma === "en" ? "Open the video " : "Abrir o vídeo ") + nome + (idioma === "en" ? " with sound" : " com som")) + '">' +
               '<span class="assistir assistir--video" aria-hidden="true"></span>' +
@@ -1991,6 +1989,58 @@ function ligaObservadores(){
   observaRevela(document.querySelectorAll(".revela"));
 }
 
+/* ----- cursor que persegue o mouse em cima das capas/vídeos -----
+   Um só elemento (reaproveitado pra tela toda) muda de posição a cada
+   quadro, se aproximando aos poucos da posição real do mouse (lerp),
+   em vez de grudar nela na hora - isso que dá a sensação de "arrastar
+   atrás do ponteiro" pedida pela Paloma. Só liga em telas com mouse de
+   verdade (hover: hover), então no celular/tablet não faz nada. */
+function ligaCursorSeguidor(){
+  if (reduzMovimento) return;
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+  const cursor = document.createElement("div");
+  cursor.className = "cursor-seguidor";
+  cursor.setAttribute("aria-hidden", "true");
+  document.body.appendChild(cursor);
+
+  const alvo = { x: 0, y: 0 };
+  const atual = { x: 0, y: 0 };
+  let ativo = false;
+  let rodando = false;
+
+  function passo(){
+    atual.x += (alvo.x - atual.x) * 0.2;
+    atual.y += (alvo.y - atual.y) * 0.2;
+    cursor.style.transform = "translate3d(" + atual.x + "px," + atual.y + "px,0) translate(-50%,-50%)";
+    const longe = Math.abs(alvo.x - atual.x) > .5 || Math.abs(alvo.y - atual.y) > .5;
+    if (ativo || longe){
+      requestAnimationFrame(passo);
+    } else {
+      rodando = false;
+    }
+  }
+
+  document.addEventListener("pointermove", function(e){
+    if (e.pointerType === "touch") return;
+    const dentro = e.target.closest(".video-quadro, .destaque-capa");
+    if (dentro){
+      alvo.x = e.clientX;
+      alvo.y = e.clientY;
+      if (!ativo){
+        ativo = true;
+        atual.x = e.clientX;    /* nasce já na posição certa, sem "voar" de outro canto */
+        atual.y = e.clientY;
+        cursor.classList.add("visivel");
+      }
+      if (!rodando){ rodando = true; requestAnimationFrame(passo); }
+    } else if (ativo){
+      ativo = false;
+      cursor.classList.remove("visivel");
+    }
+  });
+}
+
 /* ----- menu sanduíche ----- */
 function ligaMenu(){
   const botao = $("#hamburguer");
@@ -2180,6 +2230,7 @@ ligaBastidor();
 ligaObservadores();
 ligaAnimacaoNumeros();
 ligaMenu();
+ligaCursorSeguidor();
 ligaFormulario();
 ligaVisor();
 ligaCaptura();
