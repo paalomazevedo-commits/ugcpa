@@ -2013,8 +2013,82 @@ function ligaObservadores(){
    dele começa a tocar sozinha (mudo); ao sair, volta pra capa parada.
    Som só entra se a pessoa clicar (abre o visor grande).
 
+   Dentro de um carrossel de nicho (.trilho-videos), passar por cima de
+   QUALQUER vídeo liga a prévia de TODOS os vídeos daquele nicho de
+   uma vez - não só o que está embaixo do dedo/mouse. Fora de um
+   carrossel (os vídeos avulsos de Destaques/Resultados), continua
+   sendo só aquele vídeo mesmo. */
+
+function iniciaPreVisualizacao(quadro){
+  if (visorAberto) return;
+  if (quadro.querySelector("iframe")) return;
+  const botao = quadro.querySelector(".video-abrir");
+  if (!botao || !botao.dataset.id) return;
+  const frame = document.createElement("iframe");
+  frame.title = botao.dataset.nome ||
+    (botao.dataset.marca ? botao.dataset.marca + ", " + (botao.dataset.titulo || "") : "") ||
+    botao.getAttribute("aria-label") || "";
+  frame.setAttribute("allow", "autoplay; encrypted-media; picture-in-picture");
+  frame.setAttribute("src", enderecoVideo(botao.dataset.id, false));
+  /* a capa continua visível por baixo (opacity:0 no iframe, ver CSS)
+     até aqui: sem isso, aparecia um flash de tela preta enquanto o
+     player do YouTube carregava por dentro do iframe. O "load" do
+     iframe só avisa que o player chegou, não que o vídeo já está de
+     fato rodando, então ainda espera um pouquinho antes de revelar -
+     tempo suficiente pra, na prática, a tela preta nunca aparecer. */
+  frame.addEventListener("load", function(){
+    setTimeout(function(){ frame.classList.add("pronto"); }, 220);
+  });
+  quadro.insertBefore(frame, botao);
+}
+function paraPreVisualizacao(quadro){
+  const frame = quadro.querySelector("iframe");
+  if (frame) frame.remove();
+}
+/* devolve todos os vídeos do mesmo nicho (se o card estiver dentro de
+   um carrossel), ou só ele mesmo (capa avulsa de Destaques/Resultados) */
+function grupoDoQuadro(quadro){
+  const trilho = quadro.closest(".trilho-videos");
+  return trilho ? Array.from(trilho.querySelectorAll(".video-quadro")) : [quadro];
+}
+
+/* ----- liga a prévia de todos os vídeos do nicho, no mouse e no toque -----
+   Funciona em qualquer dispositivo: no computador, passar o mouse por
+   cima; no celular/tablet, passar o dedo (sem precisar tocar em cada
+   vídeo, um por um). */
+function ligaPreVisualizacaoNicho(){
+  let grupoAtual = null;
+  let quadroAtual = null;
+
+  function atualiza(e){
+    const dentro = e.target.closest ? e.target.closest(".video-quadro, .destaque-capa") : null;
+    if (dentro === quadroAtual) return;
+    quadroAtual = dentro;
+    if (grupoAtual){
+      grupoAtual.forEach(paraPreVisualizacao);
+      grupoAtual = null;
+    }
+    if (dentro){
+      grupoAtual = grupoDoQuadro(dentro);
+      grupoAtual.forEach(iniciaPreVisualizacao);
+    }
+  }
+
+  document.addEventListener("pointermove", atualiza);
+  /* no toque o "pointermove" só roda depois que o dedo já está deslizando;
+     o "pointerdown" garante que o primeiro toque já liga tudo na hora,
+     sem precisar arrastar o dedo primeiro */
+  document.addEventListener("pointerdown", atualiza);
+}
+
+/* ----- cursor que persegue o mouse, decorativo -----
+   Um só elemento de cursor (reaproveitado pra tela toda) muda de
+   posição a cada quadro, se aproximando aos poucos da posição real do
+   mouse (lerp), em vez de grudar nela na hora - isso que dá a
+   sensação de "arrastar atrás do ponteiro" pedida pela Paloma.
    Só liga em telas com mouse de verdade (hover: hover), então no
-   celular/tablet nada disso roda - lá o vídeo só toca no clique. */
+   celular/tablet não aparece - lá quem avisa que o vídeo vai tocar é
+   o próprio toque. */
 function ligaCursorSeguidor(){
   if (reduzMovimento) return;
   if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
@@ -2028,7 +2102,6 @@ function ligaCursorSeguidor(){
   const atual = { x: 0, y: 0 };
   let ativo = false;
   let rodando = false;
-  let quadroAtual = null;
 
   function passo(){
     atual.x += (alvo.x - atual.x) * 0.2;
@@ -2042,41 +2115,9 @@ function ligaCursorSeguidor(){
     }
   }
 
-  function iniciaPreVisualizacao(quadro){
-    if (visorAberto) return;
-    if (quadro.querySelector("iframe")) return;
-    const botao = quadro.querySelector(".video-abrir");
-    if (!botao || !botao.dataset.id) return;
-    const frame = document.createElement("iframe");
-    frame.title = botao.dataset.nome ||
-      (botao.dataset.marca ? botao.dataset.marca + ", " + (botao.dataset.titulo || "") : "") ||
-      botao.getAttribute("aria-label") || "";
-    frame.setAttribute("allow", "autoplay; encrypted-media; picture-in-picture");
-    frame.setAttribute("src", enderecoVideo(botao.dataset.id, false));
-    /* a capa continua visível por baixo (opacity:0 no iframe, ver CSS)
-       até aqui: sem isso, aparecia um flash de tela preta enquanto o
-       player do YouTube carregava por dentro do iframe. O "load" do
-       iframe só avisa que o player chegou, não que o vídeo já está de
-       fato rodando, então ainda espera um pouquinho antes de revelar -
-       tempo suficiente pra, na prática, a tela preta nunca aparecer. */
-    frame.addEventListener("load", function(){
-      setTimeout(function(){ frame.classList.add("pronto"); }, 220);
-    });
-    quadro.insertBefore(frame, botao);
-  }
-  function paraPreVisualizacao(quadro){
-    const frame = quadro.querySelector("iframe");
-    if (frame) frame.remove();
-  }
-
   document.addEventListener("pointermove", function(e){
     if (e.pointerType === "touch") return;
     const dentro = e.target.closest(".video-quadro, .destaque-capa");
-    if (dentro !== quadroAtual){
-      if (quadroAtual) paraPreVisualizacao(quadroAtual);
-      if (dentro) iniciaPreVisualizacao(dentro);
-      quadroAtual = dentro;
-    }
     if (dentro){
       alvo.x = e.clientX;
       alvo.y = e.clientY;
@@ -2283,6 +2324,7 @@ ligaBastidor();
 ligaObservadores();
 ligaAnimacaoNumeros();
 ligaMenu();
+ligaPreVisualizacaoNicho();
 ligaCursorSeguidor();
 ligaFormulario();
 ligaVisor();
