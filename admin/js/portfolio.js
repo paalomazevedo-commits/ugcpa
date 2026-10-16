@@ -11,6 +11,7 @@
   function montar(raiz) {
     videosAtuais = [];
     raiz.innerHTML =
+      '<div id="pfAvisoLeads"></div>' +
       '<div class="kpis" id="pfKpis"></div>' +
       '<div class="duas-colunas">' +
         '<div class="cartao cartao-pad">' +
@@ -35,6 +36,7 @@
 
     carregarMetricas();
     carregarVideos();
+    carregarAvisoLeads();
   }
 
   /* ---------- métricas ---------- */
@@ -66,6 +68,38 @@
         renderGrafico(rv.dados);
         renderOrigens(rv.dados);
       });
+    });
+  }
+
+  /* ---------- aviso de leads novos (banner bem visível, logo no
+     topo do Portfólio - é a primeira coisa que a Paloma vê ao abrir
+     o painel, pra nenhuma mensagem de marca passar despercebida) ---------- */
+  function carregarAvisoLeads() {
+    var alvo = document.getElementById("pfAvisoLeads");
+    if (!alvo) return;
+    A.buscar("marcas", function (q) {
+      return q.eq("situacao", "lead").eq("visto", false).order("criado_em", { ascending: false });
+    }).then(function (r) {
+      alvo = document.getElementById("pfAvisoLeads"); /* a pessoa pode ter trocado de aba enquanto isso carregava */
+      if (!alvo) return;
+      var leads = r.dados || [];
+      if (!leads.length) { alvo.innerHTML = ""; return; }
+      var titulo = leads.length === 1
+        ? "Você recebeu uma mensagem nova!"
+        : "Você recebeu " + leads.length + " mensagens novas!";
+      var sub = leads.length === 1
+        ? (leads[0].nome ? A.esc(leads[0].nome) + " entrou em contato pelo site." : "Alguém entrou em contato pelo site.")
+        : "A mais recente é de " + A.esc(leads[0].nome || "alguém que preencheu o formulário") + ".";
+      alvo.innerHTML =
+        '<div class="aviso-lead">' +
+          '<span class="aviso-lead-icone">' + A.icone("envelope") + "</span>" +
+          '<div class="aviso-lead-texto">' +
+            '<p class="aviso-lead-titulo">' + titulo + "</p>" +
+            '<p class="aviso-lead-sub">' + sub + "</p>" +
+          "</div>" +
+          '<button type="button" class="botao" id="pfVerLeads">Ver agora</button>' +
+        "</div>";
+      document.getElementById("pfVerLeads").addEventListener("click", function () { A.irPara("marcas"); });
     });
   }
 

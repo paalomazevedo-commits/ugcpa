@@ -144,6 +144,21 @@ svg.icone{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6;
 .aviso svg{color:var(--ambar);margin-top:1px}
 .aviso b{font-weight:600}
 
+/* ---------- aviso de leads novos (banner grande, no topo do Portfólio) ---------- */
+.aviso-lead{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  background:var(--cobalto-fundo);border:1px solid var(--cobalto);
+  border-radius:var(--raio);padding:16px 18px;margin-bottom:18px;
+}
+.aviso-lead-icone{
+  flex-shrink:0;width:38px;height:38px;border-radius:50%;
+  background:var(--cobalto);color:#fff;display:grid;place-items:center;
+}
+.aviso-lead-icone svg{width:19px;height:19px}
+.aviso-lead-texto{flex:1;min-width:200px}
+.aviso-lead-titulo{font-weight:600;color:var(--cobalto-escuro);font-size:.95rem}
+.aviso-lead-sub{font-size:.82rem;color:var(--tinta-media);margin-top:2px}
+
 /* ============================================================
    BLOCOS / CARTÕES (moldura simples, sem a moldura dupla do site
    público - aqui é discreto)
