@@ -516,30 +516,6 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
 .video-marca{font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--cobalto-texto)}
 .video-titulo{font-size:1.05rem;margin-top:5px}
 
-/* ===== TESTE: FUNDO MARROM NA SEÇÃO DE TRABALHOS =====
-   É só um teste visual pedido pela Paloma, pra comparar com a
-   referência. Pra tirar o teste e voltar pro fundo padrão do site,
-   é só remover a classe "trabalhos-fundo-teste" do <section id="trabalhos">
-   no HTML - não precisa mexer em nenhuma linha daqui. */
-#trabalhos.trabalhos-fundo-teste{background:#3a2820}
-#trabalhos.trabalhos-fundo-teste .rotulo,
-#trabalhos.trabalhos-fundo-teste .titulo-secao,
-#trabalhos.trabalhos-fundo-teste .intro-secao,
-#trabalhos.trabalhos-fundo-teste .carrossel-nome,
-#trabalhos.trabalhos-fundo-teste .carrossel-contagem,
-#trabalhos.trabalhos-fundo-teste .video-destaque,
-#trabalhos.trabalhos-fundo-teste .video-marca,
-#trabalhos.trabalhos-fundo-teste .video-titulo,
-#trabalhos.trabalhos-fundo-teste .so-leitor{color:#fff}
-#trabalhos.trabalhos-fundo-teste .carrossel-nome{border-bottom-color:#fff}
-#trabalhos.trabalhos-fundo-teste .filtro{border-color:#fff;color:#fff}
-#trabalhos.trabalhos-fundo-teste .filtro[aria-pressed="true"]{background:#fff;color:#3a2820}
-#trabalhos.trabalhos-fundo-teste .seta{border-color:#fff;color:#fff}
-#trabalhos.trabalhos-fundo-teste .seta:hover:not(:disabled){background:#fff;color:#3a2820}
-#trabalhos.trabalhos-fundo-teste .trilho-videos{scrollbar-color:#fff rgba(255,255,255,.2)}
-#trabalhos.trabalhos-fundo-teste .trilho-videos::-webkit-scrollbar-track{background:rgba(255,255,255,.2)}
-#trabalhos.trabalhos-fundo-teste .trilho-videos::-webkit-scrollbar-thumb{background:#fff}
-
 /* ===== DICA DE CURSOR (a setinha animada ao passar o mouse) =====
    Um "fantasma" do cursor, só decorativo, que aparece e se move
    sozinho quando o mouse passa em cima da capa/vídeo, sugerindo que
@@ -846,7 +822,7 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
   </section>
 
   <!-- ============ 4. TRABALHOS POR NICHO ============ -->
-  <section id="trabalhos" class="secao trabalhos-fundo-teste">
+  <section id="trabalhos" class="secao">
     <div class="env">
       <p class="rotulo revela" data-i18n="trabalhosRotulo">Trabalhos por nicho</p>
       <h2 class="titulo-secao revela" data-i18n="trabalhosTitulo">Qual <mark class="marca-texto">formato</mark> eu posso criar para a <span class="destaque-azul">sua marca</span>?</h2>
@@ -1676,18 +1652,13 @@ function montaDestaques(){
 }
 
 /* ----- endereço do vídeo no YouTube -----
-   sem som: o iframe só é criado no momento em que o mouse ou o dedo
-   passa em cima do card (veja iniciaPreVisualizacao), então já nasce
-   com autoplay=1, sem precisar de nenhum comando depois.
-   com som: usado no visor que abre quando alguém clica, esse também
-   toca sozinho assim que abre. */
-function enderecoVideo(id, comSom){
+   o iframe só é criado quando alguém clica no card, pro visor que abre
+   por cima da página - esse já nasce com autoplay=1 e som ligado, sem
+   precisar de nenhum comando depois. */
+function enderecoVideo(id){
   const codigo = encodeURIComponent(id);
   const comum = "playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1&loop=1&playlist=" + codigo;
-  const extra = comSom
-    ? "&autoplay=1&mute=0&controls=1"
-    : "&autoplay=1&mute=1&controls=0&disablekb=1&fs=0";
-  return "https://www.youtube.com/embed/" + codigo + "?" + comum + extra;
+  return "https://www.youtube.com/embed/" + codigo + "?" + comum + "&autoplay=1&mute=0&controls=1";
 }
 
 /* enquanto o visor estiver aberto, nenhum card de fundo toca ao passar o mouse */
@@ -1869,52 +1840,9 @@ function montaVideos(listaCompleta){
   window.addEventListener("resize", atualizaSetas);
 
   /* a capa (a miniatura real do vídeo, veja o <img class="video-poster">
-     no template do card) já aparece pronta, sem carregar nada. Todo
-     vídeo que estiver de verdade visível toca sozinho, mudo, sem
-     precisar de mouse nem clique; o som só entra se a pessoa clicar (o
-     que abre o visor grande). Sai de visível (rolou pra fora, trocou de
-     filtro), o vídeo pausa e volta pra capa.
-
-     O observador de cada nicho usa a própria faixa (.trilho-videos)
-     como "tela" de referência (root), não a janela do navegador. Sem
-     isso, um vídeo rolado pra fora da faixa (mas ainda dentro da
-     página, só escondido pelo overflow da faixa) contava como visível
-     e tocava escondido, disputando rede e deixando tudo mais lento. */
-  function iniciaPreVisualizacao(card){
-    if (visorAberto) return;
-    const quadro = card.querySelector(".video-quadro");
-    if (quadro.querySelector("iframe")) return;
-    const botao = quadro.querySelector(".video-abrir");
-    const frame = document.createElement("iframe");
-    frame.title = botao.dataset.nome;
-    frame.setAttribute("allow", "autoplay; encrypted-media; picture-in-picture");
-    /* sem loading="lazy" aqui: o card só ganha esse iframe quando já está
-       de fato visível, então esperar o navegador reconfirmar isso só
-       atrasava o vídeo começar a tocar */
-    frame.setAttribute("src", enderecoVideo(botao.dataset.id, false));
-    quadro.insertBefore(frame, botao);
-  }
-  function paraPreVisualizacao(card){
-    const frame = card.querySelector(".video-quadro iframe");
-    if (frame) frame.remove();
-  }
-  retomaVideos = function(){};
-
-  carrosseis.forEach(function(c){
-    const trilho = c.querySelector(".trilho-videos");
-    const cardsDoNicho = c.querySelectorAll(".video-card");
-    if (!("IntersectionObserver" in window)){
-      cardsDoNicho.forEach(function(card){ iniciaPreVisualizacao(card); });
-      return;
-    }
-    const obsNicho = new IntersectionObserver(function(entradas){
-      entradas.forEach(function(e){
-        if (e.isIntersecting) iniciaPreVisualizacao(e.target);
-        else paraPreVisualizacao(e.target);
-      });
-    }, { root: trilho, threshold: .5 });
-    cardsDoNicho.forEach(function(card){ obsNicho.observe(card); });
-  });
+     no template do card) fica parada até alguém clicar em cima - o
+     vídeo não toca sozinho ao rolar a tela. O clique abre o visor
+     grande, com som (veja a função abre()). */
 
   /* filtro por categoria: mostra só os carrosséis escolhidos */
   const botoes = document.querySelectorAll("#filtros .filtro");
@@ -1971,7 +1899,7 @@ function ligaVisor(){
     focoAnterior = document.activeElement;
     visorAberto = true;
     document.querySelectorAll("#carrosseis iframe").forEach(function(f){ f.remove(); });
-    quadro.innerHTML = '<iframe src="' + esc(enderecoVideo(id, true)) + '" ' +
+    quadro.innerHTML = '<iframe src="' + esc(enderecoVideo(id)) + '" ' +
       'title="' + esc(marca + ", " + titulo) + '" ' +
       'allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
     $("#visorMarca").textContent = marca;
