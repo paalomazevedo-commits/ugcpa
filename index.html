@@ -1324,19 +1324,41 @@ function atualizaRotulosNumeros(){
   });
 }
 
-/* conta de 0 até o valor alvo com desaceleração no final (easeOutCubic),
-   em vez de simplesmente trocar o número de uma vez - é o que dá a
-   sensação de "contador rodando" quando a seção entra na tela */
+/* efeito "caça-níquel": no começo o número troca muito rápido por
+   valores aleatórios (a fase de embaralhar), depois a troca vai ficando
+   mais espaçada e mais perto do valor certo, até travar nele no final -
+   igual uma máquina de contar antiga */
 function contaNumero(el){
   const alvo = parseInt(el.dataset.ate, 10) || 0;
   const sufixo = el.dataset.sufixo || "";
   if (reduzMovimento || !alvo){ el.textContent = alvo + sufixo; return; }
-  const duracao = 1400;
+  const duracao = 1600;
+  const faseEmbaralha = 0.6; /* 60% do tempo embaralhando rápido, 40% desacelerando até travar */
+  const digitos = String(alvo).length;
+  const tetoAleatorio = Math.pow(10, digitos) - 1;
   const inicio = performance.now();
+  let ultimaTroca = 0;
   function passo(agora){
-    const prog = Math.min(1, (agora - inicio) / duracao);
-    const valor = Math.round(alvo * (1 - Math.pow(1 - prog, 3)));
-    el.textContent = valor + sufixo;
+    const decorrido = agora - inicio;
+    const prog = Math.min(1, decorrido / duracao);
+    if (prog < faseEmbaralha){
+      /* troca a cada ~45ms, não a cada frame: todo frame ficaria rápido
+         demais pro olho acompanhar e o efeito não lia como número */
+      if (decorrido - ultimaTroca > 45){
+        el.textContent = Math.floor(Math.random() * (tetoAleatorio + 1)) + sufixo;
+        ultimaTroca = decorrido;
+      }
+    } else {
+      const prog2 = (prog - faseEmbaralha) / (1 - faseEmbaralha);
+      const intervaloTroca = 45 + prog2 * 160;
+      if (decorrido - ultimaTroca > intervaloTroca){
+        const amplitude = Math.round(tetoAleatorio * (1 - prog2) * 0.5);
+        const variacao = amplitude ? Math.floor(Math.random() * (amplitude * 2 + 1)) - amplitude : 0;
+        el.textContent = Math.max(0, alvo + variacao) + sufixo;
+        ultimaTroca = decorrido;
+      }
+    }
+    if (prog >= 1) el.textContent = alvo + sufixo;
     if (prog < 1) requestAnimationFrame(passo);
   }
   requestAnimationFrame(passo);
