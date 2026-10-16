@@ -2040,23 +2040,42 @@ function ligaObservadores(){
    que o player abriu, não que o vídeo já passou da tela preta de
    carregamento dele. É a diferença entre "o player existe" e "o
    vídeo está rodando", que o 'load' sozinho não contava direito. */
+/* marca o iframe como pronto (revela) e, se ele tinha ocupado uma vaga
+   da fila de precarregamento, libera essa vaga pro próximo da fila
+   entrar - só libera aqui (vídeo tocando de verdade ou o prazo de
+   segurança estourou), nunca no "load", porque é depois do "load"
+   que o player ainda negocia e baixa o vídeo de verdade: soltar a
+   vaga cedo demais deixava passar vídeo demais ao mesmo tempo, que
+   foi a causa da demora que a Paloma viu. */
+function marcaPronto(frame){
+  if (frame.classList.contains("pronto")) return;
+  frame.classList.add("pronto");
+  if (frame.dataset.daFila){
+    vagasOcupadas = Math.max(0, vagasOcupadas - 1);
+    andaFilaPrecarga();
+  }
+}
+
 window.addEventListener("message", function(e){
   let dados;
   try { dados = JSON.parse(e.data); } catch(err){ return; }
   const tocando = dados.event === "infoDelivery" && dados.info && dados.info.playerState === 1;
   if (!tocando) return;
   document.querySelectorAll(".video-quadro iframe, .destaque-capa iframe").forEach(function(frame){
-    if (frame.contentWindow === e.source) frame.classList.add("pronto");
+    if (frame.contentWindow === e.source) marcaPronto(frame);
   });
 });
 
-function carregaPreVisualizacao(quadro){
-  if (!PODE_PRE_VISUALIZAR) return;
+/* cria o iframe de verdade, agora mesmo, sem fila nem limite - usada
+   tanto pro vídeo que furou a fila (hover de alguém de verdade) quanto
+   por dentro da fila de precarregamento, quando chega a vez dele. */
+function criaIframePreVisualizacao(quadro, daFila){
   if (visorAberto) return;
   if (quadro.querySelector("iframe")) return;
   const botao = quadro.querySelector(".video-abrir");
   if (!botao || !botao.dataset.id) return;
   const frame = document.createElement("iframe");
+  if (daFila) frame.dataset.daFila = "1";
   frame.title = botao.dataset.nome ||
     (botao.dataset.marca ? botao.dataset.marca + ", " + (botao.dataset.titulo || "") : "") ||
     botao.getAttribute("aria-label") || "";
@@ -2074,14 +2093,45 @@ function carregaPreVisualizacao(quadro){
   frame.addEventListener("load", function(){
     frame.contentWindow.postMessage('{"event":"listening","id":"' + botao.dataset.id + '"}', "*");
   });
-  setTimeout(function(){ frame.classList.add("pronto"); }, 4000);
+  setTimeout(function(){ marcaPronto(frame); }, 4000);
   quadro.insertBefore(frame, botao);
 }
+
+/* ----- fila de precarregamento, com limite de vagas ao mesmo tempo -----
+   Carregar os 30 e tantos vídeos do site inteiro de uma vez só faz
+   todos competirem pela mesma internet, e cada um demora mais pra
+   ficar pronto (foi o que a Paloma viu: 10 segundos de espera). Em
+   vez disso, só um punhado carrega por vez; o resto espera a vez na
+   fila. Quando alguém passa o mouse de verdade em cima de um vídeo
+   que ainda não começou a carregar, ele FURA a fila e carrega na
+   hora - a pessoa nunca fica esperando a fila andar. */
+const VAGAS_PRECARGA = 4;
+let vagasOcupadas = 0;
+let filaPrecarga = [];
+function andaFilaPrecarga(){
+  while (vagasOcupadas < VAGAS_PRECARGA && filaPrecarga.length){
+    const quadro = filaPrecarga.shift();
+    if (quadro.querySelector("iframe")) continue; /* já furou a fila antes de chegar a vez */
+    vagasOcupadas++;
+    criaIframePreVisualizacao(quadro, true);
+  }
+}
+function carregaPreVisualizacao(quadro){
+  if (!PODE_PRE_VISUALIZAR) return;
+  if (quadro.querySelector("iframe") || filaPrecarga.indexOf(quadro) !== -1) return;
+  filaPrecarga.push(quadro);
+  andaFilaPrecarga();
+}
 /* mostra a prévia na hora: se já estiver carregada (precarregada), é
-   instantâneo - só troca a opacidade. Se ainda não, carrega agora
-   mesmo (fallback, mais lento só nesse caso raro). */
+   instantâneo - só troca a opacidade. Se ainda não (ainda na fila ou
+   nem entrou nela), fura a fila e carrega agora mesmo, na hora, sem
+   esperar a vez - é um hover de verdade, tem prioridade sobre tudo. */
 function mostraPreVisualizacao(quadro){
-  carregaPreVisualizacao(quadro);
+  if (PODE_PRE_VISUALIZAR && !quadro.querySelector("iframe")){
+    const naFila = filaPrecarga.indexOf(quadro);
+    if (naFila !== -1) filaPrecarga.splice(naFila, 1);
+    criaIframePreVisualizacao(quadro, false);
+  }
   const frame = quadro.querySelector("iframe");
   if (frame) frame.classList.add("ativo");
 }
