@@ -1184,6 +1184,12 @@ const SERVICOS = [
    ========================================================= */
 
 const reduzMovimento = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+/* só liga a prévia dos vídeos (tocar sozinho ao passar perto) em
+   telas com mouse de verdade. Em celular/tablet, ligar vários vídeos
+   do YouTube ao mesmo tempo (mesmo escondidos, mesmo mudos) pesa
+   demais pra memória e trava o navegador - o toque já abre o vídeo
+   com som direto, então não precisa de prévia nenhuma lá. */
+const PODE_PRE_VISUALIZAR = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 const $ = function(sel){ return document.querySelector(sel); };
 
 function esc(t){
@@ -1853,8 +1859,11 @@ function montaVideos(listaCompleta){
   /* a capa (a miniatura real do vídeo, veja o <img class="video-poster">
      no template do card) fica parada até o mouse chegar perto - o
      vídeo em si já carrega escondido assim que o carrossel aparece na
-     tela (ligaPrecarregamentoNichos), pra revelar na hora, sem espera. */
-  ligaPrecarregamentoNichos(carrosseis);
+     tela (ligaPrecarregamentoNichos), pra revelar na hora, sem espera.
+     Só liga em telas com mouse de verdade (ver PODE_PRE_VISUALIZAR):
+     no celular, carregar vários vídeos do YouTube ao mesmo tempo
+     (mesmo escondidos) pesava demais e travava o navegador. */
+  if (PODE_PRE_VISUALIZAR) ligaPrecarregamentoNichos(carrosseis);
 
   /* filtro por categoria: mostra só os carrosséis escolhidos */
   const botoes = document.querySelectorAll("#filtros .filtro");
@@ -2026,6 +2035,7 @@ function ligaObservadores(){
    perto) quanto na hora do hover, pra cobrir o caso de alguém passar
    o mouse antes do precarregamento terminar. */
 function carregaPreVisualizacao(quadro){
+  if (!PODE_PRE_VISUALIZAR) return;
   if (visorAberto) return;
   if (quadro.querySelector("iframe")) return;
   const botao = quadro.querySelector(".video-abrir");
@@ -2361,15 +2371,16 @@ ligaTarjaRotativa();
 montaDestaques();
 montaDepoimentos();
 /* são poucos vídeos avulsos (Destaques + Resultados), então pré-carrega
-   todos direto, sem precisar esperar entrar na tela */
-document.querySelectorAll(".destaque-capa").forEach(carregaPreVisualizacao);
+   todos direto, sem precisar esperar entrar na tela - só em telas com
+   mouse de verdade, ver PODE_PRE_VISUALIZAR */
+if (PODE_PRE_VISUALIZAR) document.querySelectorAll(".destaque-capa").forEach(carregaPreVisualizacao);
 carregarEMontarVideos();
 montaServicos();
 ligaBastidor();
 ligaObservadores();
 ligaAnimacaoNumeros();
 ligaMenu();
-ligaPreVisualizacaoNicho();
+if (PODE_PRE_VISUALIZAR) ligaPreVisualizacaoNicho();
 ligaCursorSeguidor();
 ligaFormulario();
 ligaVisor();
