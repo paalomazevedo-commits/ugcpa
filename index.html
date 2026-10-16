@@ -1650,13 +1650,17 @@ function montaDestaques(){
 }
 
 /* ----- endereço do vídeo no YouTube -----
-   o iframe só é criado quando alguém clica no card, pro visor que abre
-   por cima da página - esse já nasce com autoplay=1 e som ligado, sem
-   precisar de nenhum comando depois. */
-function enderecoVideo(id){
+   sem som: o iframe só é criado quando o mouse passa em cima do card
+   (veja ligaPreVisualizacaoHover), pra tocar baixinho de fundo.
+   com som: usado no visor que abre quando alguém clica, esse também
+   toca sozinho assim que abre. */
+function enderecoVideo(id, comSom){
   const codigo = encodeURIComponent(id);
   const comum = "playsinline=1&rel=0&modestbranding=1&iv_load_policy=3&enablejsapi=1&loop=1&playlist=" + codigo;
-  return "https://www.youtube.com/embed/" + codigo + "?" + comum + "&autoplay=1&mute=0&controls=1";
+  const extra = comSom
+    ? "&autoplay=1&mute=0&controls=1"
+    : "&autoplay=1&mute=1&controls=0&disablekb=1&fs=0";
+  return "https://www.youtube.com/embed/" + codigo + "?" + comum + extra;
 }
 
 /* enquanto o visor estiver aberto, nenhum card de fundo toca ao passar o mouse */
@@ -1895,8 +1899,8 @@ function ligaVisor(){
     }
     focoAnterior = document.activeElement;
     visorAberto = true;
-    document.querySelectorAll("#carrosseis iframe").forEach(function(f){ f.remove(); });
-    quadro.innerHTML = '<iframe src="' + esc(enderecoVideo(id)) + '" ' +
+    document.querySelectorAll(".video-quadro iframe, .destaque-capa iframe").forEach(function(f){ f.remove(); });
+    quadro.innerHTML = '<iframe src="' + esc(enderecoVideo(id, true)) + '" ' +
       'title="' + esc(marca + ", " + titulo) + '" ' +
       'allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>';
     $("#visorMarca").textContent = marca;
@@ -1989,12 +1993,18 @@ function ligaObservadores(){
   observaRevela(document.querySelectorAll(".revela"));
 }
 
-/* ----- cursor que persegue o mouse em cima das capas/vídeos -----
-   Um só elemento (reaproveitado pra tela toda) muda de posição a cada
-   quadro, se aproximando aos poucos da posição real do mouse (lerp),
-   em vez de grudar nela na hora - isso que dá a sensação de "arrastar
-   atrás do ponteiro" pedida pela Paloma. Só liga em telas com mouse de
-   verdade (hover: hover), então no celular/tablet não faz nada. */
+/* ----- cursor que persegue o mouse, e toca o vídeo enquanto isso -----
+   Um só elemento de cursor (reaproveitado pra tela toda) muda de
+   posição a cada quadro, se aproximando aos poucos da posição real do
+   mouse (lerp), em vez de grudar nela na hora - isso que dá a
+   sensação de "arrastar atrás do ponteiro" pedida pela Paloma.
+
+   Junto com isso, assim que o mouse entra numa capa/vídeo, a prévia
+   dele começa a tocar sozinha (mudo); ao sair, volta pra capa parada.
+   Som só entra se a pessoa clicar (abre o visor grande).
+
+   Só liga em telas com mouse de verdade (hover: hover), então no
+   celular/tablet nada disso roda - lá o vídeo só toca no clique. */
 function ligaCursorSeguidor(){
   if (reduzMovimento) return;
   if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
@@ -2008,6 +2018,7 @@ function ligaCursorSeguidor(){
   const atual = { x: 0, y: 0 };
   let ativo = false;
   let rodando = false;
+  let quadroAtual = null;
 
   function passo(){
     atual.x += (alvo.x - atual.x) * 0.2;
@@ -2021,9 +2032,32 @@ function ligaCursorSeguidor(){
     }
   }
 
+  function iniciaPreVisualizacao(quadro){
+    if (visorAberto) return;
+    if (quadro.querySelector("iframe")) return;
+    const botao = quadro.querySelector(".video-abrir");
+    if (!botao || !botao.dataset.id) return;
+    const frame = document.createElement("iframe");
+    frame.title = botao.dataset.nome ||
+      (botao.dataset.marca ? botao.dataset.marca + ", " + (botao.dataset.titulo || "") : "") ||
+      botao.getAttribute("aria-label") || "";
+    frame.setAttribute("allow", "autoplay; encrypted-media; picture-in-picture");
+    frame.setAttribute("src", enderecoVideo(botao.dataset.id, false));
+    quadro.insertBefore(frame, botao);
+  }
+  function paraPreVisualizacao(quadro){
+    const frame = quadro.querySelector("iframe");
+    if (frame) frame.remove();
+  }
+
   document.addEventListener("pointermove", function(e){
     if (e.pointerType === "touch") return;
     const dentro = e.target.closest(".video-quadro, .destaque-capa");
+    if (dentro !== quadroAtual){
+      if (quadroAtual) paraPreVisualizacao(quadroAtual);
+      if (dentro) iniciaPreVisualizacao(dentro);
+      quadroAtual = dentro;
+    }
     if (dentro){
       alvo.x = e.clientX;
       alvo.y = e.clientY;
