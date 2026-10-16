@@ -317,6 +317,40 @@ window.Admin = (function () {
     });
   }
 
+  /* ============================================================
+     SELO DE NOTIFICAÇÃO no menu lateral (ex.: leads novos em Marcas)
+     ============================================================ */
+  function atualizarContadorSecao(idSecao, contador) {
+    var btn = document.querySelector('.lateral-item[data-secao="' + idSecao + '"]');
+    if (!btn) return;
+    var selo = btn.querySelector(".lateral-item-contador");
+    if (!contador) {
+      if (selo) selo.remove();
+      return;
+    }
+    if (!selo) {
+      selo = document.createElement("span");
+      selo.className = "lateral-item-contador";
+      btn.appendChild(selo);
+    }
+    selo.textContent = contador > 99 ? "99+" : String(contador);
+  }
+
+  /* conta quantos leads (mensagens do formulário do site) ainda não
+     foram vistos, e acende o selo em "Marcas". Chamada quando o
+     painel abre, e de novo quando a Paloma entra na aba Marcas (pra
+     apagar o selo depois que ela marcar os leads como vistos). */
+  function atualizarBadgeNotificacoes() {
+    if (!window.banco) return;
+    window.banco.from("marcas").select("id", { count: "exact", head: true })
+      .eq("situacao", "lead").eq("visto", false)
+      .then(function (resp) {
+        if (resp.error) return; /* coluna "visto" pode ainda não existir - sem notificação, sem quebrar o painel */
+        atualizarContadorSecao("marcas", resp.count || 0);
+      })
+      .catch(function () {});
+  }
+
   function irPara(id) {
     var secao = secoesRegistradas.filter(function (s) { return s.id === id; })[0];
     if (!secao) return;
@@ -359,6 +393,7 @@ window.Admin = (function () {
     document.getElementById("botaoHamb").innerHTML = icone("menu");
     document.getElementById("botaoSair").innerHTML = icone("sair") + "<span>Sair</span>";
     montarLateral();
+    atualizarBadgeNotificacoes();
 
     document.getElementById("botaoHamb").addEventListener("click", abrirGavetaLateral);
     document.getElementById("cortinaLateral").addEventListener("click", fecharGavetaLateral);
@@ -395,6 +430,7 @@ window.Admin = (function () {
     fecharModal: fecharModal,
     baixarCSV: baixarCSV,
     registrarSecao: registrarSecao,
+    atualizarBadgeNotificacoes: atualizarBadgeNotificacoes,
     irPara: irPara,
     iniciar: iniciar
   };

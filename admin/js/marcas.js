@@ -124,6 +124,24 @@
       todas = r.dados;
       montarChipsNicho();
       renderTabela();
+      marcarLeadsComoVistos();
+    });
+  }
+
+  /* assim que a Paloma abre essa aba, os leads novos (do formulário
+     do site) que ainda não tinham sido vistos passam a "vistos" - é
+     o que apaga o selo de notificação no menu lateral. Se a coluna
+     "visto" ainda não existir no banco (SQL não rodado), os itens
+     simplesmente não têm essa propriedade e a lista fica vazia, sem
+     dar erro nenhum. */
+  function marcarLeadsComoVistos() {
+    var naoVistos = todas.filter(function (m) { return m.situacao === "lead" && m.visto === false; });
+    if (!naoVistos.length) { A.atualizarBadgeNotificacoes(); return; }
+    Promise.all(naoVistos.map(function (m) {
+      return A.gravar("marcas", "update", { id: m.id, valores: { visto: true } });
+    })).then(function () {
+      naoVistos.forEach(function (m) { m.visto = true; });
+      A.atualizarBadgeNotificacoes();
     });
   }
 

@@ -100,6 +100,11 @@ svg.icone{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6;
   border-left-color:var(--cobalto);
 }
 .lateral-item svg{color:inherit}
+.lateral-item-contador{
+  margin-left:auto;background:var(--cobalto);color:#fff;
+  font-size:.68rem;font-weight:600;line-height:1;
+  padding:.3em .55em;border-radius:999px;min-width:1.4em;text-align:center;
+}
 .lateral-rodape{border-top:1px solid var(--fio);padding:14px 20px 18px}
 .lateral-email{font-size:.76rem;color:var(--tinta-media);word-break:break-all;margin-bottom:10px}
 .botao-sair{
