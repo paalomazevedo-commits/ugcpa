@@ -298,6 +298,23 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
 .especialidade::after{content:"";width:6px;height:6px;background:var(--azul-claro);display:block}
 @keyframes desliza{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
+/* ===== 1.5 NÚMEROS ===== */
+.faixa-numeros{background:var(--louca-clara);border-bottom:1px solid var(--fio)}
+.numeros-grade{display:flex;flex-wrap:wrap}
+.numero-item{
+  flex:1 1 0;min-width:150px;text-align:center;
+  padding:clamp(22px,4vw,34px) 18px;
+  border-left:1px solid var(--fio);
+}
+.numero-item:first-child{border-left:none}
+.numero-valor{
+  font-family:"Fraunces",Georgia,serif;font-weight:700;
+  font-size:clamp(1.8rem,4vw,2.6rem);color:var(--cobalto-texto);line-height:1;
+}
+.numero-rotulo{
+  margin-top:8px;font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tinta-media);
+}
+
 /* ===== 2. SOBRE ===== */
 .sobre-grade{display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(28px,5vw,64px);align-items:start}
 
@@ -695,6 +712,11 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
     </div>
   </section>
 
+  <!-- ============ 1.5 NÚMEROS ============ -->
+  <section class="faixa-numeros">
+    <div class="env numeros-grade" id="faixaNumeros"></div>
+  </section>
+
   <!-- ============ 2. SOBRE MIM ============ -->
   <section id="sobre" class="secao">
     <div class="env sobre-grade">
@@ -941,6 +963,19 @@ document.documentElement.classList.add('js');
    Tudo o que aparece no site está nas listas abaixo.
    Troque o texto entre as aspas e salve. Não precisa mexer no HTML.
    ========================================================= */
+
+/* --- 0) NÚMEROS LOGO ABAIXO DA CAPA ---
+   valor:  o número que conta subindo (sem o "+", isso fica no sufixo).
+   sufixo: o que vem colado depois do número ("+", "M+", "anos"...).
+   rotulo: a legenda embaixo do número, em pt e en.
+
+   PRA ATUALIZAR: troque o valor quando tiver um número novo pra mostrar
+   (ex.: mais vídeos gravados). Não precisa mexer em mais nada. */
+const NUMEROS = [
+  { valor: 30, sufixo: "+", rotulo: { pt: "Vídeos gravados", en: "Videos recorded" } },
+  { valor: 20, sufixo: "+", rotulo: { pt: "Marcas parceiras", en: "Partner brands" } },
+  { valor: 1,  sufixo: "", rotulo: { pt: "Ano de experiência", en: "Year of experience" } }
+];
 
 /* --- 1) MARCAS DA FAIXA DA CAPA ---
    A faixa que desliza embaixo da capa. Cada marca tem:
@@ -1243,6 +1278,7 @@ function definirIdioma(novo){
      texto delas já carrega os dois idiomas dentro do próprio item) */
   montaEspecialidades();
   montaMarcas();
+  atualizaRotulosNumeros();
   montaTarjaContagem();
   const elRot = $("#tarjaRotativo");
   if (elRot) elRot.textContent = FRASES_TARJA[indiceFraseTarja][idioma];
@@ -1272,6 +1308,57 @@ function ligaIdioma(){
    lugar onde a primeira começou, então o laço reinicia sem emenda.
    O eco fica escondido do leitor de tela pra ele não ler tudo em
    dobro. */
+/* ----- faixa de números com animação de contagem ----- */
+function montaNumeros(){
+  $("#faixaNumeros").innerHTML = NUMEROS.map(function(n){
+    return '<div class="numero-item">' +
+             '<p class="numero-valor" data-ate="' + n.valor + '" data-sufixo="' + esc(n.sufixo) + '">0' + esc(n.sufixo) + '</p>' +
+             '<p class="numero-rotulo">' + esc(n.rotulo[idioma]) + '</p>' +
+           '</div>';
+  }).join("");
+}
+
+function atualizaRotulosNumeros(){
+  document.querySelectorAll("#faixaNumeros .numero-rotulo").forEach(function(el, i){
+    if (NUMEROS[i]) el.textContent = NUMEROS[i].rotulo[idioma];
+  });
+}
+
+/* conta de 0 até o valor alvo com desaceleração no final (easeOutCubic),
+   em vez de simplesmente trocar o número de uma vez - é o que dá a
+   sensação de "contador rodando" quando a seção entra na tela */
+function contaNumero(el){
+  const alvo = parseInt(el.dataset.ate, 10) || 0;
+  const sufixo = el.dataset.sufixo || "";
+  if (reduzMovimento || !alvo){ el.textContent = alvo + sufixo; return; }
+  const duracao = 1400;
+  const inicio = performance.now();
+  function passo(agora){
+    const prog = Math.min(1, (agora - inicio) / duracao);
+    const valor = Math.round(alvo * (1 - Math.pow(1 - prog, 3)));
+    el.textContent = valor + sufixo;
+    if (prog < 1) requestAnimationFrame(passo);
+  }
+  requestAnimationFrame(passo);
+}
+
+function ligaAnimacaoNumeros(){
+  const itens = document.querySelectorAll(".numero-valor");
+  if (!itens.length) return;
+  if (!("IntersectionObserver" in window) || reduzMovimento){
+    itens.forEach(function(el){ contaNumero(el); });
+    return;
+  }
+  const obs = new IntersectionObserver(function(entradas){
+    entradas.forEach(function(e){
+      if (!e.isIntersecting) return;
+      contaNumero(e.target);
+      obs.unobserve(e.target);
+    });
+  }, { threshold: 0.5 });
+  itens.forEach(function(el){ obs.observe(el); });
+}
+
 function montaMarcas(){
   const item = function(m, eco){
     return '<li class="marca-logo' + (eco ? ' eco' : '') + '"' + (eco ? ' aria-hidden="true"' : '') + '>' +
@@ -2021,6 +2108,7 @@ function ligaBastidor(){
 ligaIdioma();
 montaMarcas();
 montaEspecialidades();
+montaNumeros();
 montaTarjaContagem();
 ligaTarjaRotativa();
 montaDestaques();
@@ -2028,6 +2116,7 @@ carregarEMontarVideos();
 montaServicos();
 ligaBastidor();
 ligaObservadores();
+ligaAnimacaoNumeros();
 ligaMenu();
 ligaFormulario();
 ligaVisor();
