@@ -621,6 +621,24 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
 .rodape-redes a{font-size:.9rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.45);padding-bottom:3px}
 .rodape-redes a:hover{border-bottom-color:#fff}
 .rodape-ano{width:100%;padding:16px 0 34px;border-top:1px solid rgba(255,255,255,.28);font-size:.86rem;color:rgba(255,255,255,.75)}
+.rodape-legais{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:6px}
+.rodape-legais button{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.rodape-legais button:hover{color:#fff}
+
+/* ===== PÁGINAS LEGAIS (política de privacidade / termos de uso) =====
+   Reaproveita a mesma estrutura visual do card de captura - um
+   modal simples, com texto comprido e rolagem própria. */
+.legal{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:20px;background:rgba(22,35,59,.62)}
+.legal[hidden]{display:none}
+.legal-card{position:relative;width:min(640px,100%);max-height:86vh;overflow-y:auto;background:var(--louca-clara);border:3px solid var(--cobalto);box-shadow:inset 0 0 0 5px var(--louca-clara),inset 0 0 0 6px var(--cobalto);padding:38px 32px 34px}
+.legal-fechar{position:absolute;top:12px;right:12px;width:38px;height:38px;border:2px solid var(--cobalto);background:transparent;color:var(--cobalto-texto);font-size:1.15rem;cursor:pointer;line-height:1}
+.legal-card h2{font-size:1.5rem;margin-bottom:6px}
+.legal-card .legal-atualizado{color:var(--tinta-media);font-size:.82rem;margin-bottom:20px}
+.legal-card h3{font-size:1.02rem;margin:22px 0 8px;color:var(--cobalto-texto)}
+.legal-card p,.legal-card li{color:var(--tinta-media);font-size:.92rem;line-height:1.65}
+.legal-card ul{margin:0 0 0 1.1em;padding:0}
+.legal-card li{margin-bottom:6px}
+.legal-card a{color:var(--cobalto-texto)}
 /* pisca-valores segue usada na etiqueta "Black Friday" da tarja de
    contagem, mesmo depois que os botões pra tabela de valores saíram */
 @keyframes pisca-valores{0%,100%{opacity:1}50%{opacity:.4}}
@@ -954,7 +972,14 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
         <a href="mailto:paalomazevedo@gmail.com" data-i18n="rodapeEmail">E-mail</a>
       </nav>
     </div>
-    <p class="rodape-ano"><span data-i18n="rodapeAno">Paloma Ribeiro, criadora de conteúdo UGC em Praia Grande.</span> <span id="ano"></span></p>
+    <p class="rodape-ano">
+      <span data-i18n="rodapeAno">Paloma Ribeiro, criadora de conteúdo UGC em Praia Grande.</span>
+      &middot; &copy; <span id="ano"></span> Paloma Ribeiro &middot; @paalomaribeiro
+    </p>
+    <div class="rodape-legais">
+      <button type="button" id="abrirPrivacidade" data-i18n="rodapePrivacidade">Política de Privacidade</button>
+      <button type="button" id="abrirTermos" data-i18n="rodapeTermos">Termos de Uso</button>
+    </div>
   </div>
 </footer>
 
@@ -988,6 +1013,69 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
       <button class="btn" type="submit" data-i18n="capturaBtn">Quero receber</button>
     </form>
     <p class="aviso-form" id="avisoCaptura" role="status" aria-live="polite" hidden></p>
+  </div>
+</div>
+
+<!-- ============ POLÍTICA DE PRIVACIDADE E TERMOS DE USO ============
+     Só em português (a LGPD é lei brasileira, e o site é voltado pro
+     público do Brasil) - o resto do site continua em pt/en normal. -->
+<div class="legal" id="modalPrivacidade" hidden>
+  <div class="legal-card" role="dialog" aria-modal="true" aria-labelledby="tituloPrivacidade">
+    <button class="legal-fechar" id="fecharPrivacidade" aria-label="Fechar">&#10005;</button>
+    <h2 id="tituloPrivacidade">Política de Privacidade</h2>
+    <p class="legal-atualizado">Última atualização: outubro de 2026.</p>
+
+    <p>Esta Política explica quais dados pessoais este site coleta, para que servem e quais são os seus direitos, de acordo com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018 - LGPD).</p>
+
+    <h3>1. Quem é a responsável pelos dados</h3>
+    <p>Paloma Ribeiro, criadora de conteúdo UGC, com contato pelo e-mail <a href="mailto:paalomazevedo@gmail.com">paalomazevedo@gmail.com</a>, é quem decide como e por que os dados coletados neste site são usados.</p>
+
+    <h3>2. Quais dados são coletados</h3>
+    <ul>
+      <li><b>Formulário de contato ("Me conta da sua marca"):</b> nome, e-mail e a mensagem que você escrever.</li>
+      <li><b>Pop-up de mídia kit:</b> nome e e-mail, só se você preencher e enviar.</li>
+      <li><b>Navegação no site:</b> um registro simples de qual página foi aberta e de onde a visita veio (por exemplo, Instagram ou Google), sem nenhum dado que identifique você pessoalmente.</li>
+    </ul>
+    <p>O site não usa cookies de rastreamento nem pixels de publicidade. Guarda só duas informações no seu próprio navegador (nunca enviadas pra fora dele): o idioma escolhido (português/inglês) e se o pop-up de mídia kit já apareceu nessa visita.</p>
+
+    <h3>3. Para que esses dados são usados</h3>
+    <ul>
+      <li>Responder ao seu contato e conversar sobre uma possível parceria;</li>
+      <li>Enviar o mídia kit, quando solicitado;</li>
+      <li>Entender, de forma agregada, quais páginas e origens trazem mais visitas ao site.</li>
+    </ul>
+
+    <h3>4. Com quem os dados são compartilhados</h3>
+    <p>Os dados ficam guardados no banco de dados do site (Supabase) e, quando aplicável, passam pelo serviço usado para enviar e-mails (Resend). Nenhum dado é vendido ou compartilhado com terceiros para fins de publicidade.</p>
+
+    <h3>5. Seus direitos</h3>
+    <p>Você pode, a qualquer momento, pedir para saber quais dados seus estão guardados, corrigi-los ou pedir a exclusão deles, escrevendo para <a href="mailto:paalomazevedo@gmail.com">paalomazevedo@gmail.com</a>.</p>
+  </div>
+</div>
+
+<div class="legal" id="modalTermos" hidden>
+  <div class="legal-card" role="dialog" aria-modal="true" aria-labelledby="tituloTermos">
+    <button class="legal-fechar" id="fecharTermos" aria-label="Fechar">&#10005;</button>
+    <h2 id="tituloTermos">Termos de Uso</h2>
+    <p class="legal-atualizado">Última atualização: outubro de 2026.</p>
+
+    <h3>1. Sobre este site</h3>
+    <p>Este site é o portfólio de Paloma Ribeiro, criadora de conteúdo UGC, usado para apresentar trabalhos, serviços e facilitar o contato com marcas interessadas em uma parceria.</p>
+
+    <h3>2. Propriedade do conteúdo</h3>
+    <p>Todas as fotos, vídeos, textos e demais materiais exibidos aqui são de autoria de Paloma Ribeiro ou usados com autorização das marcas envolvidas, e não podem ser copiados, reproduzidos ou usados sem permissão prévia.</p>
+
+    <h3>3. Uso do formulário de contato</h3>
+    <p>Ao preencher o formulário de contato ou o pop-up de mídia kit, você garante que as informações enviadas são verdadeiras e concorda em ser contatado(a) por e-mail ou WhatsApp a respeito da sua solicitação.</p>
+
+    <h3>4. Limitação de responsabilidade</h3>
+    <p>As informações deste site (como resultados de campanhas e métricas) têm caráter ilustrativo do trabalho já realizado e não constituem garantia de resultado para futuras parcerias.</p>
+
+    <h3>5. Alterações</h3>
+    <p>Estes Termos podem ser atualizados a qualquer momento, para refletir mudanças no site ou na legislação. A data no topo desta página indica a última atualização.</p>
+
+    <h3>6. Dúvidas</h3>
+    <p>Qualquer dúvida sobre estes Termos pode ser enviada para <a href="mailto:paalomazevedo@gmail.com">paalomazevedo@gmail.com</a>.</p>
   </div>
 </div>
 
@@ -1304,6 +1392,8 @@ const TEXTOS = {
 
   rodapeEmail: { pt: "E-mail", en: "Email" },
   rodapeAno: { pt: "Paloma Ribeiro, criadora de conteúdo UGC em Praia Grande.", en: "Paloma Ribeiro, UGC content creator in Praia Grande." },
+  rodapePrivacidade: { pt: "Política de Privacidade", en: "Privacy Policy (in Portuguese)" },
+  rodapeTermos: { pt: "Termos de Uso", en: "Terms of Use (in Portuguese)" },
 
   fecharVideo: { pt: "Fechar o vídeo", en: "Close the video" },
   fechar: { pt: "Fechar", en: "Close" },
@@ -2397,6 +2487,32 @@ function ligaAno(){
   $("#ano").textContent = new Date().getFullYear();
 }
 
+/* ----- modais de Política de Privacidade e Termos de Uso -----
+   Mesma mecânica (abrir/fechar/Esc/clique fora) pros dois, só muda
+   qual botão abre qual caixa. */
+function ligaLegal(botaoAbreId, caixaId, botaoFecharId){
+  const botaoAbre = $("#" + botaoAbreId);
+  const caixa = $("#" + caixaId);
+  const fechar = $("#" + botaoFecharId);
+  if (!botaoAbre || !caixa || !fechar) return;
+  let focoAnterior = null;
+  function abre(){
+    focoAnterior = document.activeElement;
+    caixa.hidden = false;
+    fechar.focus();
+    document.addEventListener("keydown", tecla);
+  }
+  function fecha(){
+    caixa.hidden = true;
+    document.removeEventListener("keydown", tecla);
+    if (focoAnterior && focoAnterior.focus) focoAnterior.focus();
+  }
+  function tecla(e){ if (e.key === "Escape") fecha(); }
+  botaoAbre.addEventListener("click", abre);
+  fechar.addEventListener("click", fecha);
+  caixa.addEventListener("click", function(e){ if (e.target === caixa) fecha(); });
+}
+
 /* ----- bastidor: as fotos alternam sozinhas, uma de cada vez -----
    quem pediu menos movimento no sistema (prefers-reduced-motion) só
    vê a primeira foto, fixa, sem a troca automática. */
@@ -2443,6 +2559,8 @@ ligaFormulario();
 ligaVisor();
 ligaCaptura();
 ligaAno();
+ligaLegal("abrirPrivacidade", "modalPrivacidade", "fecharPrivacidade");
+ligaLegal("abrirTermos", "modalTermos", "fecharTermos");
 registraVisita();
 </script>
 </body>
