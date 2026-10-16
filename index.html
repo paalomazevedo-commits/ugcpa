@@ -408,6 +408,11 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
 /* etiqueta da marca flutuando em cima do vídeo, tipo um cartão pequeno
    pousado sobre a capa (sombra pra dar a sensação de estar solta, não
    colada na imagem) */
+.destaque-capa iframe{
+  position:absolute;inset:0;width:100%;height:100%;border:0;display:block;z-index:1;
+  opacity:0;transition:opacity .35s ease;
+}
+.destaque-capa iframe.pronto{opacity:1}
 .destaque-marca-flutuante{
   position:absolute;top:14px;left:14px;z-index:1;pointer-events:none;
   display:block;width:52px;height:52px;border-radius:50%;
@@ -505,7 +510,12 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
    vídeo (ficava preto em vez de tocar), então voltou pro tamanho
    normal: prefiro o vídeo tocando com a marca do YouTube por cima do
    que a tela preta. */
-.video-quadro iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;border-radius:18px;z-index:1}
+.video-quadro iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block;border-radius:18px;z-index:1;
+  /* nasce transparente: a capa por baixo continua visível até o vídeo
+     estar pronto de verdade (ver "pronto" em iniciaPreVisualizacao),
+     pra não aparecer aquele flash de tela preta do player carregando */
+  opacity:0;transition:opacity .35s ease}
+.video-quadro iframe.pronto{opacity:1}
 .video-abrir{position:absolute;inset:0;z-index:2;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:default;display:flex;align-items:flex-end;justify-content:center}
 .selo-som{margin-bottom:14px;padding:8px 13px;background:var(--louca-clara);border:2px solid var(--cobalto);color:var(--cobalto-texto);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;border-radius:999px;transition:background .2s ease,color .2s ease}
 .video-abrir:hover .selo-som,.video-abrir:focus-visible .selo-som{background:var(--cobalto);color:#fff}
@@ -2043,6 +2053,15 @@ function ligaCursorSeguidor(){
       botao.getAttribute("aria-label") || "";
     frame.setAttribute("allow", "autoplay; encrypted-media; picture-in-picture");
     frame.setAttribute("src", enderecoVideo(botao.dataset.id, false));
+    /* a capa continua visível por baixo (opacity:0 no iframe, ver CSS)
+       até aqui: sem isso, aparecia um flash de tela preta enquanto o
+       player do YouTube carregava por dentro do iframe. O "load" do
+       iframe só avisa que o player chegou, não que o vídeo já está de
+       fato rodando, então ainda espera um pouquinho antes de revelar -
+       tempo suficiente pra, na prática, a tela preta nunca aparecer. */
+    frame.addEventListener("load", function(){
+      setTimeout(function(){ frame.classList.add("pronto"); }, 220);
+    });
     quadro.insertBefore(frame, botao);
   }
   function paraPreVisualizacao(quadro){
