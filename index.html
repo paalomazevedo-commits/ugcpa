@@ -2048,14 +2048,14 @@ function carregaPreVisualizacao(quadro){
   frame.setAttribute("src", enderecoVideo(botao.dataset.id, false));
   /* a capa continua visível por baixo (opacity:0 no iframe, ver CSS)
      até aqui: sem isso, aparecia um flash de tela preta enquanto o
-     player do YouTube carregava por dentro do iframe. O "load" do
-     iframe só avisa que o player chegou, não que o vídeo já está de
-     fato rodando, então ainda espera um pouquinho antes de revelar -
-     tempo suficiente pra, na prática, a tela preta nunca aparecer.
-     Como isso já rola precarregado (antes do hover, na maioria dos
-     casos), quem visita o site nem percebe essa espera. */
+     player do YouTube carregava por dentro do iframe. Como todo
+     carrossel já pré-carrega assim que a página abre (bem antes de
+     qualquer hover de verdade), esse carregamento já aconteceu
+     inteiro de sobra; os 80ms aqui são só uma folga mínima de
+     segurança pro "load" assentar antes de revelar, não uma espera
+     que a pessoa chegue a perceber. */
   frame.addEventListener("load", function(){
-    setTimeout(function(){ frame.classList.add("pronto"); }, 220);
+    setTimeout(function(){ frame.classList.add("pronto"); }, 80);
   });
   quadro.insertBefore(frame, botao);
 }
@@ -2110,27 +2110,16 @@ function ligaPreVisualizacaoNicho(){
   document.addEventListener("pointerdown", atualiza);
 }
 
-/* ----- precarrega os vídeos de um nicho assim que o carrossel aparece
-   na tela, bem antes de qualquer mouse chegar perto - é o que faz a
-   prévia parecer instantânea no hover, em vez de esperar o YouTube
-   carregar na hora. Só liga quando o carrossel entra na tela (e só
-   uma vez), pra não carregar os 30 e tantos vídeos do site inteiro de
-   uma vez só. */
+/* ----- precarrega TODOS os vídeos de TODOS os nichos assim que a
+   página carrega - não espera nem o carrossel entrar na tela, pra não
+   sobrar nenhuma chance de alguém rolar até lá e passar o mouse antes
+   do vídeo estar pronto. Só liga em telas com mouse de verdade (ver
+   PODE_PRE_VISUALIZAR, no celular isso nunca roda), então carregar
+   os 30 e tantos vídeos de uma vez é tranquilo pra memória. */
 function ligaPrecarregamentoNichos(carrosseis){
-  if (!("IntersectionObserver" in window)){
-    carrosseis.forEach(function(c){
-      c.querySelectorAll(".video-quadro").forEach(carregaPreVisualizacao);
-    });
-    return;
-  }
-  const obs = new IntersectionObserver(function(entradas){
-    entradas.forEach(function(e){
-      if (!e.isIntersecting) return;
-      e.target.querySelectorAll(".video-quadro").forEach(carregaPreVisualizacao);
-      obs.unobserve(e.target);
-    });
-  }, { rootMargin: "200px 0px" });
-  carrosseis.forEach(function(c){ obs.observe(c); });
+  carrosseis.forEach(function(c){
+    c.querySelectorAll(".video-quadro").forEach(carregaPreVisualizacao);
+  });
 }
 
 /* ----- cursor que persegue o mouse, decorativo -----
