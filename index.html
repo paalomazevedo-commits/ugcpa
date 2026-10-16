@@ -564,6 +564,27 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
 }
 .servico-texto{margin-top:16px;color:var(--tinta-media);font-size:.96rem}
 
+/* ===== 2.7 DEPOIMENTOS =====
+   o logo da marca fica meio "pousado" em cima do card, saindo um
+   pouco da borda de cima - por isso a margem negativa no logo e o
+   padding extra no card, pra sobrar espaço pra ele encaixar ali */
+.depoimentos-grade{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,3vw,32px);margin-top:46px}
+.depoimento-card{
+  position:relative;background:var(--louca-clara);border-radius:18px;
+  box-shadow:0 10px 26px rgba(43,45,53,.09);
+  padding:44px 26px 28px;text-align:center;
+}
+.depoimento-logo{
+  display:grid;place-items:center;width:64px;height:64px;margin:-62px auto 14px;
+  border-radius:50%;background:#fff;border:1px solid var(--fio);
+  box-shadow:0 8px 16px rgba(43,45,53,.16);overflow:hidden;
+}
+.depoimento-logo img{width:100%;height:100%;object-fit:cover}
+.depoimento-marca{font-family:"Fraunces",Georgia,serif;font-weight:700;font-size:1.05rem;color:var(--cobalto-texto)}
+.depoimento-estrelas{margin-top:6px;color:var(--tarja-fundo-escuro);font-size:.95rem;letter-spacing:.14em}
+.depoimento-texto{margin-top:14px;font-size:.92rem;color:var(--tinta-media);line-height:1.6}
+.depoimento-autor{margin-top:14px;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tinta-media)}
+
 
 /* ===== 7. CONTATO ===== */
 /* o min-width:0 deixa as colunas encolherem abaixo do conteúdo. Sem ele,
@@ -627,6 +648,7 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
 @media (max-width:720px){
   .secao{padding:66px 0}
   .servicos-grade{grid-template-columns:1fr}
+  .depoimentos-grade{grid-template-columns:1fr}
   .sobre-dados{grid-template-columns:1fr}
   .btn{width:100%}
   .capa-botoes{flex-direction:column;align-items:stretch}
@@ -779,6 +801,15 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
           <img src="resultados/byri-dashboard.webp" alt="Print do painel de anúncios da Byri: 295 conversas por mensagem iniciadas, R$2,10 por conversa, R$618,13 de valor gasto" data-i18n-alt="resultadosFundoAlt" loading="lazy" decoding="async">
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ============ 2.7 DEPOIMENTOS ============ -->
+  <section id="depoimentos" class="secao">
+    <div class="env">
+      <p class="rotulo revela" data-i18n="depoimentosRotulo">Feedback de quem já trabalhou comigo</p>
+      <h2 class="titulo-secao revela" data-i18n="depoimentosTitulo">O que as <mark class="marca-texto">marcas</mark> dizem depois do vídeo pronto</h2>
+      <div class="depoimentos-grade" id="grelhaDepoimentos"></div>
     </div>
   </section>
 
@@ -977,6 +1008,44 @@ const NUMEROS = [
   { valor: 1,  sufixo: "", rotulo: { pt: "Ano de experiência", en: "Year of experience" } }
 ];
 
+/* --- 0.5) DEPOIMENTOS ---
+   Feedback de marca, recortado de e-mail ou mensagem real (sem inventar
+   nada). logo: arquivo já existente em marcas/. autor: quem assinou o
+   feedback, pra dar mais credibilidade ainda.
+
+   PRA ADICIONAR UM NOVO: cole o texto (em pt), traduza pro en, e aponte
+   o logo da marca (se ainda não tiver logo em marcas/, adiciona lá
+   primeiro, do jeito que já foi feito com as outras marcas). */
+const TESTEMUNHOS = [
+  {
+    marca: "Celimax",
+    logo: "marcas/celimax.webp",
+    texto: {
+      pt: "Adoramos ver o resultado e queremos agradecer pelo tempo, pela dedicação e pela criatividade que você colocou no conteúdo. Valorizamos muito todo o carinho e a autenticidade que você transmitiu.",
+      en: "We loved seeing the result and want to thank you for the time, dedication and creativity you put into the content. We really value all the care and authenticity you brought to it."
+    },
+    autor: { pt: "E-mail da Celimax", en: "Email from Celimax" }
+  },
+  {
+    marca: "Celimax",
+    logo: "marcas/celimax.webp",
+    texto: {
+      pt: "Gostaríamos de agradecer pelo lindo conteúdo que você criou para a nossa marca. Adoramos o vídeo e ficamos muito felizes com o resultado, o que nos motiva a continuar construindo essa relação com você.",
+      en: "We'd like to thank you for the beautiful content you created for our brand. We loved the video and were very happy with the result, which motivates us to keep building this relationship with you."
+    },
+    autor: { pt: "Aylen, Marketing Celimax", en: "Aylen, Celimax Marketing" }
+  },
+  {
+    marca: "Bioage",
+    logo: "marcas/bioage.webp",
+    texto: {
+      pt: "Gostamos muito do seu conteúdo! Adoramos a qualidade das entregas e, principalmente, o seu comprometimento, que faz toda a diferença para o sucesso da ação!",
+      en: "We really loved your content! We loved the quality of the deliveries and, most importantly, your commitment, which makes all the difference for the campaign's success!"
+    },
+    autor: { pt: "Equipe Bioage", en: "Bioage Team" }
+  }
+];
+
 /* --- 1) MARCAS DA FAIXA DA CAPA ---
    A faixa que desliza embaixo da capa. Cada marca tem:
    nome:    o nome que aparece pra quem usa leitor de tela (e no título
@@ -1172,6 +1241,9 @@ const TEXTOS = {
   resultadosIntro: { pt: "Um criativo só, rodando como anúncio para a Byri, virou <b>295</b> conversas iniciadas a <b>R$2,10</b> cada. Prova de que o conteúdo certo não só engaja, vende.", en: "Just one creative, running as a paid ad for Byri, turned into <b>295</b> conversations started at <b>R$2,10</b> each. Proof that the right content doesn't just engage, it sells." },
   resultadosFundoAlt: { pt: "Print do painel de anúncios da Byri: 295 conversas por mensagem iniciadas, R$2,10 por conversa, R$618,13 de valor gasto", en: "Byri ad dashboard screenshot: 295 conversations started, R$2,10 per conversation, R$618,13 spent" },
   resultadosVideoAlt: { pt: "Capa do vídeo: o mule zebra da Byri", en: "Video cover: the Byri zebra mule" },
+
+  depoimentosRotulo: { pt: "Feedback de quem já trabalhou comigo", en: "Feedback from brands I've worked with" },
+  depoimentosTitulo: { pt: 'O que as <mark class="marca-texto">marcas</mark> dizem depois do vídeo pronto', en: 'What <mark class="marca-texto">brands</mark> say once the video is ready' },
   resultadosVideoAria: { pt: "Assistir o vídeo que gerou esse resultado", en: "Watch the video that generated this result" },
   resultadosVideoTitulo: { pt: "O mule que virou anúncio", en: "The mule that became an ad" },
 
@@ -1283,6 +1355,7 @@ function definirIdioma(novo){
   const elRot = $("#tarjaRotativo");
   if (elRot) elRot.textContent = FRASES_TARJA[indiceFraseTarja][idioma];
   montaDestaques();
+  montaDepoimentos();
   montaServicos();
   if (typeof videosAtuais !== "undefined" && videosAtuais.length) montaVideos(videosAtuais);
 
@@ -1920,6 +1993,21 @@ function montaServicos(){
   }).join("");
 }
 
+function montaDepoimentos(){
+  const rotuloLogo = idioma === "en" ? "Logo of the brand " : "Logo da marca ";
+  $("#grelhaDepoimentos").innerHTML = TESTEMUNHOS.map(function(d){
+    return '<article class="depoimento-card revela">' +
+             '<span class="depoimento-logo">' +
+               '<img src="' + esc(d.logo) + '" alt="' + esc(rotuloLogo + d.marca) + '" loading="lazy" decoding="async">' +
+             '</span>' +
+             '<p class="depoimento-marca">' + esc(d.marca) + '</p>' +
+             '<p class="depoimento-estrelas" aria-hidden="true">★★★★★</p>' +
+             '<p class="depoimento-texto">“' + esc(d.texto[idioma]) + '”</p>' +
+             '<p class="depoimento-autor">' + esc(d.autor[idioma]) + '</p>' +
+           '</article>';
+  }).join("");
+}
+
 /* ----- animação de entrada ao rolar -----
    Os vídeos chegam depois (vêm do banco, por uma busca que leva um
    tempinho), então esse observador precisa poder ser chamado de novo
@@ -2134,6 +2222,7 @@ montaNumeros();
 montaTarjaContagem();
 ligaTarjaRotativa();
 montaDestaques();
+montaDepoimentos();
 carregarEMontarVideos();
 montaServicos();
 ligaBastidor();
