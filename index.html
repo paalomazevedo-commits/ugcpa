@@ -478,7 +478,6 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
 .carrossel[hidden]{display:none}
 .carrossel-topo{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px}
 .carrossel-nome{font-family:"Fraunces",Georgia,serif;font-style:italic;font-weight:600;font-size:1.4rem;color:var(--cobalto-texto);padding-bottom:8px;border-bottom:1px solid var(--cobalto)}
-.carrossel-contagem{font-family:"Inter",sans-serif;font-style:normal;font-weight:400;font-size:.8rem;color:var(--tinta-media);vertical-align:super}
 .carrossel-setas{display:flex;gap:10px}
 .carrossel-setas[hidden]{display:none}
 .seta{width:48px;height:48px;border:2px solid var(--cobalto);background:transparent;color:var(--cobalto-texto);cursor:pointer;display:grid;place-items:center;font-size:1rem;line-height:1;border-radius:50%;transition:background .2s ease,color .2s ease}
@@ -1799,7 +1798,7 @@ function montaVideos(listaCompleta){
     return '' +
       '<section class="carrossel revela" data-categoria="' + esc(c.id) + '">' +
         '<div class="carrossel-topo">' +
-          '<h3 class="carrossel-nome">' + esc(c.nome) + ' <span class="carrossel-contagem">' + String(itensDoNicho.length).padStart(2, "0") + '</span></h3>' +
+          '<h3 class="carrossel-nome">' + esc(c.nome) + '</h3>' +
           '<div class="carrossel-setas">' +
             '<button type="button" class="seta" data-passo="-1" aria-label="' + esc(idioma === "en" ? "See the previous " + c.nome + " videos" : "Ver os vídeos anteriores de " + c.nome) + '">&#10094;</button>' +
             '<button type="button" class="seta" data-passo="1" aria-label="' + esc(idioma === "en" ? "See the next " + c.nome + " videos" : "Ver os próximos vídeos de " + c.nome) + '">&#10095;</button>' +
