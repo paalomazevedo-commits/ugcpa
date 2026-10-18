@@ -45,7 +45,13 @@
     vigencia_fim: { rotulo: "Vigência até (data)", tipo: "data" },
     meios_divulgacao: { rotulo: "Onde vai ser usado (ex.: perfil da marca no Instagram e TikTok; anúncios pagos)", tipo: "texto" },
     exclusividade_dias: { rotulo: "Dias de exclusividade após a publicação", tipo: "numero", extenso: true, opcional: true },
-    categoria_exclusividade: { rotulo: "Categoria da exclusividade (ex.: cosméticos)", tipo: "texto", opcional: true }
+    categoria_exclusividade: { rotulo: "Categoria da exclusividade (ex.: cosméticos)", tipo: "texto", opcional: true },
+    data_briefing: { rotulo: "Cronograma: envio do briefing e produtos", tipo: "data", opcional: true },
+    data_roteiro: { rotulo: "Cronograma: envio do roteiro", tipo: "data", opcional: true },
+    data_aprovacao_roteiro: { rotulo: "Cronograma: aprovação do roteiro", tipo: "data", opcional: true },
+    data_gravacao: { rotulo: "Cronograma: gravação e envio do material bruto", tipo: "data", opcional: true },
+    data_entrega_final: { rotulo: "Cronograma: entrega final (arquivos editados)", tipo: "data", opcional: true },
+    data_publicacao: { rotulo: "Cronograma: publicação no perfil", tipo: "data", opcional: true }
   };
 
   var modeloAtual = { texto: "", logo_base64: null };
