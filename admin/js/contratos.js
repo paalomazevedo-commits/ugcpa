@@ -40,7 +40,12 @@
     prazo_pagamento: { rotulo: "Prazo de pagamento (dias)", tipo: "numero", extenso: true },
     meses_licenca: { rotulo: "Meses de licença de mídia paga", tipo: "numero", extenso: true },
     cidade_assinatura: { rotulo: "Cidade da assinatura", tipo: "texto", padrao: "Praia Grande/SP" },
-    data_assinatura: { rotulo: "Data da assinatura", tipo: "data", extenso: true, padrao: "hoje" }
+    data_assinatura: { rotulo: "Data da assinatura", tipo: "data", extenso: true, padrao: "hoje" },
+    produto: { rotulo: "Produto(s) divulgado(s)", tipo: "texto" },
+    vigencia_fim: { rotulo: "Vigência até (data)", tipo: "data" },
+    meios_divulgacao: { rotulo: "Onde vai ser usado (ex.: perfil da marca no Instagram e TikTok; anúncios pagos)", tipo: "texto" },
+    exclusividade_dias: { rotulo: "Dias de exclusividade após a publicação", tipo: "numero", extenso: true, opcional: true },
+    categoria_exclusividade: { rotulo: "Categoria da exclusividade (ex.: cosméticos)", tipo: "texto", opcional: true }
   };
 
   var modeloAtual = { texto: "", logo_base64: null };
