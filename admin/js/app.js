@@ -46,7 +46,8 @@ window.Admin = (function () {
     ordemDesc: '<svg class="icone seta-ordem" viewBox="0 0 24 24"><path d="M7 10l5-5 5 5"/></svg>',
     envelope: '<svg class="icone" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
     copiar: '<svg class="icone" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="1.5"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg>',
-    tela: '<svg class="icone" viewBox="0 0 24 24"><path d="M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 1-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1 1h-4"/></svg>'
+    tela: '<svg class="icone" viewBox="0 0 24 24"><path d="M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 1-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1 1h-4"/></svg>',
+    contrato: '<svg class="icone" viewBox="0 0 24 24"><path d="M7 3h8l4 4v14H7z"/><path d="M15 3v4h4"/><path d="M9 11h6M9 15h6M9 19h3"/></svg>'
   };
 
   function icone(nome) { return ICONES[nome] || ""; }

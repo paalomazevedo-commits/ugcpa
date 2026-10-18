@@ -603,6 +603,29 @@ tr.linha-favorita{box-shadow:inset 3px 0 0 var(--ambar)}
 .prosp-fila-item-acoes{display:flex;gap:8px;flex-wrap:wrap}
 
 /* ============================================================
+   CONTRATOS
+   ============================================================ */
+.contrato-colunas{display:grid;grid-template-columns:1fr 1.1fr;gap:16px;align-items:start}
+.contrato-modelo-textarea{
+  width:100%;min-height:360px;font-family:inherit;font-size:.86rem;line-height:1.6;
+  border:1px solid var(--fio-forte);border-radius:var(--raio);padding:12px;resize:vertical;
+  margin-bottom:12px;color:var(--tinta);
+}
+.contrato-previa{
+  border:1px solid var(--fio-forte);border-radius:var(--raio);padding:18px 22px;
+  max-height:70vh;overflow-y:auto;background:var(--louca-clara);
+}
+.contrato-previa-titulo{font-weight:700;text-align:center;font-size:1.05rem;margin:0 0 12px}
+.contrato-previa-secao{font-weight:700;margin:14px 0 6px;font-size:.92rem}
+.contrato-previa-paragrafo{margin:0 0 8px;font-size:.84rem;line-height:1.6;text-align:justify}
+.contrato-previa-lista{margin:0 0 8px;padding-left:20px;font-size:.84rem;line-height:1.6}
+.contrato-previa-tabela{width:100%;border-collapse:collapse;margin:0 0 10px;font-size:.78rem}
+.contrato-previa-tabela th,.contrato-previa-tabela td{border:1px solid var(--fio-forte);padding:6px 8px;text-align:left}
+.contrato-previa-tabela th{background:var(--fio);font-weight:600}
+.contrato-previa-assinatura{margin:18px 0 0;font-size:.84rem;line-height:1.8}
+.contrato-campo-vazio{background:#fde68a;color:#78350f;padding:0 3px;border-radius:2px;font-weight:600}
+
+/* ============================================================
    RESPONSIVO
    ============================================================ */
 @media (max-width:900px){
@@ -619,6 +642,7 @@ tr.linha-favorita{box-shadow:inset 3px 0 0 var(--ambar)}
   .dia-mes{min-height:74px}
   .prosp-grid{grid-template-columns:1fr}
   .prosp-preview-col{position:static}
+  .contrato-colunas{grid-template-columns:1fr}
   .prosp-capa-topo{flex-wrap:wrap}
   .prosp-capa-numero{text-align:left}
 }
