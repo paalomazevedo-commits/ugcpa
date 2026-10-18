@@ -427,6 +427,101 @@
     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
 
+  function blobParaBase64(blob) {
+    return new Promise(function (resolve, reject) {
+      var leitor = new FileReader();
+      leitor.onload = function () { resolve(String(leitor.result || "")); };
+      leitor.onerror = reject;
+      leitor.readAsDataURL(blob);
+    });
+  }
+
+  /* ============================================================
+     ASSINATURA DIGITAL (via Autentique)
+     ============================================================ */
+
+  function chamarAssinatura(corpo) {
+    return window.banco.auth.getSession().then(function (r) {
+      var sessao = r && r.data && r.data.session;
+      if (!sessao) return { ok: false, mensagem: "Sua sessão expirou. Recarregue a página e entre de novo." };
+      var urlBase = window.URL_PROJETO_SUPABASE;
+      if (!urlBase) return { ok: false, mensagem: "Não achei o endereço do projeto (js/banco.js). Recarregue a página." };
+      return fetch(urlBase + "/functions/v1/assinatura-contrato", {
+        method: "POST",
+        headers: { Authorization: "Bearer " + sessao.access_token, "Content-Type": "application/json" },
+        body: JSON.stringify(corpo)
+      }).then(function (resp) {
+        return resp.json().catch(function () { return null; }).then(function (corpoResp) {
+          if (!resp.ok || !corpoResp) return { ok: false, mensagem: (corpoResp && corpoResp.mensagem) || "A função respondeu com um erro." };
+          return corpoResp;
+        });
+      });
+    }).catch(function () {
+      return { ok: false, mensagem: "Não consegui falar com a função de assinatura agora. Confira a sua internet." };
+    });
+  }
+
+  function abrirEnvioAssinatura(contratoId, nomeDocumento, blocosResolvidos, valoresParaPreencher) {
+    var html =
+      '<h2 class="gaveta-titulo">Enviar para assinatura</h2>' +
+      '<p class="texto-apoio">Vai pedir a assinatura sua e da marca, pelo Autentique. Confira o e-mail da marca antes de mandar.</p>' +
+      '<label class="campo"><span>Nome de quem assina pela marca</span><input type="text" id="eaNome" value="' + A.esc(valoresParaPreencher.representante || "") + '"></label>' +
+      '<label class="campo"><span>E-mail de quem assina pela marca</span><input type="email" id="eaEmail" value="' + A.esc(valoresParaPreencher.email_marca || "") + '"></label>' +
+      '<p class="erro-campo" id="eaErro" hidden></p>' +
+      '<div class="gaveta-acoes"><button type="button" class="botao" id="eaEnviar">Enviar pra assinatura</button></div>';
+
+    A.abrirModal({
+      titulo: "Enviar para assinatura",
+      corpoHTML: html,
+      onMontar: function (caixa) {
+        caixa.querySelector("#eaEnviar").addEventListener("click", function () {
+          var nome = document.getElementById("eaNome").value.trim();
+          var email = document.getElementById("eaEmail").value.trim();
+          var erro = document.getElementById("eaErro");
+          if (!email) { erro.hidden = false; erro.textContent = "Preencha o e-mail da marca."; return; }
+          erro.hidden = true;
+          var botao = document.getElementById("eaEnviar");
+          botao.disabled = true; botao.textContent = "Gerando PDF...";
+          gerarPDF(blocosResolvidos, logoBase64Atual).then(function (r) {
+            if (!r.ok) {
+              botao.disabled = false; botao.textContent = "Enviar pra assinatura";
+              erro.hidden = false; erro.textContent = r.mensagem || "Não consegui gerar o PDF.";
+              return;
+            }
+            botao.textContent = "Enviando...";
+            blobParaBase64(r.blob).then(function (base64) {
+              return window.banco.auth.getSession().then(function (sres) {
+                var sessao = sres && sres.data && sres.data.session;
+                var emailPaloma = sessao && sessao.user && sessao.user.email;
+                return chamarAssinatura({
+                  acao: "enviar",
+                  contratoId: contratoId,
+                  nomeDocumento: nomeDocumento,
+                  pdfBase64: base64,
+                  assinantes: [
+                    { nome: "Paloma Ribeiro", email: emailPaloma || "" },
+                    { nome: nome, email: email }
+                  ]
+                });
+              });
+            }).then(function (resultado) {
+              botao.disabled = false; botao.textContent = "Enviar pra assinatura";
+              if (!resultado.ok) { erro.hidden = false; erro.textContent = resultado.mensagem || "Não consegui enviar."; return; }
+              A.fecharModal();
+              A.toast("Contrato enviado para assinatura.", "ok");
+            });
+          });
+        });
+      }
+    });
+  }
+
+  function rotuloStatusAssinatura(status) {
+    if (status === "assinado") return "Assinado";
+    if (status === "pendente") return "Aguardando assinatura";
+    return "Não enviado";
+  }
+
   function limpaNomeArquivo(t) {
     return String(t || "").replace(/[\\/:*?"<>|]/g, "-").trim();
   }
@@ -438,7 +533,7 @@
   }
 
   function salvarHistorico(valores) {
-    A.gravar("contratos_gerados", "insert", { valores: { marca: valores.razao_social || "Sem nome", campos: valores } });
+    return A.gravar("contratos_gerados", "insert", { valores: { marca: valores.razao_social || "Sem nome", campos: valores } });
   }
 
   /* ============================================================
@@ -451,11 +546,19 @@
       var html =
         '<h2 class="gaveta-titulo">Histórico de contratos</h2>' +
         (lista.length
-          ? '<div class="tabela-scroll"><table class="tabela"><thead><tr><th>Marca</th><th>Gerado em</th><th></th></tr></thead><tbody>' +
+          ? '<div class="tabela-scroll"><table class="tabela"><thead><tr><th>Marca</th><th>Gerado em</th><th>Assinatura</th><th></th></tr></thead><tbody>' +
             lista.map(function (h) {
-              return "<tr><td>" + A.esc(h.marca) + "</td><td>" + (A.formatarData(h.criado_em) || "-") + '</td><td style="display:flex;gap:8px">' +
+              var acoesAssinatura = h.status_assinatura === "nao_enviado" || !h.status_assinatura
+                ? '<button type="button" class="botao botao--linha botao--mini" data-assinar="' + A.esc(h.id) + '">Enviar pra assinatura</button>'
+                : h.status_assinatura === "pendente"
+                  ? '<button type="button" class="botao botao--linha botao--mini" data-conferir="' + A.esc(h.id) + '">Conferir status</button>'
+                  : "";
+              return "<tr><td>" + A.esc(h.marca) + "</td><td>" + (A.formatarData(h.criado_em) || "-") + "</td>" +
+                '<td data-status-de="' + A.esc(h.id) + '">' + rotuloStatusAssinatura(h.status_assinatura) + "</td>" +
+                '<td style="display:flex;gap:8px;flex-wrap:wrap">' +
                 '<button type="button" class="botao botao--linha botao--mini" data-usar="' + A.esc(h.id) + '">Usar como base</button>' +
-                '<button type="button" class="botao botao--linha botao--mini" data-baixar="' + A.esc(h.id) + '">Baixar de novo</button></td></tr>';
+                '<button type="button" class="botao botao--linha botao--mini" data-baixar="' + A.esc(h.id) + '">Baixar de novo</button>' +
+                acoesAssinatura + "</td></tr>";
             }).join("") + "</tbody></table></div>"
           : '<p class="texto-apoio">Nenhum contrato gerado ainda.</p>');
 
@@ -482,6 +585,27 @@
                 btn.disabled = false; btn.textContent = "Baixar de novo";
                 if (!res.ok) { A.toast(res.mensagem || "Não consegui gerar o PDF.", "erro"); return; }
                 baixarBlob(res.blob, montaNomeArquivo(item.campos || {}));
+              });
+            });
+          });
+          caixa.querySelectorAll("[data-assinar]").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              var item = lista.filter(function (h) { return String(h.id) === btn.dataset.assinar; })[0];
+              if (!item) return;
+              var resolvidos = montarBlocosResolvidos(blocosCrus, item.campos || {}, item.campos || {});
+              var nomeDoc = montaNomeArquivo(item.campos || {}).replace(/\.pdf$/, "");
+              abrirEnvioAssinatura(item.id, nomeDoc, resolvidos, item.campos || {});
+            });
+          });
+          caixa.querySelectorAll("[data-conferir]").forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              btn.disabled = true; btn.textContent = "Conferindo...";
+              chamarAssinatura({ acao: "status", contratoId: btn.dataset.conferir }).then(function (res) {
+                btn.disabled = false; btn.textContent = "Conferir status";
+                if (!res.ok) { A.toast(res.mensagem || "Não consegui conferir o status.", "erro"); return; }
+                var celula = caixa.querySelector('[data-status-de="' + btn.dataset.conferir + '"]');
+                if (celula) celula.textContent = rotuloStatusAssinatura(res.status);
+                if (res.status === "assinado") { btn.hidden = true; A.toast("Contrato assinado!", "ok"); }
               });
             });
           });
@@ -533,6 +657,7 @@
           '<div class="gaveta-acoes" style="justify-content:flex-start">' +
             '<button type="button" class="botao" id="ctGerar">' + A.icone("baixar") + "Gerar PDF</button>" +
             '<button type="button" class="botao botao--linha" id="ctHistorico">Histórico</button>' +
+            '<button type="button" class="botao botao--linha" id="ctEnviarAssinatura" hidden>Enviar pra assinatura</button>' +
           "</div>" +
         "</div>" +
         '<div class="cartao cartao-pad">' +
@@ -600,8 +725,17 @@
         botao.disabled = false; botao.textContent = "Gerar PDF";
         if (!r.ok) { erro.hidden = false; erro.textContent = r.mensagem || "Não consegui gerar o PDF. Tenta de novo."; return; }
         baixarBlob(r.blob, montaNomeArquivo(obtidos.formatados));
-        salvarHistorico(obtidos.formatados);
         A.toast("Contrato gerado.", "ok");
+        salvarHistorico(obtidos.formatados).then(function (rHist) {
+          if (!rHist.ok || !rHist.dados || !rHist.dados[0]) return;
+          var contratoId = rHist.dados[0].id;
+          var nomeDoc = montaNomeArquivo(obtidos.formatados).replace(/\.pdf$/, "");
+          var botaoAssinatura = document.getElementById("ctEnviarAssinatura");
+          botaoAssinatura.hidden = false;
+          botaoAssinatura.onclick = function () {
+            abrirEnvioAssinatura(contratoId, nomeDoc, blocosResolvidos, obtidos.formatados);
+          };
+        });
       });
     });
 
