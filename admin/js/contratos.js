@@ -11,6 +11,11 @@
 (function () {
   var A = window.Admin;
 
+  /* o e-mail que recebe o pedido de assinatura como CONTRATADA - o
+     mesmo que já aparece no contrato e no site, não o e-mail de
+     login do admin (que pode ser outro). */
+  var EMAIL_ASSINATURA_PALOMA = "contato@palomaribeirougc.com";
+
   var MESES_EXTENSO = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"];
   var UNIDADES = ["zero", "um", "dois", "três", "quatro", "cinco", "seis", "sete", "oito", "nove"];
   var DEZ_A_DEZENOVE = ["dez", "onze", "doze", "treze", "quatorze", "quinze", "dezesseis", "dezessete", "dezoito", "dezenove"];
@@ -490,19 +495,15 @@
             }
             botao.textContent = "Enviando...";
             blobParaBase64(r.blob).then(function (base64) {
-              return window.banco.auth.getSession().then(function (sres) {
-                var sessao = sres && sres.data && sres.data.session;
-                var emailPaloma = sessao && sessao.user && sessao.user.email;
-                return chamarAssinatura({
-                  acao: "enviar",
-                  contratoId: contratoId,
-                  nomeDocumento: nomeDocumento,
-                  pdfBase64: base64,
-                  assinantes: [
-                    { nome: "Paloma Ribeiro", email: emailPaloma || "" },
-                    { nome: nome, email: email }
-                  ]
-                });
+              return chamarAssinatura({
+                acao: "enviar",
+                contratoId: contratoId,
+                nomeDocumento: nomeDocumento,
+                pdfBase64: base64,
+                assinantes: [
+                  { nome: "Paloma Ribeiro", email: EMAIL_ASSINATURA_PALOMA },
+                  { nome: nome, email: email }
+                ]
               });
             }).then(function (resultado) {
               botao.disabled = false; botao.textContent = "Enviar pra assinatura";
