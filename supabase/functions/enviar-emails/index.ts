@@ -30,7 +30,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 // cá que aponta o "SAIR" do rodapé. Não é segredo nenhum, por
 // isso pode ficar aqui no código. Se um dia você trocar de
 // e-mail, troca só esta linha.
-const EMAIL_CONTATO = "paalomazevedo@gmail.com";
+const EMAIL_CONTATO = "contato@palomaribeirougc.com";
 
 // Só este e-mail pode chamar esta função. Qualquer sessão de
 // outro usuário é recusada.
