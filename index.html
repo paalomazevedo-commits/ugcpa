@@ -220,6 +220,21 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
   -webkit-mask-image:linear-gradient(to bottom,#000 88%,transparent 100%);
   mask-image:linear-gradient(to bottom,#000 88%,transparent 100%);
 }
+/* a caixa do vídeo de apresentação (toca sozinho, em loop) fica no
+   lugar da foto, do mesmo jeito que um vídeo de trabalho: moldura
+   arredondada, proporção de Reels. O iframe nunca recebe clique
+   (pointer-events:none): é só decoração, não dá pra pausar nem mexer. */
+.capa-video-caixa{
+  position:relative;z-index:1;width:min(100%,420px);aspect-ratio:9/16;
+  border-radius:clamp(22px,2.6vw,38px);overflow:hidden;background:#0b1220;
+  box-shadow:var(--sombra);
+}
+.capa-video-caixa iframe{
+  position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none;
+}
+/* sem isso, o display:block fixo acima ignoraria o hidden que o
+   JavaScript liga/desliga pra alternar entre foto e vídeo */
+.capa-foto[hidden],.capa-video-caixa[hidden]{display:none}
 .capa-botoes{display:flex;flex-wrap:wrap;gap:14px;margin-top:clamp(24px,3vw,34px)}
 
 /* faixa fina com os nomes das marcas */
@@ -752,7 +767,11 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
              enquanto carrega. -->
         <img src="foto-capa-recorte.png" width="700" height="887" fetchpriority="high"
              alt="Paloma Ribeiro sorrindo, de blazer bege sobre camiseta branca"
-             class="capa-foto">
+             class="capa-foto" id="capaFoto">
+        <!-- Vídeo de apresentação (o vídeo com nicho "bio" lá no painel). Só
+             aparece se existir um vídeo assim; sem ele, a foto acima continua
+             mostrando normalmente. Toca sozinho, sem som, em loop. -->
+        <div class="capa-video-caixa" id="capaVideoCaixa" hidden></div>
       </div>
     </div>
     <div class="faixa-especialidades">
@@ -1795,7 +1814,7 @@ function idDoYoutube(link){
    novo. Se o banco não responder por qualquer motivo, o site não
    quebra: essa seção mostra uma frase simples no lugar dos vídeos. */
 function carregarEMontarVideos(){
-  if (!window.banco){ montaVideos([]); return; }
+  if (!window.banco){ montaVideos([]); montaVideoCapa(null); return; }
   window.banco.from("videos").select("*").eq("visivel", true).order("ordem", { ascending: true })
     .then(function(resp){
       if (resp.error) throw resp.error;
@@ -1808,11 +1827,17 @@ function carregarEMontarVideos(){
           destaque: v.destaque || ""
         };
       }).filter(function(v){ return v.id && v.categoria; });
+      /* o vídeo com nicho "bio" não é um trabalho pra marca: é o vídeo
+         de apresentação que toca sozinho lá na capa, então não forma
+         carrossel próprio nos Conteúdos (mesma lógica do "youtube ads"). */
+      const videoBio = linhas.filter(function(v){ return tiraAcento(v.categoria) === "bio"; })[0] || null;
+      montaVideoCapa(videoBio);
       montaVideos(linhas);
     })
     .catch(function(erro){
       console.error("Não consegui carregar os vídeos do banco:", erro);
       montaVideos([]);
+      montaVideoCapa(null);
     });
 }
 
@@ -1840,14 +1865,42 @@ function tiraAcento(t){
   return String(t).normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim().replace(/s$/, "");
 }
 
+/* ----- vídeo de apresentação da capa (nicho "bio") -----
+   Toca sozinho, sem som, em loop, no lugar da foto. Se não existir
+   nenhum vídeo com esse nicho (ou o vídeo não tiver um link do
+   YouTube válido), a foto de sempre continua aparecendo. */
+function montaVideoCapa(video){
+  const caixa = $("#capaVideoCaixa");
+  const foto = $("#capaFoto");
+  if (!caixa) return;
+  caixa.innerHTML = "";
+  if (!video || !video.id || reduzMovimento){
+    caixa.hidden = true;
+    if (foto) foto.hidden = false;
+    return;
+  }
+  const iframe = document.createElement("iframe");
+  iframe.src = "https://www.youtube.com/embed/" + encodeURIComponent(video.id) +
+    "?autoplay=1&mute=1&loop=1&playlist=" + encodeURIComponent(video.id) +
+    "&controls=0&modestbranding=1&playsinline=1&rel=0&showinfo=0";
+  iframe.title = idioma === "en" ? "Paloma Ribeiro introduction video" : "Vídeo de apresentação da Paloma Ribeiro";
+  iframe.setAttribute("allow", "autoplay; encrypted-media");
+  iframe.setAttribute("frameborder", "0");
+  caixa.appendChild(iframe);
+  caixa.hidden = false;
+  if (foto) foto.hidden = true;
+}
+
 /* ----- carrosséis de vídeo, um por nicho -----
    "youtube ads" nunca aparece aqui como nicho pequeno: esse formato já
    tem a seção própria e maior dele na página (#youtubeAds), então um
    vídeo salvo lá no painel com esse nicho some da lista em vez de
-   virar um carrossel duplicado. */
+   virar um carrossel duplicado. O nicho "bio" também some daqui: ele
+   é o vídeo de apresentação que toca sozinho lá na capa (ver
+   montaVideoCapa), não um trabalho pra mostrar em Conteúdos. */
 function montaVideos(listaCompleta){
   const lista = listaCompleta.filter(function(v){
-    return tiraAcento(v.categoria) !== tiraAcento("youtube ads");
+    return tiraAcento(v.categoria) !== tiraAcento("youtube ads") && tiraAcento(v.categoria) !== "bio";
   });
   videosAtuais = lista;
 
