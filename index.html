@@ -468,25 +468,11 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
   box-shadow:0 6px 14px rgba(43,45,53,.25);
 }
 .destaque-marca-flutuante img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover}
-.destaque-texto{padding:34px 10px 0;text-align:center}
+.destaque-texto{padding:34px 10px 4px;text-align:center}
 /* a etiqueta do formato é a primeira coisa que a marca lê no card */
 .destaque-formato{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--cobalto-texto);margin-bottom:6px}
 .destaque-titulo{font-size:1.1rem}
 .destaque-contexto{margin-top:6px;color:var(--tinta-media);font-size:.92rem}
-/* botão "assistir" só existe de verdade (ocupa espaço) no card em
-   evidência: é isso que faz ele crescer e ficar maior que os outros
-   dois, igual o card rosa da referência. Nos outros dois fica
-   recolhido a zero de altura, então não aparece nem rouba o clique
-   de trocar qual está em evidência. */
-.destaque-cta{
-  display:block;margin-top:16px;padding:0 18px;border-radius:999px;
-  background:var(--tinta);color:#fff;text-decoration:none;text-align:center;
-  font-size:.76rem;letter-spacing:.06em;text-transform:uppercase;font-weight:500;
-  max-height:0;overflow:hidden;opacity:0;pointer-events:none;
-  transition:max-height .35s ease,opacity .25s ease,padding .35s ease;
-}
-.destaque-cta:hover{background:var(--cobalto-escuro)}
-.destaque[data-ativo="true"] .destaque-cta{max-height:46px;padding:12px 18px;opacity:1;pointer-events:auto}
 
 /* ===== 3.5 YOUTUBE ADS =====
    uma seção pequena e só pra esse formato: o vídeo já vem na horizontal
@@ -1769,9 +1755,6 @@ function montaDestaques(){
           '<h3 class="destaque-titulo">' + esc(titulo) + '</h3>' +
           '<p class="destaque-contexto">' + esc(contexto) + '</p>' +
         '</div>' +
-        '<a class="destaque-cta" href="' + esc(d.link) + '" target="_blank" rel="noopener" tabindex="-1">' +
-          (idioma === "en" ? "Watch on YouTube" : "Ver no YouTube") + " &rarr;" +
-        '</a>' +
       '</article>';
   }).join("");
 
@@ -1780,19 +1763,13 @@ function montaDestaques(){
 
   function marcaAtivo(){
     Array.prototype.forEach.call(trilho.children, function(card, i){
-      const estaAtivo = i === ativo;
-      card.setAttribute("data-ativo", estaAtivo ? "true" : "false");
-      /* o botão "assistir" só é alcançável pelo teclado no card em
-         evidência - nos outros ele fica invisível (opacity:0), então
-         não pode ficar no meio da ordem de tabulação */
-      const cta = card.querySelector(".destaque-cta");
-      if (cta) cta.tabIndex = estaAtivo ? 0 : -1;
+      card.setAttribute("data-ativo", i === ativo ? "true" : "false");
     });
   }
 
   /* os três já ficam todos visíveis lado a lado (sem carrossel, sem
      rolagem); só quem o mouse ou o teclado encosta vira o card em
-     evidência, trocando de cor e revelando o botão de assistir */
+     evidência, trocando de cor */
   Array.prototype.forEach.call(trilho.children, function(card, i){
     card.addEventListener("mouseenter", function(){ ativo = i; marcaAtivo(); });
     /* focusin em vez de focus: quem recebe o foco de verdade agora é o
