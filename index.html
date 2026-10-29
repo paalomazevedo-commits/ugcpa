@@ -213,18 +213,28 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
   width:min(92%,410px);aspect-ratio:1/1.12;border-radius:clamp(22px,2.6vw,38px);
   background:var(--cobalto);
 }
-/* a caixa do vídeo de apresentação (toca sozinho, sem som, em loop)
-   fica no lugar onde era a foto: moldura arredondada, proporção de
-   Reels. O vídeo nunca recebe clique (pointer-events:none): é só
+/* o vídeo de apresentação (toca sozinho, sem som, em loop) fica no
+   lugar onde era a foto, como uma Polaroid pregada com um alfinete:
+   moldura branca, levemente torta, com o alfinete pousado em cima da
+   borda. O vídeo nunca recebe clique (pointer-events:none): é só
    decoração, não dá pra pausar nem mexer. */
+.capa-video-moldura{
+  position:relative;z-index:1;width:min(100%,400px);
+  background:var(--louca-clara);padding:14px 14px 26px;border-radius:16px;
+  box-shadow:var(--sombra);transform:rotate(-2.4deg);
+}
 .capa-video-caixa{
-  position:relative;z-index:1;width:min(100%,420px);aspect-ratio:9/16;
-  border-radius:clamp(22px,2.6vw,38px);overflow:hidden;background:#0b1220;
-  box-shadow:var(--sombra);
+  position:relative;width:100%;aspect-ratio:9/16;
+  border-radius:10px;overflow:hidden;background:#0b1220;
 }
 .capa-video{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   display:block;pointer-events:none;
+}
+.capa-video-alfinete{
+  position:absolute;top:-18px;left:34px;z-index:2;
+  width:42px;height:42px;transform:rotate(22deg);
+  filter:drop-shadow(0 8px 10px rgba(43,45,53,.3));
 }
 .capa-botoes{display:flex;flex-wrap:wrap;gap:14px;margin-top:clamp(24px,3vw,34px)}
 
@@ -755,11 +765,18 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
              por outro vídeo seu. Pra carregar rápido, mantenha ele vertical,
              sem áudio, curto (poucos segundos) e leve (poucos MB). Toca
              sozinho, sem som, em loop, sem nenhuma marca ou texto por cima. -->
-        <div class="capa-video-caixa">
-          <video class="capa-video" autoplay muted loop playsinline preload="auto"
-                 aria-label="Vídeo de apresentação da Paloma Ribeiro" data-i18n-aria-label="capaVideoAria">
-            <source src="capa-video-bio.mp4" type="video/mp4">
-          </video>
+        <div class="capa-video-moldura">
+          <svg class="capa-video-alfinete" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="8" r="6" fill="var(--cobalto)"/>
+            <circle cx="12" cy="8" r="6" stroke="var(--louca-clara)" stroke-width="1.5"/>
+            <path d="M12 14L12 22" stroke="var(--cobalto)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <div class="capa-video-caixa">
+            <video class="capa-video" autoplay muted loop playsinline preload="auto"
+                   aria-label="Vídeo de apresentação da Paloma Ribeiro" data-i18n-aria-label="capaVideoAria">
+              <source src="capa-video-bio.mp4" type="video/mp4">
+            </video>
+          </div>
         </div>
       </div>
     </div>
