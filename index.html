@@ -432,20 +432,16 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
   padding:12px 4px 16px;scrollbar-width:none;
 }
 .destaques-trilho::-webkit-scrollbar{display:none}
-/* o card em evidência fica nítido e os outros desfocados. Sem mouse em
-   cima, quem manda é o card ativo (o que as setas escolhem); com o mouse
-   em cima do carrossel, quem manda é o card sob o cursor. */
+/* os três ficam lado a lado, do mesmo tamanho e sempre nítidos, como
+   na referência - só o card em evidência muda de cor, não de nitidez. */
 .destaque{
   flex:0 0 min(232px,64%);scroll-snap-align:center;text-decoration:none;color:inherit;display:block;
   background:var(--louca-clara);border:3px solid var(--cobalto);padding:5px;border-radius:22px;
-  filter:blur(3px);opacity:.5;transform:scale(.93);
-  transition:filter .35s ease,opacity .35s ease,transform .35s ease;
+  transition:background .3s ease,border-color .3s ease;
 }
 /* o card em evidência ganha o azul claro do site, como a referência
    fazia com o rosa, pra chamar mais atenção que os outros dois */
-.destaque[data-ativo="true"]{filter:none;opacity:1;transform:none;background:var(--ceu);border-color:var(--ceu)}
-.destaques-trilho:hover .destaque,.destaques-trilho:focus-within .destaque{filter:blur(3px);opacity:.5;transform:scale(.93)}
-.destaques-trilho .destaque:hover,.destaques-trilho .destaque:focus-within{filter:none;opacity:1;transform:none}
+.destaque[data-ativo="true"]{background:var(--ceu);border-color:var(--ceu)}
 .destaque-capa{border:1px solid var(--cobalto);position:relative;border-radius:17px;overflow:hidden}
 .destaque-capa .legenda{position:absolute;left:14px;right:14px;bottom:14px}
 /* etiqueta da marca flutuando em cima do vídeo, tipo um cartão pequeno
