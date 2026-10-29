@@ -437,7 +437,14 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
   background:var(--louca);padding:20px 20px 18px;border-radius:28px;
   box-shadow:0 10px 26px rgba(43,45,53,.1);
   transition:background .3s ease;
+  animation:capa-flutuar 6s ease-in-out infinite;
 }
+/* cada card sobe e desce num ritmo levemente diferente dos outros,
+   pra não parecer que estão se movendo juntos, mecanicamente */
+.destaque:nth-child(1){animation-duration:5.5s}
+.destaque:nth-child(2){animation-duration:6.5s;animation-delay:-2s}
+.destaque:nth-child(3){animation-duration:7s;animation-delay:-4s}
+@media (prefers-reduced-motion: reduce){.destaque{animation:none}}
 /* o card em evidência ganha o azul claro do site, como a referência
    fazia com o rosa, pra chamar mais atenção que os outros dois */
 .destaque[data-ativo="true"]{background:var(--ceu)}
@@ -892,7 +899,6 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
       <div class="destaques-texto">
         <h2 class="titulo-secao revela" data-i18n="destaquesTitulo">Algum deles já passou no seu <mark class="marca-texto">feed</mark>?</h2>
         <p class="destaques-gancho revela" data-i18n="destaquesGancho">Três produtos diferentes, três formatos diferentes, e os três funcionaram.</p>
-        <p class="intro-secao revela" data-i18n="destaquesIntro">Eu leio o produto antes de gravar e escolho o formato que conecta ele com o público. Com o seu não é diferente: existe um formato certo para ele, e achar esse formato é o meu trabalho.</p>
         <p class="destaques-dica revela" data-i18n="destaquesDica">Passe o mouse pra ver os detalhes de cada um.</p>
       </div>
       <div class="destaques-palco revela">
@@ -1420,7 +1426,6 @@ const TEXTOS = {
 
   destaquesTitulo: { pt: 'Algum deles já passou no seu <mark class="marca-texto">feed</mark>?', en: 'Has one of these already been on your <mark class="marca-texto">feed</mark>?' },
   destaquesGancho: { pt: "Três produtos diferentes, três formatos diferentes, e os três funcionaram.", en: "Three different products, three different formats, and all three worked." },
-  destaquesIntro: { pt: "Eu leio o produto antes de gravar e escolho o formato que conecta ele com o público. Com o seu não é diferente: existe um formato certo para ele, e achar esse formato é o meu trabalho.", en: "I study the product before filming and choose the format that connects it with the audience. Yours is no different: there's a right format for it, and finding that format is my job." },
   destaquesDica: { pt: "Passe o mouse pra ver os detalhes de cada um.", en: "Hover over each one to see the details." },
   destaquesCarrossel: { pt: "Os três conteúdos de destaque", en: "The three featured pieces of content" },
 
