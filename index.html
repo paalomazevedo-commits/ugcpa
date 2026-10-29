@@ -372,6 +372,7 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
    arquivo. */
 .foto-moldurada{position:relative;width:100%;max-width:400px;margin-inline:auto;aspect-ratio:800/1203}
 .foto-moldurada .midia{position:absolute;inset:0;width:100%;height:100%}
+.foto-moldurada-btn{display:flex;width:fit-content;max-width:400px;margin:20px auto 0}
 /* sem moldura ornamentada: só a foto mesmo, com canto arredondado e
    sombra suave - pedido da Paloma pra ficar mais parecido com a
    referência que ela mandou */
@@ -821,6 +822,7 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
         <div class="foto-moldurada">
           <img src="foto-sobre.webp" alt="Paloma Ribeiro rindo atrás do notebook, com blusa marrom e acessórios dourados" data-i18n-alt="sobreFotoAlt" class="foto-real" width="800" height="1203">
         </div>
+        <a class="btn foto-moldurada-btn" href="#contato" data-i18n="sobreBtnSaibaMais">Saiba mais</a>
       </div>
       <div class="revela">
         <p class="rotulo" data-i18n="sobreRotulo">Sobre mim</p>
@@ -1381,6 +1383,7 @@ const TEXTOS = {
 
   sobreFotoAlt: { pt: "Paloma Ribeiro rindo atrás do notebook, com blusa marrom e acessórios dourados", en: "Paloma Ribeiro laughing behind her laptop, wearing a brown blouse and gold accessories" },
   sobreRotulo: { pt: "Sobre mim", en: "About me" },
+  sobreBtnSaibaMais: { pt: "Saiba mais", en: "Learn more" },
   sobreTitulo: { pt: "Oiiii, eu sou a Paloma", en: "Hiii, I'm Paloma" },
   sobreDt1: { pt: "Tenho 29 anos", en: "I'm 29 years old" },
   sobreDd1: { pt: "Criadora de conteúdo UGC.", en: "UGC content creator." },
