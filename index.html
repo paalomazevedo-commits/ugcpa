@@ -418,27 +418,22 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
   .resultado-video-lado{margin-bottom:8px}
 }
 
-/* ===== 3. DESTAQUES ===== */
-.destaques-grade{display:grid;grid-template-columns:.92fr 1.08fr;gap:clamp(28px,5vw,64px);align-items:center}
+/* ===== 3. DESTAQUES =====
+   Texto em cima, centralizado, e os três cards numa fileira só
+   embaixo, todos expostos ao mesmo tempo - sem carrossel, sem
+   setas, sem precisar rolar nem deslizar, igual a referência. */
+.destaques-texto{max-width:680px;margin-inline:auto;text-align:center}
 .destaques-gancho{margin-top:20px;font-family:"Fraunces",Georgia,serif;font-style:italic;font-size:1.3rem;color:var(--cobalto-texto)}
 .destaques-dica{margin-top:16px;font-size:.88rem;color:var(--tinta-media)}
-.destaques-palco{position:relative;display:flex;align-items:center;gap:clamp(6px,1vw,12px);min-width:0}
-.destaque-seta{flex:0 0 auto}
-.destaques-trilho{
-  /* o position:relative faz o offsetLeft dos cards ser medido a partir do
-     próprio trilho, que é o que a conta de "quem está no meio" espera */
-  position:relative;flex:1;min-width:0;display:flex;gap:clamp(12px,1.6vw,20px);
-  overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;
-  padding:12px 4px 16px;scrollbar-width:none;
-}
-.destaques-trilho::-webkit-scrollbar{display:none}
+.destaques-palco{margin-top:clamp(32px,5vw,52px)}
 /* os três ficam lado a lado, do mesmo tamanho (menos a altura, que o
    card em evidência ganha de sobra por causa do botão), com uma
    moldura larga ao redor da foto, como na referência - só o card em
-   evidência muda de cor, não de nitidez. */
-.destaques-trilho{align-items:flex-start}
+   evidência muda de cor, não de nitidez. No celular, sem espaço pra
+   três lado a lado, eles empilham. */
+.destaques-trilho{display:flex;flex-wrap:wrap;justify-content:center;align-items:flex-start;gap:clamp(16px,2.4vw,28px)}
 .destaque{
-  flex:0 0 min(232px,64%);scroll-snap-align:center;text-decoration:none;color:inherit;display:block;
+  flex:1 1 232px;max-width:280px;width:100%;text-decoration:none;color:inherit;display:block;
   background:var(--louca);padding:20px 20px 18px;border-radius:28px;
   box-shadow:0 10px 26px rgba(43,45,53,.1);
   transition:background .3s ease;
@@ -712,7 +707,7 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
 
 /* ===== responsivo ===== */
 @media (max-width:980px){
-  .sobre-grade,.contato-grade,.destaques-grade{grid-template-columns:1fr}
+  .sobre-grade,.contato-grade{grid-template-columns:1fr}
 }
 @media (max-width:900px){
   .hamburguer{display:grid}
@@ -734,14 +729,6 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
   .sobre-dados{grid-template-columns:1fr}
   .btn{width:100%}
   .capa-botoes{flex-direction:column;align-items:stretch}
-  /* no celular as setas passam a flutuar por cima do carrossel: sentadas ao
-     lado do trilho elas comiam a largura e o card do meio ficava estreito
-     demais pra ler o texto */
-  .destaques-palco{display:block}
-  .destaque-seta{position:absolute;top:44%;transform:translateY(-50%);z-index:3;
-    width:42px;height:42px;background:var(--louca-clara)}
-  .destaque-seta[data-passo="-1"]{left:0}
-  .destaque-seta[data-passo="1"]{right:0}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -901,17 +888,15 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
 
   <!-- ============ 3. CONTEÚDOS DE DESTAQUE ============ -->
   <section id="destaques" class="secao">
-    <div class="env destaques-grade">
+    <div class="env">
       <div class="destaques-texto">
         <h2 class="titulo-secao revela" data-i18n="destaquesTitulo">Algum deles já passou no seu <mark class="marca-texto">feed</mark>?</h2>
         <p class="destaques-gancho revela" data-i18n="destaquesGancho">Três produtos diferentes, três formatos diferentes, e os três funcionaram.</p>
         <p class="intro-secao revela" data-i18n="destaquesIntro">Eu leio o produto antes de gravar e escolho o formato que conecta ele com o público. Com o seu não é diferente: existe um formato certo para ele, e achar esse formato é o meu trabalho.</p>
-        <p class="destaques-dica revela" data-i18n="destaquesDica">Passe o mouse ou deslize.</p>
+        <p class="destaques-dica revela" data-i18n="destaquesDica">Passe o mouse pra ver os detalhes de cada um.</p>
       </div>
       <div class="destaques-palco revela">
-        <button type="button" class="seta destaque-seta" data-passo="-1" aria-label="Ver o conteúdo anterior" data-i18n-aria-label="destaqueSetaAnterior">&#10094;</button>
-        <div class="destaques-trilho" id="grelhaDestaques" tabindex="0" role="group" aria-label="Carrossel dos três conteúdos de destaque" data-i18n-aria-label="destaquesCarrossel"></div>
-        <button type="button" class="seta destaque-seta" data-passo="1" aria-label="Ver o próximo conteúdo" data-i18n-aria-label="destaqueSetaProxima">&#10095;</button>
+        <div class="destaques-trilho" id="grelhaDestaques" role="group" aria-label="Os três conteúdos de destaque" data-i18n-aria-label="destaquesCarrossel"></div>
       </div>
     </div>
   </section>
@@ -1436,10 +1421,8 @@ const TEXTOS = {
   destaquesTitulo: { pt: 'Algum deles já passou no seu <mark class="marca-texto">feed</mark>?', en: 'Has one of these already been on your <mark class="marca-texto">feed</mark>?' },
   destaquesGancho: { pt: "Três produtos diferentes, três formatos diferentes, e os três funcionaram.", en: "Three different products, three different formats, and all three worked." },
   destaquesIntro: { pt: "Eu leio o produto antes de gravar e escolho o formato que conecta ele com o público. Com o seu não é diferente: existe um formato certo para ele, e achar esse formato é o meu trabalho.", en: "I study the product before filming and choose the format that connects it with the audience. Yours is no different: there's a right format for it, and finding that format is my job." },
-  destaquesDica: { pt: "Passe o mouse ou deslize.", en: "Hover or swipe." },
-  destaqueSetaAnterior: { pt: "Ver o conteúdo anterior", en: "See the previous content" },
-  destaquesCarrossel: { pt: "Carrossel dos três conteúdos de destaque", en: "Carousel of the three featured pieces of content" },
-  destaqueSetaProxima: { pt: "Ver o próximo conteúdo", en: "See the next content" },
+  destaquesDica: { pt: "Passe o mouse pra ver os detalhes de cada um.", en: "Hover over each one to see the details." },
+  destaquesCarrossel: { pt: "Os três conteúdos de destaque", en: "The three featured pieces of content" },
 
   trabalhosRotulo: { pt: "Trabalhos por nicho", en: "Work by niche" },
   trabalhosTitulo: { pt: 'Qual <mark class="marca-texto">formato</mark> eu posso criar para a <span class="destaque-azul">sua marca</span>?', en: 'Which <mark class="marca-texto">format</mark> can I create for <span class="destaque-azul">your brand</span>?' },
@@ -1802,50 +1785,18 @@ function montaDestaques(){
     });
   }
 
-  function pinta(){
-    marcaAtivo();
-    const card = trilho.children[ativo];
-    if (!card) return;
-    /* rola só o trilho, nunca a página */
-    const alvo = card.offsetLeft - (trilho.clientWidth - card.clientWidth) / 2;
-    trilho.scrollTo({ left: Math.max(0, alvo), behavior: reduzMovimento ? "auto" : "smooth" });
-  }
-
-  /* deslizando o carrossel na mão (celular), quem para mais perto do
-     meio vira o card em evidência, senão o nítido ficaria fora da tela */
-  let esperaRolagem = null;
-  trilho.addEventListener("scroll", function(){
-    clearTimeout(esperaRolagem);
-    esperaRolagem = setTimeout(function(){
-      const meio = trilho.scrollLeft + trilho.clientWidth / 2;
-      let maisPerto = ativo, menorDistancia = Infinity;
-      Array.prototype.forEach.call(trilho.children, function(card, i){
-        const distancia = Math.abs((card.offsetLeft + card.clientWidth / 2) - meio);
-        if (distancia < menorDistancia){ menorDistancia = distancia; maisPerto = i; }
-      });
-      if (maisPerto !== ativo){ ativo = maisPerto; marcaAtivo(); }
-    }, 120);
-  }, { passive: true });
-
-  document.querySelectorAll(".destaque-seta").forEach(function(seta){
-    seta.addEventListener("click", function(){
-      const passo = Number(seta.dataset.passo);
-      ativo = (ativo + passo + DESTAQUES.length) % DESTAQUES.length;
-      pinta();
-    });
-  });
-
-  /* quem o mouse ou o teclado encosta vira o ativo, pra quando sair o
-     desfoque não voltar pro card de antes */
+  /* os três já ficam todos visíveis lado a lado (sem carrossel, sem
+     rolagem); só quem o mouse ou o teclado encosta vira o card em
+     evidência, trocando de cor e revelando o botão de assistir */
   Array.prototype.forEach.call(trilho.children, function(card, i){
-    card.addEventListener("mouseenter", function(){ ativo = i; pinta(); });
+    card.addEventListener("mouseenter", function(){ ativo = i; marcaAtivo(); });
     /* focusin em vez de focus: quem recebe o foco de verdade agora é o
        botão de assistir lá dentro do card, e só focusin borbulha até
        aqui pra avisar o card pai */
-    card.addEventListener("focusin", function(){ ativo = i; pinta(); });
+    card.addEventListener("focusin", function(){ ativo = i; marcaAtivo(); });
   });
 
-  pinta();
+  marcaAtivo();
 }
 
 /* ----- endereço do vídeo no YouTube -----
