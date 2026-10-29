@@ -468,11 +468,8 @@ h1,h2,h3{margin:0;font-family:"Fraunces",Georgia,serif;font-weight:700;line-heig
   box-shadow:0 6px 14px rgba(43,45,53,.25);
 }
 .destaque-marca-flutuante img{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover}
-.destaque-texto{padding:34px 10px 4px;text-align:center}
-/* a etiqueta do formato é a primeira coisa que a marca lê no card */
-.destaque-formato{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500;color:var(--cobalto-texto);margin-bottom:6px}
+.destaque-texto{padding:34px 10px 8px;text-align:center}
 .destaque-titulo{font-size:1.1rem}
-.destaque-contexto{margin-top:6px;color:var(--tinta-media);font-size:.92rem}
 
 /* ===== 3.5 YOUTUBE ADS =====
    uma seção pequena e só pra esse formato: o vídeo já vem na horizontal
@@ -1257,13 +1254,13 @@ const ESPECIALIDADES = [
    contexto: duas linhas explicando o formato por dentro. */
 const DESTAQUES = [
   {
-    link: "https://youtube.com/shorts/XJ9iKnRe_lc?feature=share",
-    capa: "destaques/bioage.webp",
-    marca: "Bioage",
-    logo: "marcas/bioage.webp",
-    formato: { pt: "Storytelling", en: "Storytelling" },
-    titulo: { pt: "O produto dentro da rotina", en: "The product inside the routine" },
-    contexto: { pt: "Parte da cena, nunca intervalo comercial.", en: "Part of the scene, never a commercial break." }
+    link: "https://youtube.com/shorts/WRwtlxy0ODA?feature=share",
+    capa: "destaques/vitalis.webp",
+    marca: "Vitalis Clinic",
+    logo: "marcas/vitalis.webp",
+    formato: { pt: "Experiência", en: "Experience" },
+    titulo: { pt: "Como é a experiência na clínica", en: "What the clinic experience is like" },
+    contexto: { pt: "Mostrando o procedimento de dentro, sem cortes.", en: "Showing the procedure from the inside, with no cuts." }
   },
   {
     link: "https://youtube.com/shorts/7XeWNnD0xCE?feature=share",
@@ -1735,7 +1732,7 @@ function montaDestaques(){
   const rotuloAssistir = idioma === "en" ? "Watch the content in " : "Assistir o conteúdo em ";
   trilho.innerHTML = DESTAQUES.map(function(d, i){
     const idVideo = idDoYoutube(d.link);
-    const titulo = d.titulo[idioma], formato = d.formato[idioma], contexto = d.contexto[idioma];
+    const titulo = d.titulo[idioma], formato = d.formato[idioma];
     return '' +
       '<article class="destaque" data-indice="' + i + '">' +
         '<div class="destaque-capa">' +
@@ -1751,9 +1748,7 @@ function montaDestaques(){
           '</button>' +
         '</div>' +
         '<div class="destaque-texto">' +
-          '<p class="destaque-formato">' + esc(formato) + '</p>' +
           '<h3 class="destaque-titulo">' + esc(titulo) + '</h3>' +
-          '<p class="destaque-contexto">' + esc(contexto) + '</p>' +
         '</div>' +
       '</article>';
   }).join("");
